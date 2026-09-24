@@ -3,7 +3,7 @@
  * ILEARN — Fully Responsive Modern Intentional E-Learning Platform
  * ============================================================================
  * Designed for education startups & curious lifelong learners.
- * Fully optimized for mobile (iPhone SE 375px+, Android), tablet, and desktop.
+ * Fully optimized for mobile (iPhone SE 375px+), tablet, and desktop viewports.
  *
  * Core Capabilities & User Journeys:
  * 1. Discover Available Courses:
@@ -13,13 +13,13 @@
  *      reviews, and lesson preview estimates.
  * 3. Frictionless Enrollment Flow:
  *    - Responsive enrollment confirmation modal with value props and instant access.
- * 4. Rich Learning & Lesson Experience:
- *    - Distraction-free player, playback speeds, focus mode toggle, interactive
- *      knowledge check quiz, personal note-taking with local persistence,
- *      and lesson key takeaways.
+ * 4. Rich Learning & Lesson Experience (/learn/:id):
+ *    - Distraction-free player, playback speeds (1x, 1.25x, 1.5x, 2x), focus mode,
+ *      interactive knowledge check quiz, personal notes editor with auto-save,
+ *      lesson key takeaways, discussion, and downloadable resources.
  * 5. Comprehensive Learning Progress Tracking:
- *    - Lesson-by-lesson checkmarks, course completion percentages, certificate
- *      generation upon 100% completion, weekly activity bars, and milestone badges.
+ *    - Lesson checkmarks, course progress bars, certificate generation on 100%,
+ *      weekly activity charts, and milestone badges.
  * 6. Intuitive Navigation:
  *    - Seamless routing across Discover, My Learning, Course Details, Lesson Player,
  *      and Analytics Dashboard with persistent light/dark themes and mobile drawer.
@@ -66,6 +66,7 @@ import {
   Podcast,
   RotateCcw,
   Search,
+  Send,
   Settings,
   Share2,
   ShieldCheck,
@@ -88,7 +89,7 @@ import './styles.css'
    ============================================================================ */
 
 /**
- * Curated courses catalog data with modules, outcomes, and interactive quiz items.
+ * Curated courses catalog data with modules, outcomes, resources, and interactive quizzes.
  */
 const COURSES_DATA = [
   {
@@ -1855,7 +1856,8 @@ function CourseDetailView({
 }
 
 /**
- * 8.3 Learning Player Experience with Focus Mode, Quiz, Notes, and Curriculum.
+ * 8.3 Comprehensive Interactive Learning Player Experience (/learn/:id).
+ * Handles focus mode, interactive notes, quizzes, Q&A, and responsive curriculum navigation.
  */
 function LearningPlayerView({
   course,
@@ -1872,41 +1874,79 @@ function LearningPlayerView({
   const [playbackSpeed, setPlaybackSpeed] = useState('1x')
   const [isMuted, setIsMuted] = useState(false)
   const [focusMode, setFocusMode] = useState(false)
-  const [activeTab, setActiveTab] = useState('notes')
+  const [activeTab, setActiveTab] = useState('notes') // 'notes' | 'takeaways' | 'quiz' | 'qa' | 'resources'
   const [noteDraft, setNoteDraft] = useState(userNotes)
 
   const [selectedQuizOption, setSelectedQuizOption] = useState(null)
   const [quizSubmitted, setQuizSubmitted] = useState(false)
 
+  // Community discussion state simulation
+  const [discussions, setDiscussions] = useState([
+    {
+      id: 1,
+      author: 'Elena Kim',
+      initials: 'EK',
+      time: '2 hours ago',
+      text: 'How do you balance calm design when stakeholders request multiple high-contrast banners?',
+    },
+    {
+      id: 2,
+      author: 'Marcus Vance',
+      initials: 'MV',
+      time: 'Yesterday',
+      text: 'The concept of treating user attention like battery power completely transformed how I think about onboarding.',
+    },
+  ])
+  const [newQuestionText, setNewQuestionText] = useState('')
+
   useEffect(() => {
     setSelectedQuizOption(null)
     setQuizSubmitted(false)
     setNoteDraft(userNotes)
-  }, [userNotes, activeLessonIndex])
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [userNotes, activeLessonIndex, course.id])
 
-  const currentLesson = course.lessons[activeLessonIndex] || course.lessons[0]
-  const isLessonComplete = completedLessons.includes(activeLessonIndex)
+  const safeLessonIndex = Math.min(activeLessonIndex, course.lessons.length - 1)
+  const currentLesson = course.lessons[safeLessonIndex] || course.lessons[0]
+  const isLessonComplete = completedLessons.includes(safeLessonIndex)
 
   const handlePrev = () => {
-    if (activeLessonIndex > 0) {
-      setActiveLessonIndex(activeLessonIndex - 1)
+    if (safeLessonIndex > 0) {
+      setActiveLessonIndex(safeLessonIndex - 1)
     }
   }
 
   const handleNext = () => {
-    if (activeLessonIndex < course.lessons.length - 1) {
-      setActiveLessonIndex(activeLessonIndex + 1)
+    if (safeLessonIndex < course.lessons.length - 1) {
+      setActiveLessonIndex(safeLessonIndex + 1)
     }
+  }
+
+  const handlePostQuestion = (e) => {
+    e.preventDefault()
+    if (!newQuestionText.trim()) return
+    setDiscussions([
+      {
+        id: Date.now(),
+        author: 'Jordan Davis',
+        initials: 'JD',
+        time: 'Just now',
+        text: newQuestionText.trim(),
+      },
+      ...discussions,
+    ])
+    setNewQuestionText('')
   }
 
   return (
     <section className={`pt-6 sm:pt-8 ${focusMode ? 'max-w-4xl mx-auto' : ''}`}>
+      {/* Top Controls Bar: Back to Course & Focus Mode Switch */}
       <div className="mb-5 flex items-center justify-between">
         <button
           onClick={() => navigate(`/course/${course.id}`)}
           className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 transition hover:text-[#1a1e1b] dark:text-gray-400 dark:hover:text-white"
         >
-          <ChevronLeft size={15} /> Back to Course
+          <ChevronLeft size={15} /> Back to Course Overview
         </button>
 
         <button
@@ -1923,23 +1963,28 @@ function LearningPlayerView({
         </button>
       </div>
 
+      {/* Lesson Heading Banner */}
       <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <p className="eyebrow">{course.title}</p>
+          <div className="flex items-center gap-2">
+            <p className="eyebrow">{course.title}</p>
+            <span className="text-[11px] text-gray-400">• {course.level}</span>
+          </div>
           <h1 className="mt-1 text-xl sm:text-3xl font-extrabold tracking-tight break-words">
             {currentLesson.title}
           </h1>
           <p className="mt-0.5 text-xs text-gray-500">
-            Lesson {activeLessonIndex + 1} of {course.lessons.length} • {currentLesson.duration}
+            Lesson {safeLessonIndex + 1} of {course.lessons.length} • {currentLesson.duration}
           </p>
         </div>
 
-        <div className="w-full sm:w-52">
+        {/* Progress bar in header */}
+        <div className="w-full sm:w-56">
           <div className="mb-1.5 flex justify-between text-xs font-semibold">
-            <span>Progress</span>
+            <span>Course Progress</span>
             <span className="text-[#2b593f] dark:text-[#88cb9f]">{progress}%</span>
           </div>
-          <div className="h-1.5 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+          <div className="h-2 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
             <div
               className="h-full rounded-full bg-[#3b6d52] transition-all duration-500"
               style={{ width: `${progress}%` }}
@@ -1948,8 +1993,10 @@ function LearningPlayerView({
         </div>
       </div>
 
+      {/* Main Player & Workspace Grid */}
       <div className={`grid gap-6 ${focusMode ? 'grid-cols-1' : 'lg:grid-cols-[1fr_340px]'}`}>
         <div>
+          {/* Video Player Mock */}
           <div className={`relative aspect-video overflow-hidden rounded-2xl sm:rounded-3xl ${course.color} shadow-lg`}>
             <img
               src={course.image}
@@ -1964,6 +2011,7 @@ function LearningPlayerView({
               {isPlaying ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" className="ml-0.5" />}
             </button>
 
+            {/* Bottom Player Overlay Bar */}
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 sm:p-4 text-white">
               <div className="mb-2 sm:mb-3 h-1.5 w-full overflow-hidden rounded-full bg-white/30 cursor-pointer">
                 <div className={`h-full rounded-full bg-emerald-400 ${isPlaying ? 'w-[45%]' : 'w-[20%]'}`} />
@@ -1971,10 +2019,10 @@ function LearningPlayerView({
 
               <div className="flex items-center justify-between text-[11px] sm:text-xs">
                 <div className="flex items-center gap-3">
-                  <button onClick={() => setIsPlaying(!isPlaying)}>
+                  <button onClick={() => setIsPlaying(!isPlaying)} aria-label="Toggle Play">
                     {isPlaying ? <Pause size={14} /> : <Play size={14} />}
                   </button>
-                  <button onClick={() => setIsMuted(!isMuted)}>
+                  <button onClick={() => setIsMuted(!isMuted)} aria-label="Toggle Mute">
                     {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
                   </button>
                   <span>04:12 / {currentLesson.duration}</span>
@@ -1986,6 +2034,7 @@ function LearningPlayerView({
                       setPlaybackSpeed((prev) => (prev === '1x' ? '1.25x' : prev === '1.25x' ? '1.5x' : '1x'))
                     }
                     className="rounded-md bg-white/20 px-2 py-0.5 font-bold hover:bg-white/30"
+                    title="Playback speed"
                   >
                     {playbackSpeed}
                   </button>
@@ -1994,17 +2043,18 @@ function LearningPlayerView({
             </div>
           </div>
 
+          {/* Navigation and Completion Trigger Bar */}
           <div className="mt-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-b border-black/[0.08] pb-5 dark:border-white/[0.08]">
             <div className="flex items-center justify-between sm:justify-start gap-2">
               <button
-                disabled={activeLessonIndex === 0}
+                disabled={safeLessonIndex === 0}
                 onClick={handlePrev}
                 className="flex items-center gap-1 rounded-full border border-black/10 px-3.5 py-2 text-xs font-semibold disabled:opacity-40 dark:border-white/10"
               >
                 <ChevronLeft size={14} /> Prev
               </button>
               <button
-                disabled={activeLessonIndex === course.lessons.length - 1}
+                disabled={safeLessonIndex === course.lessons.length - 1}
                 onClick={handleNext}
                 className="flex items-center gap-1 rounded-full border border-black/10 px-3.5 py-2 text-xs font-semibold disabled:opacity-40 dark:border-white/10"
               >
@@ -2013,7 +2063,7 @@ function LearningPlayerView({
             </div>
 
             <button
-              onClick={() => onToggleComplete(activeLessonIndex)}
+              onClick={() => onToggleComplete(safeLessonIndex)}
               className={`flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold transition ${
                 isLessonComplete
                   ? 'border border-emerald-600 bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300'
@@ -2066,8 +2116,31 @@ function LearningPlayerView({
                   <HelpCircle size={13} /> Practice Check
                 </button>
               )}
+              <button
+                onClick={() => setActiveTab('qa')}
+                className={`flex items-center gap-1.5 pb-2 text-xs font-bold transition ${
+                  activeTab === 'qa'
+                    ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
+                    : 'text-gray-500 hover:text-black dark:hover:text-white'
+                }`}
+              >
+                <MessageSquare size={13} /> Discussion ({discussions.length})
+              </button>
+              {course.resources && course.resources.length > 0 && (
+                <button
+                  onClick={() => setActiveTab('resources')}
+                  className={`flex items-center gap-1.5 pb-2 text-xs font-bold transition ${
+                    activeTab === 'resources'
+                      ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
+                      : 'text-gray-500 hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <Download size={13} /> Resources ({course.resources.length})
+                </button>
+              )}
             </div>
 
+            {/* Tab: Notes Editor */}
             {activeTab === 'notes' && (
               <div className="mt-4">
                 <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -2088,6 +2161,7 @@ function LearningPlayerView({
               </div>
             )}
 
+            {/* Tab: Key Takeaways */}
             {activeTab === 'takeaways' && (
               <div className="mt-4 space-y-2.5">
                 {currentLesson.takeaways?.map((takeaway, idx) => (
@@ -2100,6 +2174,7 @@ function LearningPlayerView({
               </div>
             )}
 
+            {/* Tab: Practice Check Quiz */}
             {activeTab === 'quiz' && currentLesson.quiz && (
               <div className="card mt-4 p-4 sm:p-5">
                 <h4 className="text-xs sm:text-sm font-bold">{currentLesson.quiz.question}</h4>
@@ -2142,9 +2217,73 @@ function LearningPlayerView({
                 )}
               </div>
             )}
+
+            {/* Tab: Discussion & Community Q&A */}
+            {activeTab === 'qa' && (
+              <div className="mt-4 space-y-4">
+                <form onSubmit={handlePostQuestion} className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newQuestionText}
+                    onChange={(e) => setNewQuestionText(e.target.value)}
+                    placeholder="Ask a question about this lesson..."
+                    className="h-10 flex-1 rounded-xl border border-black/10 bg-white/70 px-3.5 text-xs font-medium outline-none transition focus:border-[#43795b] dark:border-white/10 dark:bg-white/5"
+                  />
+                  <button
+                    type="submit"
+                    className="flex items-center gap-1.5 rounded-xl bg-[#1e382b] px-4 py-2 text-xs font-bold text-white dark:bg-white dark:text-[#121c16]"
+                  >
+                    <Send size={13} /> Post
+                  </button>
+                </form>
+
+                <div className="space-y-2.5">
+                  {discussions.map((item) => (
+                    <div key={item.id} className="card p-3.5">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="grid h-6 w-6 place-items-center rounded-full bg-[#dbe7de] text-[10px] font-bold text-[#204430] dark:bg-[#1a3124] dark:text-[#9fd5b6]">
+                            {item.initials}
+                          </span>
+                          <span className="text-xs font-bold">{item.author}</span>
+                        </div>
+                        <span className="text-[10px] text-gray-400">{item.time}</span>
+                      </div>
+                      <p className="mt-2 text-xs leading-relaxed text-gray-600 dark:text-gray-300">
+                        {item.text}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Tab: Downloadable Resources */}
+            {activeTab === 'resources' && course.resources && (
+              <div className="mt-4 space-y-2.5">
+                {course.resources.map((res, idx) => (
+                  <div key={idx} className="card flex items-center justify-between p-3.5">
+                    <div className="flex items-center gap-2.5 min-w-0 pr-3">
+                      <FileText size={16} className="text-[#3b6d52] shrink-0" />
+                      <div className="min-w-0">
+                        <p className="truncate text-xs font-bold">{res.name}</p>
+                        <p className="text-[10px] text-gray-400">{res.size}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => alert(`Downloading ${res.name}...`)}
+                      className="flex items-center gap-1 rounded-full border border-black/10 px-3 py-1 text-xs font-semibold hover:bg-black/5 dark:border-white/10 shrink-0"
+                    >
+                      <Download size={12} /> Download
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
+        {/* Right Curriculum Outline */}
         {!focusMode && (
           <aside className="card p-4 sm:p-5">
             <div className="mb-3.5 flex items-center justify-between border-b border-black/[0.06] pb-2.5 dark:border-white/[0.08]">
@@ -2156,7 +2295,7 @@ function LearningPlayerView({
 
             <div className="space-y-1">
               {course.lessons.map((lesson, idx) => {
-                const isSelected = activeLessonIndex === idx
+                const isSelected = safeLessonIndex === idx
                 const isDone = completedLessons.includes(idx)
 
                 return (
@@ -2277,7 +2416,7 @@ function MyLearningView({
             filterTab === 'completed'
               ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
               : 'text-gray-500 hover:text-black dark:hover:text-white'
-          }`}
+            }`}
         >
           Completed ({COURSES_DATA.filter((c) => enrolledCourses.includes(c.id) && getCourseProgress(c.id) === 100).length})
         </button>
