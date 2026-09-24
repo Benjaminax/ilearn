@@ -1,20 +1,27 @@
 /**
  * ============================================================================
- * ILEARN — Modern Intentional Learning Platform
+ * ILEARN — Modern Intentional E-Learning Platform
  * ============================================================================
- * An elegant, calm, and distraction-free e-learning web application designed
- * for mindful personal and professional growth.
+ * Designed for education startups & curious lifelong learners.
  *
- * Features:
- * - Responsive navigation with seamless routing and mobile drawer
- * - Light & Dark theme toggle with persistent preference
- * - Rich course catalog with category filters, instant search, and sorting
- * - Interactive course syllabus & detailed curriculum breakdown
- * - Comprehensive learning player with play controls, speed adjustment,
- *   personal lesson notes, key takeaways, and progress tracking
- * - My Learning dashboard with in-progress, completed, and bookmarked tabs
- * - Visual analytics dashboard with weekly focus chart and achievement badges
- * - Local storage persistence for progress, active lessons, notes, and favorites
+ * Core Capabilities & User Journeys:
+ * 1. Discover Available Courses:
+ *    - Search, category filter tabs, sorting, level badges, and ratings.
+ * 2. Explore Course Details:
+ *    - In-depth syllabus breakdown, learning outcomes, instructor credentials,
+ *      reviews, and lesson preview estimates.
+ * 3. Frictionless Enrollment Flow:
+ *    - Interactive enrollment confirmation modal with value props and instant access.
+ * 4. Rich Learning & Lesson Experience:
+ *    - Distraction-free player, playback speeds, focus mode toggle, interactive
+ *      knowledge check quiz, personal note-taking with local persistence,
+ *      and lesson key takeaways.
+ * 5. Comprehensive Learning Progress Tracking:
+ *    - Lesson-by-lesson checkmarks, course completion percentages, certificate
+ *      generation upon 100% completion, weekly activity bars, and milestone badges.
+ * 6. Intuitive Navigation:
+ *    - Seamless routing across Discover, My Learning, Course Details, Lesson Player,
+ *      and Analytics Dashboard with persistent light/dark themes.
  * ============================================================================
  */
 
@@ -36,17 +43,21 @@ import {
   ChevronRight,
   Clock3,
   Compass,
+  Download,
+  FileCheck,
+  FileDown,
   FileText,
   Filter,
   Flame,
   Globe,
   Headphones,
-  Heart,
   HelpCircle,
   LayoutDashboard,
+  Lock,
   Maximize2,
   Menu,
   MessageSquare,
+  Minimize2,
   Moon,
   MoreHorizontal,
   Pause,
@@ -56,10 +67,12 @@ import {
   Search,
   Settings,
   Share2,
+  ShieldCheck,
   Sparkles,
   Star,
   Sun,
   TrendingUp,
+  Trophy,
   UserCheck,
   UserRound,
   Volume2,
@@ -74,7 +87,7 @@ import './styles.css'
    ============================================================================ */
 
 /**
- * Curated courses repository with rich syllabus, outcomes, and instructor profiles.
+ * Curated courses catalog data with modules, outcomes, and interactive quiz items.
  */
 const COURSES_DATA = [
   {
@@ -88,7 +101,6 @@ const COURSES_DATA = [
     authorBio: 'Maya leads design systems at Studio Forma and specializes in human-centric digital interfaces.',
     duration: '3h 24m',
     totalDurationMinutes: 204,
-    lessonsCount: 6,
     rating: '4.9',
     reviewsCount: 384,
     color: 'bg-[#d8e6df]',
@@ -101,13 +113,127 @@ const COURSES_DATA = [
       'Design graceful state transitions and feedback micro-interactions',
       'Audit existing digital products for sensory clutter and friction',
     ],
+    resources: [
+      { name: 'Calm Design System Checklist.pdf', size: '1.4 MB' },
+      { name: 'Typographic Scale & Whitespace Tokens.fig', size: '3.8 MB' },
+    ],
     lessons: [
-      { id: 1, title: 'Welcome to the course & philosophy of calm', duration: '8:45', preview: 'An introduction to calm software, setting our intentions, and outlining the learning path ahead.' },
-      { id: 2, title: 'The calm design principle: Respecting human attention', duration: '14:20', preview: 'Explore how cognitive bandwidth works and why quiet interfaces outperform noisy ones.' },
-      { id: 3, title: 'Making space for focus: Whitespace & hierarchy', duration: '18:10', preview: 'Hands-on layout techniques to give interface elements breathing room and clarity.' },
-      { id: 4, title: 'A more intentional workflow: Colors & subtle cues', duration: '12:35', preview: 'Learn how to use muted palettes with purposeful accent colors for intuitive navigation.' },
-      { id: 5, title: 'Micro-interactions that soothe rather than startle', duration: '15:50', preview: 'Implement smooth animations and tactile feedback that reassure the user without distraction.' },
-      { id: 6, title: 'Your capstone practice: Redesigning a noisy dashboard', duration: '22:15', preview: 'Apply all concepts to audit and refactor a crowded interface into a serene, efficient workspace.' },
+      {
+        id: 1,
+        title: 'Welcome to the course & philosophy of calm',
+        duration: '8:45',
+        preview: 'An introduction to calm software, setting our intentions, and outlining the learning path ahead.',
+        takeaways: [
+          'Calm design respects the user’s cognitive bandwidth as their most valuable asset.',
+          'Software should inform and assist without shouting or creating artificial urgency.',
+        ],
+        quiz: {
+          question: 'What is the primary objective of calm technology?',
+          options: [
+            'To maximize the time a user spends inside the app',
+            'To deliver utility while requiring the smallest possible amount of attention',
+            'To replace all text with icons and illustrations',
+          ],
+          correct: 1,
+          explanation: 'Calm technology aims to inform and empower without demanding constant, active attention.',
+        },
+      },
+      {
+        id: 2,
+        title: 'The calm design principle: Respecting human attention',
+        duration: '14:20',
+        preview: 'Explore how cognitive bandwidth works and why quiet interfaces outperform noisy ones.',
+        takeaways: [
+          'Attention is finite; every flashing banner or badge costs mental focus.',
+          'Prioritize peripheral awareness over intrusive modal popups.',
+        ],
+        quiz: {
+          question: 'Which element is considered a high-friction cognitive trigger?',
+          options: [
+            'Consistent baseline typography',
+            'Flashing unread notification counters with urgent sound effects',
+            'Muted neutral background surfaces',
+          ],
+          correct: 1,
+          explanation: 'Aggressive badges and intrusive audio cues trigger sensory alarms that disrupt focus.',
+        },
+      },
+      {
+        id: 3,
+        title: 'Making space for focus: Whitespace & hierarchy',
+        duration: '18:10',
+        preview: 'Hands-on layout techniques to give interface elements breathing room and clarity.',
+        takeaways: [
+          'Whitespace is an active design element, not empty wasted space.',
+          'Use macro-whitespace to separate major concepts and micro-whitespace for scannability.',
+        ],
+        quiz: {
+          question: 'How does generous whitespace benefit the learner or user?',
+          options: [
+            'It forces more scroll distance to increase page views',
+            'It reduces visual clutter, allowing the brain to process key elements faster',
+            'It is solely an aesthetic preference with no measurable UX benefit',
+          ],
+          correct: 1,
+          explanation: 'Whitespace reduces visual crowding and dramatically boosts reading comprehension.',
+        },
+      },
+      {
+        id: 4,
+        title: 'A more intentional workflow: Colors & subtle cues',
+        duration: '12:35',
+        preview: 'Learn how to use muted palettes with purposeful accent colors for intuitive navigation.',
+        takeaways: [
+          'Use 90% neutral and grounded tones, reserving high-contrast colors strictly for primary actions.',
+          'Subtle state transitions reassure the user without breaking flow.',
+        ],
+        quiz: {
+          question: 'When should vibrant accent colors be used in calm UI?',
+          options: [
+            'On every heading and icon across the page',
+            'Strictly for key call-to-actions, confirmation feedback, and primary progress',
+            'Only on background containers',
+          ],
+          correct: 1,
+          explanation: 'Accent colors maintain their power only when applied sparingly for key interactions.',
+        },
+      },
+      {
+        id: 5,
+        title: 'Micro-interactions that soothe rather than startle',
+        duration: '15:50',
+        preview: 'Implement smooth animations and tactile feedback that reassure the user without distraction.',
+        takeaways: [
+          'Keep animation durations between 150ms and 300ms for natural, organic motion.',
+          'Provide instant, quiet acknowledgment for every user action.',
+        ],
+        quiz: {
+          question: 'What is the optimal duration for subtle UI state transitions?',
+          options: ['50ms or less', '150ms to 300ms', '1000ms to 2000ms'],
+          correct: 1,
+          explanation: '150ms to 300ms feels snappy and human without causing perceptible lag or motion sickness.',
+        },
+      },
+      {
+        id: 6,
+        title: 'Your capstone practice: Redesigning a noisy dashboard',
+        duration: '22:15',
+        preview: 'Apply all concepts to audit and refactor a crowded interface into a serene, efficient workspace.',
+        takeaways: [
+          'Perform a friction audit by listing every element competing for user attention.',
+          'Refactor layouts by grouping secondary metrics into collapsible drawers.',
+        ],
+        quiz: {
+          question: 'What is the first step in auditing a cluttered interface?',
+          options: [
+            'Delete all analytics data',
+            'Identify and rank the primary intent versus secondary noise',
+            'Switch immediately to dark mode',
+          ],
+          correct: 1,
+          explanation: 'Understanding the core user job-to-be-done establishes the hierarchy for removing noise.',
+        },
+      },
     ],
   },
   {
@@ -121,7 +247,6 @@ const COURSES_DATA = [
     authorBio: 'Jon has coached over 5,000 artists and entrepreneurs on sustaining lifelong creative practices.',
     duration: '2h 48m',
     totalDurationMinutes: 168,
-    lessonsCount: 5,
     rating: '4.8',
     reviewsCount: 242,
     color: 'bg-[#f0dfd2]',
@@ -134,12 +259,75 @@ const COURSES_DATA = [
       'Develop an effective personal idea capture system',
       'Transform unstructured inspiration into finished artifacts',
     ],
+    resources: [
+      { name: 'Daily Creative Habit Tracker.pdf', size: '920 KB' },
+    ],
     lessons: [
-      { id: 1, title: 'Debunking the myth of creative genius', duration: '10:15', preview: 'Why showing up every day consistently beats sporadic bursts of inspired brilliance.' },
-      { id: 2, title: 'Setting up your daily creative sanctuary', duration: '16:40', preview: 'Curating physical and digital spaces designed specifically to trigger deep focus.' },
-      { id: 3, title: 'Overcoming resistance & the blank page syndrome', duration: '19:05', preview: 'Mental models and rapid ideation frameworks to get moving within 3 minutes.' },
-      { id: 4, title: 'The discipline of shipping unfinished drafts', duration: '14:30', preview: 'How iterative release cycles unlock new insights and protect against perfectionism.' },
-      { id: 5, title: 'Designing your weekly creative reflection review', duration: '21:00', preview: 'A structured review routine to evaluate what sparked joy and where your art is heading.' },
+      {
+        id: 1,
+        title: 'Debunking the myth of creative genius',
+        duration: '10:15',
+        preview: 'Why showing up every day consistently beats sporadic bursts of inspired brilliance.',
+        takeaways: ['Inspiration is the reward for showing up, not the prerequisite for starting.'],
+        quiz: {
+          question: 'What is the most reliable driver of long-term creative output?',
+          options: ['Waiting for sudden inspiration', 'A consistent, daily creative habit', 'Purchasing expensive new tools'],
+          correct: 1,
+          explanation: 'Consistency compounds over time and removes the barrier of starting.',
+        },
+      },
+      {
+        id: 2,
+        title: 'Setting up your daily creative sanctuary',
+        duration: '16:40',
+        preview: 'Curating physical and digital spaces designed specifically to trigger deep focus.',
+        takeaways: ['Environment shapes behavior more reliably than sheer willpower.'],
+        quiz: {
+          question: 'Why is a dedicated creative workspace effective?',
+          options: ['It serves as an environmental cue that primes the brain for focus', 'It looks better on social media', 'It is required by copyright laws'],
+          correct: 0,
+          explanation: 'Consistent environments trigger conditioned focus states automatically.',
+        },
+      },
+      {
+        id: 3,
+        title: 'Overcoming resistance & the blank page syndrome',
+        duration: '19:05',
+        preview: 'Mental models and rapid ideation frameworks to get moving within 3 minutes.',
+        takeaways: ['Lower the bar to start: write the worst possible first sentence just to break inertia.'],
+        quiz: {
+          question: 'What is the fastest way to overcome creative inertia?',
+          options: ['Lower the stakes and produce a deliberately imperfect draft', 'Wait another week', 'Delete your idea'],
+          correct: 0,
+          explanation: 'Lowering stakes eliminates perfection paralysis.',
+        },
+      },
+      {
+        id: 4,
+        title: 'The discipline of shipping unfinished drafts',
+        duration: '14:30',
+        preview: 'How iterative release cycles unlock new insights and protect against perfectionism.',
+        takeaways: ['A published good draft teaches you more than an unpublished masterpiece.'],
+        quiz: {
+          question: 'Why should creators ship iterative drafts?',
+          options: ['To receive early real-world feedback and maintain momentum', 'To rush without care', 'To fill up storage'],
+          correct: 0,
+          explanation: 'Real-world feedback clarifies what resonates with your audience.',
+        },
+      },
+      {
+        id: 5,
+        title: 'Designing your weekly creative reflection review',
+        duration: '21:00',
+        preview: 'A structured review routine to evaluate what sparked joy and where your art is heading.',
+        takeaways: ['Celebrate small finished pieces to build intrinsic motivation.'],
+        quiz: {
+          question: 'What is the purpose of a weekly creative reflection?',
+          options: ['To evaluate progress, celebrate milestones, and adjust course', 'To punish yourself for missed days', 'To restart from scratch'],
+          correct: 0,
+          explanation: 'Reflection fosters continuous improvement and sustainable growth.',
+        },
+      },
     ],
   },
   {
@@ -153,7 +341,6 @@ const COURSES_DATA = [
     authorBio: 'Alex has led product strategy across multiple high-growth technology platforms over the past decade.',
     duration: '4h 12m',
     totalDurationMinutes: 252,
-    lessonsCount: 6,
     rating: '4.9',
     reviewsCount: 512,
     color: 'bg-[#e4def1]',
@@ -166,13 +353,89 @@ const COURSES_DATA = [
       'Construct lean feature prioritization matrices',
       'Define clear North Star metrics and leading indicators',
     ],
+    resources: [
+      { name: 'Customer Discovery Script Template.docx', size: '850 KB' },
+      { name: 'RICE Prioritization Matrix.xlsx', size: '1.2 MB' },
+    ],
     lessons: [
-      { id: 1, title: 'Understanding problem spaces vs solution spaces', duration: '15:20', preview: 'Why most products fail by building the right answer to the wrong question.' },
-      { id: 2, title: 'Jobs To Be Done (JTBD) framework in action', duration: '22:10', preview: 'Deconstructing user motivation and the emotional catalysts behind product adoption.' },
-      { id: 3, title: 'Customer discovery interviews without confirmation bias', duration: '28:45', preview: 'Scripting and conducting live user conversations that yield unfiltered truth.' },
-      { id: 4, title: 'Prioritization matrices: RICE, MoSCoW, & Opportunity Score', duration: '20:15', preview: 'Evaluating technical effort versus strategic impact to guide roadmap decisions.' },
-      { id: 5, title: 'Prototyping & validating hypotheses with zero code', duration: '25:30', preview: 'Rapid test setups using landing pages, concierge tests, and wizard-of-oz models.' },
-      { id: 6, title: 'Defining North Star metrics & product health telemetry', duration: '18:50', preview: 'Establishing telemetry that measures actual user value delivered rather than vanity metrics.' },
+      {
+        id: 1,
+        title: 'Understanding problem spaces vs solution spaces',
+        duration: '15:20',
+        preview: 'Why most products fail by building the right answer to the wrong question.',
+        takeaways: ['Fall in love with the customer problem, not your initial solution idea.'],
+        quiz: {
+          question: 'What is the primary danger of jumping straight into solution space?',
+          options: ['Building a flawless solution for a problem nobody actually has', 'Using modern frameworks', 'Hiring too many designers'],
+          correct: 0,
+          explanation: 'Building without validating the root problem leads to low product adoption.',
+        },
+      },
+      {
+        id: 2,
+        title: 'Jobs To Be Done (JTBD) framework in action',
+        duration: '22:10',
+        preview: 'Deconstructing user motivation and the emotional catalysts behind product adoption.',
+        takeaways: ['Users don’t buy a 1/4-inch drill bit; they buy a 1/4-inch hole in the wall.'],
+        quiz: {
+          question: 'According to JTBD theory, why do customers "hire" products?',
+          options: ['To make progress in a specific life or work situation', 'To collect apps', 'Because of color palettes alone'],
+          correct: 0,
+          explanation: 'Products are hired to help users make tangible progress.',
+        },
+      },
+      {
+        id: 3,
+        title: 'Customer discovery interviews without confirmation bias',
+        duration: '28:45',
+        preview: 'Scripting and conducting live user conversations that yield unfiltered truth.',
+        takeaways: ['Ask about past behaviors rather than hypothetical future promises.'],
+        quiz: {
+          question: 'Which question yields the highest signal in user interviews?',
+          options: ['"Would you buy this feature if we made it?"', '"Tell me about the last time you experienced this problem."', '"Do you like our logo?"'],
+          correct: 1,
+          explanation: 'Asking about past concrete behavior prevents hypothetical and polite answers.',
+        },
+      },
+      {
+        id: 4,
+        title: 'Prioritization matrices: RICE & Opportunity Scoring',
+        duration: '20:15',
+        preview: 'Evaluating technical effort versus strategic impact to guide roadmap decisions.',
+        takeaways: ['RICE stands for Reach, Impact, Confidence, and Effort.'],
+        quiz: {
+          question: 'In the RICE scoring model, which factor divides the score?',
+          options: ['Reach', 'Impact', 'Effort'],
+          correct: 2,
+          explanation: 'Score = (Reach * Impact * Confidence) / Effort.',
+        },
+      },
+      {
+        id: 5,
+        title: 'Prototyping & validating hypotheses with zero code',
+        duration: '25:30',
+        preview: 'Rapid test setups using landing pages, concierge tests, and wizard-of-oz models.',
+        takeaways: ['Test demand before investing engineering bandwidth.'],
+        quiz: {
+          question: 'What is a "Smoke Test" in product validation?',
+          options: ['Testing server firewalls', 'A landing page gauging interest with a CTA before full development', 'Code compilation test'],
+          correct: 1,
+          explanation: 'Smoke tests measure actual conversion intent before committing build resources.',
+        },
+      },
+      {
+        id: 6,
+        title: 'Defining North Star metrics & product health telemetry',
+        duration: '18:50',
+        preview: 'Establishing telemetry that measures actual user value delivered rather than vanity metrics.',
+        takeaways: ['A North Star metric reflects genuine value captured by users.'],
+        quiz: {
+          question: 'What differentiates a North Star metric from a vanity metric?',
+          options: ['It tracks direct user value rather than surface impressions', 'It always goes up automatically', 'It is measured only once a year'],
+          correct: 0,
+          explanation: 'A great North Star metric aligns customer success with business revenue.',
+        },
+      },
     ],
   },
   {
@@ -186,7 +449,6 @@ const COURSES_DATA = [
     authorBio: 'Rhea edits leading publications and writes speeches delivered at international leadership summits.',
     duration: '1h 56m',
     totalDurationMinutes: 116,
-    lessonsCount: 5,
     rating: '4.7',
     reviewsCount: 198,
     color: 'bg-[#e6e4c9]',
@@ -199,12 +461,75 @@ const COURSES_DATA = [
       'Structure complex arguments into scannable, digestible prose',
       'Develop an authentic, warm, and memorable tone of voice',
     ],
+    resources: [
+      { name: 'Self-Editing 10-Point Checklist.pdf', size: '640 KB' },
+    ],
     lessons: [
-      { id: 1, title: 'The architecture of an engaging first sentence', duration: '11:10', preview: 'Hooking readers immediately by raising curiosity and promising tangible value.' },
-      { id: 2, title: 'Pruning the garden: Cutting 30% of words effortlessly', duration: '14:40', preview: 'Eliminating filler phrases, zombie nouns, and unnecessary qualifiers.' },
-      { id: 3, title: 'Storytelling frameworks for essays, emails, and pitches', duration: '18:25', preview: 'The Hero’s Journey adapted for modern memos, newsletters, and case studies.' },
-      { id: 4, title: 'Rhythm and cadence: Varying sentence lengths for impact', duration: '12:50', preview: 'Using musicality in prose to create reading velocity and emphasis.' },
-      { id: 5, title: 'The final polish checklist: Self-editing masterclass', duration: '16:00', preview: 'Step-by-step review to ensure tone consistency, punchy flow, and zero grammatical ambiguity.' },
+      {
+        id: 1,
+        title: 'The architecture of an engaging first sentence',
+        duration: '11:10',
+        preview: 'Hooking readers immediately by raising curiosity and promising tangible value.',
+        takeaways: ['Start in media res: plunge the reader directly into the tension or insight.'],
+        quiz: {
+          question: 'What is the sole job of the first sentence of an essay or email?',
+          options: ['To explain the entire thesis', 'To get the reader to read the second sentence', 'To list all references'],
+          correct: 1,
+          explanation: 'Great hooks create curiosity momentum that carries the reader forward.',
+        },
+      },
+      {
+        id: 2,
+        title: 'Pruning the garden: Cutting 30% of words effortlessly',
+        duration: '14:40',
+        preview: 'Eliminating filler phrases, zombie nouns, and unnecessary qualifiers.',
+        takeaways: ['Replace weak verbs and adverbs with punchy, specific action verbs.'],
+        quiz: {
+          question: 'Which phrase is an example of redundant filler words?',
+          options: ['"In order to"', '"Because"', '"Quickly"'],
+          correct: 0,
+          explanation: '"In order to" can almost always be simplified to "To".',
+        },
+      },
+      {
+        id: 3,
+        title: 'Storytelling frameworks for essays, emails, and pitches',
+        duration: '18:25',
+        preview: 'The Hero’s Journey adapted for modern memos, newsletters, and case studies.',
+        takeaways: ['Frame the reader as the hero, and your insight as the trusted mentor/guide.'],
+        quiz: {
+          question: 'In customer-centric storytelling, who is the hero of the journey?',
+          options: ['Your company or product', 'The reader / customer', 'The investor'],
+          correct: 1,
+          explanation: 'Effective communication positions the reader as the hero overcoming an obstacle.',
+        },
+      },
+      {
+        id: 4,
+        title: 'Rhythm and cadence: Varying sentence lengths for impact',
+        duration: '12:50',
+        preview: 'Using musicality in prose to create reading velocity and emphasis.',
+        takeaways: ['Mix short, punchy sentences with longer descriptive sentences to create melody.'],
+        quiz: {
+          question: 'What happens when all sentences in a paragraph are the exact same length?',
+          options: ['It becomes monotonous and tires the reader', 'It guarantees viral sharing', 'It improves SEO rating'],
+          correct: 0,
+          explanation: 'Varying rhythm keeps the human ear engaged and prevents reading fatigue.',
+        },
+      },
+      {
+        id: 5,
+        title: 'The final polish checklist: Self-editing masterclass',
+        duration: '16:00',
+        preview: 'Step-by-step review to ensure tone consistency, punchy flow, and zero grammatical ambiguity.',
+        takeaways: ['Read your draft out loud to catch awkward pauses and clunky phrases.'],
+        quiz: {
+          question: 'What is the most effective technique to identify clunky phrasing before publishing?',
+          options: ['Reading the text out loud', 'Running spell check once', 'Changing the font size'],
+          correct: 0,
+          explanation: 'Reading out loud forces your brain to hear unnatural phrasing instantly.',
+        },
+      },
     ],
   },
 ]
@@ -220,20 +545,14 @@ const CATEGORIES = ['All courses', 'Design', 'Creativity', 'Business', 'Communic
 const ACHIEVEMENTS = [
   { id: 'streak-3', title: '3-Day Momentum', desc: 'Maintained a 3-day continuous learning streak', icon: Flame, color: 'text-amber-500 bg-amber-500/10' },
   { id: 'first-course', title: 'Pioneer Learner', desc: 'Completed your first interactive course lesson', icon: Sparkles, color: 'text-emerald-500 bg-emerald-500/10' },
+  { id: 'quiz-master', title: 'Concept Master', desc: 'Aced a lesson practice check with 100% accuracy', icon: Trophy, color: 'text-amber-600 bg-amber-500/10' },
   { id: 'notes-master', title: 'Mindful Scribe', desc: 'Authored and saved lesson notes for future review', icon: FileText, color: 'text-blue-500 bg-blue-500/10' },
-  { id: 'focus-champion', title: 'Deep Focus', desc: 'Achieved an 85+ focus score on weekly analysis', icon: Award, color: 'text-purple-500 bg-purple-500/10' },
 ]
 
 /* ============================================================================
    2. LOCAL STORAGE PERSISTENCE UTILITIES
    ============================================================================ */
 
-/**
- * Safely parses an array from localStorage.
- * @param {string} key - Storage key name.
- * @param {Array} fallback - Fallback array if key is missing or corrupted.
- * @returns {Array} Parsed array or fallback.
- */
 function readStoredArray(key, fallback) {
   try {
     const stored = localStorage.getItem(key)
@@ -241,41 +560,16 @@ function readStoredArray(key, fallback) {
     const parsed = JSON.parse(stored)
     return Array.isArray(parsed) ? parsed : fallback
   } catch (error) {
-    console.error(`Unable to parse ${key} from localStorage:`, error)
     return fallback
   }
 }
 
-/**
- * Safely parses an object from localStorage.
- * @param {string} key - Storage key name.
- * @param {Object} fallback - Fallback object if key is missing or corrupted.
- * @returns {Object} Parsed object or fallback.
- */
 function readStoredObject(key, fallback) {
   try {
     const stored = localStorage.getItem(key)
     if (!stored) return fallback
     const parsed = JSON.parse(stored)
     return typeof parsed === 'object' && parsed !== null ? parsed : fallback
-  } catch (error) {
-    console.error(`Unable to parse object ${key} from localStorage:`, error)
-    return fallback
-  }
-}
-
-/**
- * Safely parses a number from localStorage.
- * @param {string} key - Storage key name.
- * @param {number} fallback - Fallback number if key is missing or invalid.
- * @returns {number} Parsed number or fallback.
- */
-function readStoredNumber(key, fallback) {
-  try {
-    const stored = localStorage.getItem(key)
-    if (!stored) return fallback
-    const parsed = Number(stored)
-    return Number.isInteger(parsed) && parsed >= 0 ? parsed : fallback
   } catch (error) {
     return fallback
   }
@@ -285,10 +579,6 @@ function readStoredNumber(key, fallback) {
    3. ROUTING & NAVIGATION PARSER
    ============================================================================ */
 
-/**
- * Determines current view and parameters based on browser pathname.
- * @returns {{ page: string, id?: number }} Route object
- */
 function getRoute() {
   const path = window.location.pathname
   if (path.startsWith('/course/')) {
@@ -309,10 +599,6 @@ function getRoute() {
    4. CORE APPLICATION ROOT
    ============================================================================ */
 
-/**
- * Root Application Component.
- * Orchestrates routing, persistent state, theme management, and layout shells.
- */
 function App() {
   // Navigation & Route state
   const [route, setRoute] = useState(getRoute)
@@ -321,12 +607,12 @@ function App() {
   // Theme state (Persisted in localStorage)
   const [dark, setDark] = useState(() => localStorage.getItem('ilearn-theme') === 'dark')
 
-  // Search & Filter state
+  // Search, Filter & Sort state
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All courses')
-  const [sortBy, setSortBy] = useState('popular') // 'popular' | 'rating' | 'duration'
+  const [sortBy, setSortBy] = useState('popular')
 
-  // Learning Progress State (Stored per course)
+  // Persistent Learning Progress & Enrolled State
   const [completedMap, setCompletedMap] = useState(() =>
     readStoredObject('ilearn-completed-map', { 1: [0, 1] })
   )
@@ -342,8 +628,14 @@ function App() {
   const [userNotes, setUserNotes] = useState(() =>
     readStoredObject('ilearn-user-notes', {
       '1_0': 'Key principle: Calm software creates breathing space for deep thought.',
+      '1_1': 'Attention is finite: avoid artificial urgency and noisy notification badges.',
     })
   )
+
+  // Enrollment Modal Trigger State
+  const [enrollingCourse, setEnrollingCourse] = useState(null)
+  // Certificate Modal State
+  const [certificateCourse, setCertificateCourse] = useState(null)
 
   // Transition splash screen for Analytics page
   const [analyticsSplash, setAnalyticsSplash] = useState(false)
@@ -351,28 +643,25 @@ function App() {
   // Toast feedback notification
   const [toastMessage, setToastMessage] = useState(null)
 
-  /**
-   * Triggers a temporary toast message to provide feedback.
-   */
   const showToast = (message) => {
     setToastMessage(message)
-    window.setTimeout(() => setToastMessage(null), 2500)
+    window.setTimeout(() => setToastMessage(null), 2800)
   }
 
-  // Synchronize browser history and popstate navigation
+  // Popstate history navigation
   useEffect(() => {
     const handlePopState = () => setRoute(getRoute())
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
-  // Synchronize theme changes to document body and localStorage
+  // Sync theme
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
     localStorage.setItem('ilearn-theme', dark ? 'dark' : 'light')
   }, [dark])
 
-  // Persist learning state changes
+  // Sync local storage
   useEffect(() => {
     localStorage.setItem('ilearn-completed-map', JSON.stringify(completedMap))
   }, [completedMap])
@@ -393,16 +682,14 @@ function App() {
     localStorage.setItem('ilearn-user-notes', JSON.stringify(userNotes))
   }, [userNotes])
 
-  // Dismiss splash transition after timeout
+  // Splash dismissal
   useEffect(() => {
     if (!analyticsSplash) return
     const timeout = window.setTimeout(() => setAnalyticsSplash(false), 1100)
     return () => window.clearTimeout(timeout)
   }, [analyticsSplash])
 
-  /**
-   * Programmatic client-side navigation handler.
-   */
+  // Navigation handler
   const navigate = (path) => {
     window.history.pushState({}, '', path)
     const newRoute = getRoute()
@@ -412,22 +699,20 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  /**
-   * Toggles enrollment status for a given course.
-   */
-  const handleToggleEnroll = (courseId) => {
-    if (enrolledCourses.includes(courseId)) {
-      setEnrolledCourses((prev) => prev.filter((id) => id !== courseId))
-      showToast('Course removed from your enrolled list')
-    } else {
-      setEnrolledCourses((prev) => [...prev, courseId])
-      showToast('🎉 Enrolled successfully! Start learning now.')
-    }
+  // Enrollment flow triggers
+  const initiateEnrollment = (course) => {
+    setEnrollingCourse(course)
   }
 
-  /**
-   * Toggles bookmark/favorite status for a course.
-   */
+  const confirmEnrollment = (courseId) => {
+    if (!enrolledCourses.includes(courseId)) {
+      setEnrolledCourses((prev) => [...prev, courseId])
+    }
+    setEnrollingCourse(null)
+    showToast('🎉 Enrolled successfully! Redirecting to lesson player...')
+    navigate(`/learn/${courseId}`)
+  }
+
   const handleToggleBookmark = (courseId, e) => {
     if (e) e.stopPropagation()
     if (bookmarkedCourses.includes(courseId)) {
@@ -439,9 +724,6 @@ function App() {
     }
   }
 
-  /**
-   * Toggles a lesson completion status.
-   */
   const handleToggleLessonComplete = (courseId, lessonIndex) => {
     const currentCompleted = completedMap[courseId] || []
     const isCompleted = currentCompleted.includes(lessonIndex)
@@ -454,14 +736,17 @@ function App() {
       [courseId]: updated,
     }))
 
+    const course = COURSES_DATA.find((c) => c.id === courseId)
     if (!isCompleted) {
-      showToast('✨ Lesson marked as completed!')
+      if (course && updated.length === course.lessons.length) {
+        showToast('🏆 Incredible! You have completed the entire course!')
+        setCertificateCourse(course)
+      } else {
+        showToast('✨ Lesson marked as completed!')
+      }
     }
   }
 
-  /**
-   * Saves a note written for a specific course lesson.
-   */
   const handleSaveNote = (courseId, lessonIndex, text) => {
     const noteKey = `${courseId}_${lessonIndex}`
     setUserNotes((prev) => ({
@@ -471,16 +756,10 @@ function App() {
     showToast('💾 Lesson note saved')
   }
 
-  /**
-   * Active course object derived from route id or fallback.
-   */
   const activeCourse = useMemo(() => {
     return COURSES_DATA.find((c) => c.id === route.id) || COURSES_DATA[0]
   }, [route.id])
 
-  /**
-   * Filtered and sorted courses list for the Discover view.
-   */
   const filteredCourses = useMemo(() => {
     let result = COURSES_DATA.filter((course) => {
       const matchesSearch = `${course.title} ${course.tagline} ${course.category} ${course.author}`
@@ -500,9 +779,6 @@ function App() {
     return result
   }, [searchQuery, selectedCategory, sortBy])
 
-  /**
-   * Helper to calculate course completion percentage.
-   */
   const getCourseProgress = (courseId) => {
     const course = COURSES_DATA.find((c) => c.id === courseId)
     if (!course) return 0
@@ -510,17 +786,33 @@ function App() {
     return Math.round((completedList.length / course.lessons.length) * 100)
   }
 
-  // Active lesson index for the current learning view
   const currentActiveLesson = activeLessonMap[activeCourse.id] || 0
 
   return (
     <div className="min-h-screen bg-[#fbfaf8] text-[#1a1e1b] transition-colors duration-300 dark:bg-[#0d1210] dark:text-[#f3f5f3]">
-      {/* Dynamic Toast Feedback Overlay */}
+      {/* Toast Feedback Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl border border-emerald-600/20 bg-[#1e382b] px-4 py-3 text-sm font-medium text-white shadow-2xl animate-fade-in">
-          <Sparkles size={16} className="text-emerald-400" />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-xl border border-emerald-600/20 bg-[#1e382b] px-5 py-3.5 text-sm font-semibold text-white shadow-2xl animate-fade-in">
+          <Sparkles size={17} className="text-emerald-400 shrink-0" />
           <span>{toastMessage}</span>
         </div>
+      )}
+
+      {/* Enrollment Flow Modal */}
+      {enrollingCourse && (
+        <EnrollmentModal
+          course={enrollingCourse}
+          onClose={() => setEnrollingCourse(null)}
+          onConfirm={() => confirmEnrollment(enrollingCourse.id)}
+        />
+      )}
+
+      {/* Certificate Showcase Modal */}
+      {certificateCourse && (
+        <CertificateModal
+          course={certificateCourse}
+          onClose={() => setCertificateCourse(null)}
+        />
       )}
 
       {/* Dashboard Shell for /dashboard and /analytics */}
@@ -569,6 +861,7 @@ function App() {
               bookmarkedCourses={bookmarkedCourses}
               onToggleBookmark={handleToggleBookmark}
               getCourseProgress={getCourseProgress}
+              onInitiateEnroll={initiateEnrollment}
             />
           )}
 
@@ -579,6 +872,7 @@ function App() {
               bookmarkedCourses={bookmarkedCourses}
               getCourseProgress={getCourseProgress}
               onToggleBookmark={handleToggleBookmark}
+              onViewCertificate={(c) => setCertificateCourse(c)}
             />
           )}
 
@@ -589,7 +883,7 @@ function App() {
               isEnrolled={enrolledCourses.includes(activeCourse.id)}
               isBookmarked={bookmarkedCourses.includes(activeCourse.id)}
               progress={getCourseProgress(activeCourse.id)}
-              onToggleEnroll={handleToggleEnroll}
+              onInitiateEnroll={() => initiateEnrollment(activeCourse)}
               onToggleBookmark={handleToggleBookmark}
             />
           )}
@@ -616,12 +910,135 @@ function App() {
 }
 
 /* ============================================================================
-   5. SHARED UI ATOMS & COMPONENTS
+   5. MODALS & POPUPS (Enrollment & Certificate)
    ============================================================================ */
 
 /**
- * Brand Logo component.
+ * 5.1 Enrollment Flow Confirmation Modal.
  */
+function EnrollmentModal({ course, onClose, onConfirm }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+      <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-black/10 bg-[#fbfaf8] p-6 shadow-2xl dark:border-white/10 dark:bg-[#121815] sm:p-8">
+        <button
+          onClick={onClose}
+          className="absolute right-5 top-5 grid h-8 w-8 place-items-center rounded-full text-gray-400 hover:bg-black/5 dark:hover:bg-white/10"
+        >
+          <X size={18} />
+        </button>
+
+        <div className="flex items-center gap-3">
+          <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#234432] text-white">
+            <Sparkles size={20} />
+          </span>
+          <div>
+            <p className="eyebrow">Confirm Enrollment</p>
+            <h3 className="text-xl font-bold tracking-tight">{course.title}</h3>
+          </div>
+        </div>
+
+        <p className="mt-4 text-xs leading-relaxed text-gray-600 dark:text-gray-300">
+          You are about to unlock full access to all {course.lessons.length} video lessons, downloadable exercise guides, interactive knowledge checks, and certificate eligibility.
+        </p>
+
+        {/* Benefits List */}
+        <div className="my-6 space-y-2.5 rounded-2xl border border-black/5 bg-black/[0.02] p-4 text-xs dark:border-white/5 dark:bg-white/[0.03]">
+          <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-300">
+            <Check size={15} /> <span>Self-paced lifetime access to all course modules</span>
+          </div>
+          <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-300">
+            <Check size={15} /> <span>Personal interactive note-taking and lesson quizzes</span>
+          </div>
+          <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-300">
+            <Check size={15} /> <span>Verified Certificate of Completion upon 100% progress</span>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="rounded-full border border-black/10 px-5 py-2.5 text-xs font-semibold text-gray-600 hover:bg-black/5 dark:border-white/10 dark:text-gray-300"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex items-center gap-2 rounded-full bg-[#1b3426] px-6 py-2.5 text-xs font-bold text-white shadow-md transition hover:bg-[#284f3a] dark:bg-white dark:text-[#121c16]"
+          >
+            <span>Confirm & Start Learning</span>
+            <ArrowRight size={14} />
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * 5.2 Certificate Showcase & Download Modal.
+ */
+function CertificateModal({ course, onClose }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+      <div className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-amber-600/30 bg-[#fefdfb] p-6 shadow-2xl dark:border-amber-500/20 dark:bg-[#151c17] sm:p-10">
+        <button
+          onClick={onClose}
+          className="absolute right-5 top-5 grid h-8 w-8 place-items-center rounded-full text-gray-400 hover:bg-black/5 dark:hover:bg-white/10"
+        >
+          <X size={18} />
+        </button>
+
+        {/* Certificate Decorative Border Container */}
+        <div className="rounded-2xl border-4 border-double border-amber-800/20 p-8 text-center dark:border-amber-500/30">
+          <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400">
+            <Trophy size={28} />
+          </div>
+
+          <p className="eyebrow mt-4 text-amber-800 dark:text-amber-300">
+            Certificate of Intentional Mastery
+          </p>
+          <h2 className="serif mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
+            {course.title}
+          </h2>
+
+          <p className="mt-4 text-xs text-gray-500">This certificate certifies that</p>
+          <p className="mt-1 text-lg font-bold text-[#1b3426] dark:text-[#90cca7]">
+            Jordan Davis
+          </p>
+          <p className="mt-1 text-xs text-gray-500">
+            has successfully completed all coursework, interactive exercises, and curriculum requirements.
+          </p>
+
+          <div className="mt-8 flex items-center justify-between border-t border-amber-900/10 pt-4 text-xs font-semibold text-gray-500 dark:border-white/10">
+            <span>Instructor: {course.author}</span>
+            <span>Issued: September 2026</span>
+            <span>Credential ID: IL-{course.id}84920</span>
+          </div>
+        </div>
+
+        <div className="mt-6 flex items-center justify-between">
+          <span className="flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+            <ShieldCheck size={16} /> Verified Authentic Credential
+          </span>
+          <button
+            onClick={() => {
+              alert('Certificate downloaded to your device as PDF.')
+              onClose()
+            }}
+            className="flex items-center gap-2 rounded-full bg-[#1b3426] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#254935] dark:bg-white dark:text-[#121c16]"
+          >
+            <Download size={14} /> Download Certificate (PDF)
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ============================================================================
+   6. SHARED UI ATOMS & COMPONENTS
+   ============================================================================ */
+
 function Brand({ onClick }) {
   return (
     <button
@@ -636,9 +1053,6 @@ function Brand({ onClick }) {
   )
 }
 
-/**
- * Light/Dark Mode Switcher.
- */
 function ThemeButton({ dark, setDark }) {
   return (
     <button
@@ -652,9 +1066,6 @@ function ThemeButton({ dark, setDark }) {
   )
 }
 
-/**
- * Animated Accessible Hamburger Toggle.
- */
 function AnimatedHamburger({ checked, onChange, label, className = '' }) {
   return (
     <label className={`animated-hamburger ${className}`} aria-label={label}>
@@ -674,9 +1085,6 @@ function AnimatedHamburger({ checked, onChange, label, className = '' }) {
   )
 }
 
-/**
- * Key Performance Indicator / Metric Widget.
- */
 function MetricCard({ label, value, change, icon: Icon, trend = 'up' }) {
   return (
     <div className="card p-5 transition hover:-translate-y-0.5">
@@ -699,85 +1107,88 @@ function MetricCard({ label, value, change, icon: Icon, trend = 'up' }) {
   )
 }
 
-/**
- * Course Card Item in Catalog.
- */
-function CourseCard({ course, navigate, isBookmarked, onToggleBookmark, progress = 0 }) {
+function CourseCard({
+  course,
+  navigate,
+  isBookmarked,
+  onToggleBookmark,
+  progress = 0,
+  onInitiateEnroll,
+  isEnrolled,
+}) {
   return (
     <div
       onClick={() => navigate(`/course/${course.id}`)}
-      className="card group cursor-pointer overflow-hidden p-4 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:hover:border-white/20"
+      className="card group cursor-pointer overflow-hidden p-4 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:hover:border-white/20 flex flex-col justify-between"
     >
-      {/* Course Thumbnail Image container */}
-      <div className={`relative mb-4 aspect-[16/10] overflow-hidden rounded-xl ${course.color}`}>
-        <img
-          src={course.image}
-          alt={course.title}
-          className="h-full w-full object-cover mix-blend-multiply opacity-80 transition duration-500 group-hover:scale-105 dark:opacity-70"
-          loading="lazy"
-        />
-        {/* Category Pill */}
-        <span className="glass-pill absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold text-gray-800 dark:text-gray-200">
-          {course.category}
-        </span>
+      <div>
+        {/* Course Thumbnail Image */}
+        <div className={`relative mb-4 aspect-[16/10] overflow-hidden rounded-xl ${course.color}`}>
+          <img
+            src={course.image}
+            alt={course.title}
+            className="h-full w-full object-cover mix-blend-multiply opacity-80 transition duration-500 group-hover:scale-105 dark:opacity-70"
+            loading="lazy"
+          />
+          <span className="glass-pill absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold text-gray-800 dark:text-gray-200">
+            {course.category}
+          </span>
 
-        {/* Bookmark Button */}
-        <button
-          aria-label={isBookmarked ? 'Remove bookmark' : 'Bookmark course'}
-          onClick={(e) => onToggleBookmark(course.id, e)}
-          className="glass-pill absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full text-gray-700 transition hover:scale-110 dark:text-gray-200"
-        >
-          {isBookmarked ? (
-            <BookmarkCheck size={16} className="text-emerald-700 dark:text-emerald-400" />
-          ) : (
-            <Bookmark size={16} />
+          <button
+            aria-label={isBookmarked ? 'Remove bookmark' : 'Bookmark course'}
+            onClick={(e) => onToggleBookmark(course.id, e)}
+            className="glass-pill absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full text-gray-700 transition hover:scale-110 dark:text-gray-200"
+          >
+            {isBookmarked ? (
+              <BookmarkCheck size={16} className="text-emerald-700 dark:text-emerald-400" />
+            ) : (
+              <Bookmark size={16} />
+            )}
+          </button>
+
+          {progress > 0 && (
+            <div className="glass-pill absolute bottom-3 left-3 rounded-full px-3 py-1 text-[11px] font-semibold text-emerald-900 dark:text-emerald-200">
+              {progress}% completed
+            </div>
           )}
-        </button>
+        </div>
 
-        {/* Progress Badge if started */}
-        {progress > 0 && (
-          <div className="glass-pill absolute bottom-3 left-3 rounded-full px-3 py-1 text-[11px] font-semibold text-emerald-900 dark:text-emerald-200">
-            {progress}% completed
-          </div>
-        )}
+        {/* Content Details */}
+        <div className="flex items-center justify-between text-xs text-gray-400">
+          <span>{course.level}</span>
+          <span className="flex items-center gap-1 font-medium text-amber-600 dark:text-amber-400">
+            <Star size={13} fill="currentColor" /> {course.rating}{' '}
+            <span className="text-gray-400">({course.reviewsCount})</span>
+          </span>
+        </div>
+
+        <h3 className="mt-2 text-[17px] font-bold leading-snug tracking-tight group-hover:text-[#2d5740] dark:group-hover:text-[#90cca7]">
+          {course.title}
+        </h3>
+
+        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+          {course.tagline}
+        </p>
       </div>
 
-      {/* Course Content Details */}
-      <div className="flex items-center justify-between text-xs text-gray-400">
-        <span>{course.level}</span>
-        <span className="flex items-center gap-1 font-medium text-amber-600 dark:text-amber-400">
-          <Star size={13} fill="currentColor" /> {course.rating}{' '}
-          <span className="text-gray-400">({course.reviewsCount})</span>
-        </span>
-      </div>
-
-      <h3 className="mt-2 text-[17px] font-bold leading-snug tracking-tight group-hover:text-[#2d5740] dark:group-hover:text-[#90cca7]">
-        {course.title}
-      </h3>
-
-      <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
-        {course.tagline}
-      </p>
-
-      <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-3 text-xs text-gray-500 dark:border-white/5 dark:text-gray-400">
-        <span className="flex items-center gap-1.5 truncate">
-          <UserRound size={13} /> {course.author}
-        </span>
-        <span className="flex items-center gap-1 shrink-0">
-          <Clock3 size={13} /> {course.duration}
-        </span>
+      <div className="mt-4 border-t border-gray-100 pt-3 text-xs text-gray-500 dark:border-white/5 dark:text-gray-400">
+        <div className="flex items-center justify-between">
+          <span className="flex items-center gap-1.5 truncate">
+            <UserRound size={13} /> {course.author}
+          </span>
+          <span className="flex items-center gap-1 shrink-0">
+            <Clock3 size={13} /> {course.duration}
+          </span>
+        </div>
       </div>
     </div>
   )
 }
 
 /* ============================================================================
-   6. LAYOUT SHELLS
+   7. LAYOUT SHELLS
    ============================================================================ */
 
-/**
- * Editorial Marketing Shell with clean glass navbar and footer.
- */
 function MarketingShell({
   route,
   navigate,
@@ -789,12 +1200,10 @@ function MarketingShell({
 }) {
   return (
     <div className="flex min-h-screen flex-col">
-      {/* Sticky Glass Navbar */}
       <header className="sticky top-0 z-30 border-b border-black/[0.06] bg-[#fbfaf8]/90 backdrop-blur-xl transition-colors dark:border-white/[0.08] dark:bg-[#0d1210]/90">
         <div className="mx-auto flex h-[76px] max-w-[1240px] items-center justify-between px-5 lg:px-8">
           <Brand onClick={() => navigate('/')} />
 
-          {/* Desktop Nav Items */}
           <nav className="hidden items-center gap-8 md:flex">
             <button
               onClick={() => navigate('/')}
@@ -822,7 +1231,6 @@ function MarketingShell({
             </button>
           </nav>
 
-          {/* Right Action Icons & User Profile */}
           <div className="flex items-center gap-3">
             <ThemeButton dark={dark} setDark={setDark} />
 
@@ -836,7 +1244,6 @@ function MarketingShell({
               <span>Jordan Davis</span>
             </button>
 
-            {/* Mobile Hamburger Button */}
             <button
               aria-label="Toggle mobile menu"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -847,7 +1254,6 @@ function MarketingShell({
           </div>
         </div>
 
-        {/* Mobile Dropdown Menu Drawer */}
         {mobileMenuOpen && (
           <div className="border-t border-black/5 bg-[#fbfaf8] px-5 py-4 dark:border-white/10 dark:bg-[#0d1210] md:hidden">
             <nav className="flex flex-col space-y-1">
@@ -880,12 +1286,10 @@ function MarketingShell({
         )}
       </header>
 
-      {/* Main View Area */}
       <main className="mx-auto w-full max-w-[1240px] flex-1 px-5 pb-24 lg:px-8">
         {children}
       </main>
 
-      {/* Modern Minimal Footer */}
       <footer className="mt-auto border-t border-black/[0.06] bg-white/40 py-10 dark:border-white/[0.08] dark:bg-[#090d0b]">
         <div className="mx-auto flex max-w-[1240px] flex-col items-center justify-between gap-6 px-5 text-xs text-gray-500 dark:text-gray-400 sm:flex-row lg:px-8">
           <div className="flex items-center gap-2 font-medium">
@@ -909,9 +1313,6 @@ function MarketingShell({
   )
 }
 
-/**
- * Dashboard Shell with collapsible left sidebar and upper header.
- */
 function DashboardShell({
   route,
   navigate,
@@ -932,7 +1333,6 @@ function DashboardShell({
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
-      {/* Mobile Backdrop Overlay */}
       <button
         aria-label="Close navigation overlay"
         onClick={() => setMobileMenuOpen(false)}
@@ -941,13 +1341,11 @@ function DashboardShell({
         }`}
       />
 
-      {/* Collapsible Left Sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-40 flex flex-col border-r border-black/[0.07] bg-[#f5f7f4] px-3 py-6 transition-all duration-300 dark:border-white/[0.08] dark:bg-[#121815] md:static md:translate-x-0 ${
           mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         } ${collapsed ? 'w-20' : 'w-64'}`}
       >
-        {/* Sidebar Header & Brand */}
         <div
           className={`flex items-center ${
             collapsed ? 'justify-center' : 'justify-between px-2'
@@ -968,7 +1366,6 @@ function DashboardShell({
           </button>
         </div>
 
-        {/* Navigation Link Items */}
         <nav className="mt-10 flex-1 space-y-1.5">
           {navItems.map(({ path, label, icon: Icon }) => {
             const isSelected =
@@ -1000,7 +1397,6 @@ function DashboardShell({
           })}
         </nav>
 
-        {/* Learning Streak Card */}
         {!collapsed && (
           <div className="mt-auto rounded-2xl border border-emerald-700/15 bg-[#e4ede6] p-4 dark:border-emerald-500/20 dark:bg-[#1a2b22]">
             <p className="text-[11px] font-bold uppercase tracking-wider text-[#356149] dark:text-[#9cd1b3]">
@@ -1016,9 +1412,7 @@ function DashboardShell({
         )}
       </aside>
 
-      {/* Main Content Area */}
       <div className="min-w-0 flex-1">
-        {/* Top Header Bar */}
         <header className="flex h-[76px] items-center justify-between border-b border-black/[0.07] bg-[#fbfaf8]/90 px-5 backdrop-blur-md transition-colors dark:border-white/[0.08] dark:bg-[#0d1210]/90 lg:px-10">
           <div className="flex items-center gap-3">
             <AnimatedHamburger
@@ -1028,7 +1422,7 @@ function DashboardShell({
               className="md:hidden"
             />
             <div className="hidden text-xs font-semibold text-gray-500 dark:text-gray-400 sm:block">
-              Today is Thursday, September 24, 2026
+              Thursday, September 24, 2026
             </div>
           </div>
 
@@ -1053,11 +1447,11 @@ function DashboardShell({
 }
 
 /* ============================================================================
-   7. PAGE VIEWS & INTERACTIVE PANELS
+   8. PAGE VIEWS (Discover, Course Details, Learning, My Learning, Dashboard)
    ============================================================================ */
 
 /**
- * 7.1 Discover View: Hero, Category Filters, Search Bar, and Course Catalog.
+ * 8.1 Discover View: Home & Course Discovery.
  */
 function DiscoverView({
   searchQuery,
@@ -1071,6 +1465,7 @@ function DiscoverView({
   bookmarkedCourses,
   onToggleBookmark,
   getCourseProgress,
+  onInitiateEnroll,
 }) {
   return (
     <>
@@ -1100,7 +1495,6 @@ function DiscoverView({
                 3 day streak <Flame size={18} className="text-amber-500" />
               </p>
             </div>
-            {/* 7-day visual dots */}
             <div className="flex gap-1.5">
               {[1, 1, 1, 0, 0, 0, 0].map((active, idx) => (
                 <span
@@ -1132,7 +1526,6 @@ function DiscoverView({
 
       {/* Filter & Search Bar Toolbar */}
       <section className="mb-10 flex flex-col gap-4 border-y border-black/[0.07] py-5 dark:border-white/[0.08] sm:flex-row sm:items-center sm:justify-between">
-        {/* Category Pills */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
           {CATEGORIES.map((category) => {
             const isSelected = selectedCategory === category
@@ -1152,7 +1545,6 @@ function DiscoverView({
           })}
         </div>
 
-        {/* Search Input & Sort Selector */}
         <div className="flex items-center gap-3">
           <div className="relative flex-1 sm:w-64 sm:flex-initial">
             <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -1207,6 +1599,7 @@ function DiscoverView({
                 isBookmarked={bookmarkedCourses.includes(course.id)}
                 onToggleBookmark={onToggleBookmark}
                 progress={getCourseProgress(course.id)}
+                onInitiateEnroll={() => onInitiateEnroll(course)}
               />
             ))}
           </div>
@@ -1269,7 +1662,7 @@ function DiscoverView({
 }
 
 /**
- * 7.2 Course Detail View: Detailed Course Syllabus, Outcomes, & Instructor Bio.
+ * 8.2 Course Details View.
  */
 function CourseDetailView({
   course,
@@ -1277,14 +1670,13 @@ function CourseDetailView({
   isEnrolled,
   isBookmarked,
   progress,
-  onToggleEnroll,
+  onInitiateEnroll,
   onToggleBookmark,
 }) {
-  const [activeTab, setActiveTab] = useState('syllabus') // 'syllabus' | 'outcomes' | 'instructor'
+  const [activeTab, setActiveTab] = useState('syllabus')
 
   return (
     <section className="pt-8">
-      {/* Breadcrumb Back Button */}
       <button
         onClick={() => navigate('/')}
         className="mb-8 flex items-center gap-2 text-xs font-semibold text-gray-500 transition hover:text-[#1a1e1b] dark:text-gray-400 dark:hover:text-white"
@@ -1294,7 +1686,6 @@ function CourseDetailView({
 
       {/* Main Course Header & Media Showcase */}
       <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-        {/* Left Side: Course Hero Artwork */}
         <div className={`relative min-h-[380px] overflow-hidden rounded-3xl ${course.color} shadow-lg`}>
           <img
             src={course.image}
@@ -1311,7 +1702,6 @@ function CourseDetailView({
           </div>
         </div>
 
-        {/* Right Side: Course Header Info & Actions */}
         <div className="flex flex-col justify-center">
           <div className="flex items-center gap-3">
             <p className="eyebrow">{course.category} Specialization</p>
@@ -1328,7 +1718,6 @@ function CourseDetailView({
             {course.description}
           </p>
 
-          {/* Key Course Stats */}
           <div className="my-6 flex flex-wrap gap-5 border-y border-black/[0.08] py-4 text-xs font-medium text-gray-600 dark:border-white/[0.08] dark:text-gray-300">
             <span className="flex items-center gap-1.5">
               <UserRound size={15} className="text-[#39694e]" /> {course.author}
@@ -1341,7 +1730,7 @@ function CourseDetailView({
             </span>
           </div>
 
-          {/* Primary CTA Buttons */}
+          {/* Enrollment / Learning CTA */}
           <div className="flex flex-wrap items-center gap-4">
             {isEnrolled ? (
               <button
@@ -1353,7 +1742,7 @@ function CourseDetailView({
               </button>
             ) : (
               <button
-                onClick={() => onToggleEnroll(course.id)}
+                onClick={onInitiateEnroll}
                 className="flex items-center gap-2 rounded-full bg-[#1b3426] px-8 py-3.5 text-sm font-semibold text-white shadow-md transition hover:bg-[#254935] dark:bg-white dark:text-[#121c16] dark:hover:bg-gray-100"
               >
                 <span>Enroll in Course</span>
@@ -1414,6 +1803,16 @@ function CourseDetailView({
           >
             Instructor Profile
           </button>
+          <button
+            onClick={() => setActiveTab('resources')}
+            className={`pb-2 text-sm font-bold transition ${
+              activeTab === 'resources'
+                ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
+                : 'text-gray-500 hover:text-black dark:hover:text-white'
+            }`}
+          >
+            Resources ({course.resources?.length || 0})
+          </button>
         </div>
 
         {/* Tab 1: Syllabus Accordion */}
@@ -1472,13 +1871,36 @@ function CourseDetailView({
             </div>
           </div>
         )}
+
+        {/* Tab 4: Resources */}
+        {activeTab === 'resources' && (
+          <div className="mt-8 space-y-3">
+            {course.resources?.map((res, idx) => (
+              <div key={idx} className="card flex items-center justify-between p-4">
+                <div className="flex items-center gap-3">
+                  <FileText size={18} className="text-[#3b6d52]" />
+                  <div>
+                    <p className="text-xs font-bold">{res.name}</p>
+                    <p className="text-[10px] text-gray-400">{res.size}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => alert(`Downloading ${res.name}...`)}
+                  className="flex items-center gap-1.5 rounded-full border border-black/10 px-3 py-1.5 text-xs font-semibold hover:bg-black/5 dark:border-white/10"
+                >
+                  <Download size={13} /> Download
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )
 }
 
 /**
- * 7.3 Interactive Learning Player: Video Controls, Speed, Notes Editor, & Syllabus.
+ * 8.3 Learning / Lesson Experience with Focus Mode, Quiz, Notes, and Curriculum.
  */
 function LearningPlayerView({
   course,
@@ -1495,11 +1917,18 @@ function LearningPlayerView({
   const [isPlaying, setIsPlaying] = useState(false)
   const [playbackSpeed, setPlaybackSpeed] = useState('1x')
   const [isMuted, setIsMuted] = useState(false)
-  const [activeTab, setActiveTab] = useState('notes') // 'notes' | 'takeaways' | 'qa'
+  const [focusMode, setFocusMode] = useState(false)
+  const [activeTab, setActiveTab] = useState('notes') // 'notes' | 'takeaways' | 'quiz'
   const [noteDraft, setNoteDraft] = useState(userNotes)
 
-  // Synchronize note draft when lesson changes
+  // Quiz state
+  const [selectedQuizOption, setSelectedQuizOption] = useState(null)
+  const [quizSubmitted, setQuizSubmitted] = useState(false)
+
+  // Reset quiz state when switching lessons
   useEffect(() => {
+    setSelectedQuizOption(null)
+    setQuizSubmitted(false)
     setNoteDraft(userNotes)
   }, [userNotes, activeLessonIndex])
 
@@ -1519,14 +1948,29 @@ function LearningPlayerView({
   }
 
   return (
-    <section className="pt-8">
-      {/* Back to Course Overview */}
-      <button
-        onClick={() => navigate(`/course/${course.id}`)}
-        className="mb-6 flex items-center gap-2 text-xs font-semibold text-gray-500 transition hover:text-[#1a1e1b] dark:text-gray-400 dark:hover:text-white"
-      >
-        <ChevronLeft size={16} /> Back to Course Overview
-      </button>
+    <section className={`pt-8 ${focusMode ? 'max-w-4xl mx-auto' : ''}`}>
+      {/* Top Controls: Back button & Focus mode toggle */}
+      <div className="mb-6 flex items-center justify-between">
+        <button
+          onClick={() => navigate(`/course/${course.id}`)}
+          className="flex items-center gap-2 text-xs font-semibold text-gray-500 transition hover:text-[#1a1e1b] dark:text-gray-400 dark:hover:text-white"
+        >
+          <ChevronLeft size={16} /> Back to Course Overview
+        </button>
+
+        <button
+          onClick={() => setFocusMode(!focusMode)}
+          className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+            focusMode
+              ? 'border-emerald-600 bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
+              : 'border-black/10 text-gray-600 hover:bg-black/5 dark:border-white/10 dark:text-gray-300'
+          }`}
+          title="Distraction-Free Focus Mode"
+        >
+          {focusMode ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+          <span>{focusMode ? 'Exit Focus Mode' : 'Focus Mode'}</span>
+        </button>
+      </div>
 
       {/* Lesson Header Banner */}
       <div className="mb-8 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
@@ -1540,7 +1984,6 @@ function LearningPlayerView({
           </p>
         </div>
 
-        {/* Course Progress Indicator */}
         <div className="w-full sm:w-60">
           <div className="mb-2 flex justify-between text-xs font-semibold">
             <span>Course Progress</span>
@@ -1555,21 +1998,17 @@ function LearningPlayerView({
         </div>
       </div>
 
-      {/* Main Player & Sidebar Grid */}
-      <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
-        {/* Left Side: Video Player Screen & Lesson Workspace */}
+      {/* Main Player & Workspace Grid */}
+      <div className={`grid gap-8 ${focusMode ? 'grid-cols-1' : 'lg:grid-cols-[1fr_360px]'}`}>
+        {/* Left / Center: Interactive Video Player */}
         <div>
-          {/* Interactive Player Mock Container */}
-          <div
-            className={`relative aspect-video overflow-hidden rounded-3xl ${course.color} shadow-lg`}
-          >
+          <div className={`relative aspect-video overflow-hidden rounded-3xl ${course.color} shadow-lg`}>
             <img
               src={course.image}
               alt=""
               className="h-full w-full object-cover opacity-75 mix-blend-multiply transition duration-500 dark:opacity-60"
             />
 
-            {/* Center Play/Pause Trigger */}
             <button
               onClick={() => setIsPlaying(!isPlaying)}
               className="absolute left-1/2 top-1/2 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-ink shadow-2xl transition hover:scale-110 dark:bg-[#121c16] dark:text-white"
@@ -1577,10 +2016,9 @@ function LearningPlayerView({
               {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" className="ml-1" />}
             </button>
 
-            {/* Bottom Player Controls Bar */}
+            {/* Bottom Player Controls */}
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white">
-              {/* Fake Seekbar */}
-              <div className="mb-3 h-1.5 w-full overflow-hidden rounded-full bg-white/30">
+              <div className="mb-3 h-1.5 w-full overflow-hidden rounded-full bg-white/30 cursor-pointer">
                 <div className={`h-full rounded-full bg-emerald-400 ${isPlaying ? 'w-[45%]' : 'w-[20%]'}`} />
               </div>
 
@@ -1647,7 +2085,7 @@ function LearningPlayerView({
             </button>
           </div>
 
-          {/* Interactive Lesson Workspace (Notes, Summary, Q&A) */}
+          {/* Tabbed Interactive Lesson Content (Notes, Takeaways, Quiz) */}
           <div className="mt-8">
             <div className="flex gap-4 border-b border-black/[0.08] pb-2 dark:border-white/[0.08]">
               <button
@@ -1670,28 +2108,30 @@ function LearningPlayerView({
               >
                 <Sparkles size={14} /> Key Takeaways
               </button>
-              <button
-                onClick={() => setActiveTab('qa')}
-                className={`flex items-center gap-1.5 pb-2 text-xs font-bold transition ${
-                  activeTab === 'qa'
-                    ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
-                    : 'text-gray-500 hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <MessageSquare size={14} /> Discussion & Q&A
-              </button>
+              {currentLesson.quiz && (
+                <button
+                  onClick={() => setActiveTab('quiz')}
+                  className={`flex items-center gap-1.5 pb-2 text-xs font-bold transition ${
+                    activeTab === 'quiz'
+                      ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
+                      : 'text-gray-500 hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  <HelpCircle size={14} /> Practice Check
+                </button>
+              )}
             </div>
 
-            {/* Active Tab: Personal Notes Editor */}
+            {/* Tab: Notes Editor */}
             {activeTab === 'notes' && (
               <div className="mt-5">
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Write and save key insights from this lesson. Notes are saved automatically to your device.
+                  Write reflections and thoughts for this lesson. Notes are automatically saved locally.
                 </p>
                 <textarea
                   value={noteDraft}
                   onChange={(e) => setNoteDraft(e.target.value)}
-                  placeholder="Record your reflections, ideas, or action items here..."
+                  placeholder="Type your notes, ideas, or action items here..."
                   className="mt-3 h-32 w-full rounded-2xl border border-black/10 bg-white/70 p-4 text-xs font-medium leading-relaxed outline-none transition focus:border-[#43795b] focus:ring-2 focus:ring-[#43795b]/20 dark:border-white/10 dark:bg-white/5"
                 />
                 <button
@@ -1703,99 +2143,118 @@ function LearningPlayerView({
               </div>
             )}
 
-            {/* Active Tab: Key Takeaways */}
+            {/* Tab: Key Takeaways */}
             {activeTab === 'takeaways' && (
               <div className="mt-5 space-y-3">
-                <div className="card p-4">
-                  <h4 className="text-xs font-bold text-[#234934] dark:text-[#90cca7]">
-                    1. Attention as a finite resource
-                  </h4>
-                  <p className="mt-1 text-xs leading-relaxed text-gray-600 dark:text-gray-300">
-                    Treat the user's attention like battery power — every notification, badge, or banner drains a percentage.
-                  </p>
-                </div>
-                <div className="card p-4">
-                  <h4 className="text-xs font-bold text-[#234934] dark:text-[#90cca7]">
-                    2. The power of silent defaults
-                  </h4>
-                  <p className="mt-1 text-xs leading-relaxed text-gray-600 dark:text-gray-300">
-                    Optimize for the quietest sensible default state before asking the user for input.
-                  </p>
-                </div>
+                {currentLesson.takeaways?.map((takeaway, idx) => (
+                  <div key={idx} className="card p-4">
+                    <p className="text-xs leading-relaxed text-gray-700 dark:text-gray-200">
+                      • {takeaway}
+                    </p>
+                  </div>
+                ))}
               </div>
             )}
 
-            {/* Active Tab: Discussion */}
-            {activeTab === 'qa' && (
-              <div className="mt-5 space-y-3">
-                <div className="card p-4">
-                  <div className="flex items-center gap-2">
-                    <span className="grid h-6 w-6 place-items-center rounded-full bg-[#dbe7de] text-[10px] font-bold text-[#204430] dark:bg-[#1a3124] dark:text-[#9fd5b6]">
-                      EK
-                    </span>
-                    <span className="text-xs font-bold">Elena Kim</span>
-                    <span className="text-[10px] text-gray-400">2 days ago</span>
-                  </div>
-                  <p className="mt-2 text-xs leading-relaxed text-gray-600 dark:text-gray-300">
-                    How do you balance calm design when stakeholders insist on bold callouts everywhere?
-                  </p>
+            {/* Tab: Knowledge Check Quiz */}
+            {activeTab === 'quiz' && currentLesson.quiz && (
+              <div className="card mt-5 p-6">
+                <h4 className="text-sm font-bold">{currentLesson.quiz.question}</h4>
+                <div className="mt-4 space-y-2.5">
+                  {currentLesson.quiz.options.map((option, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => !quizSubmitted && setSelectedQuizOption(idx)}
+                      className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left text-xs font-semibold transition ${
+                        selectedQuizOption === idx
+                          ? 'border-[#3b6d52] bg-emerald-50 text-[#1e382b] dark:bg-emerald-950/40 dark:text-emerald-200'
+                          : 'border-black/10 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5'
+                      }`}
+                    >
+                      <span className="grid h-5 w-5 place-items-center rounded-full border text-[10px]">
+                        {String.fromCharCode(65 + idx)}
+                      </span>
+                      <span>{option}</span>
+                    </button>
+                  ))}
                 </div>
+
+                {!quizSubmitted ? (
+                  <button
+                    disabled={selectedQuizOption === null}
+                    onClick={() => setQuizSubmitted(true)}
+                    className="mt-4 rounded-xl bg-[#1e382b] px-5 py-2 text-xs font-bold text-white disabled:opacity-40 dark:bg-white dark:text-[#121c16]"
+                  >
+                    Submit Answer
+                  </button>
+                ) : (
+                  <div className="mt-4 rounded-xl border border-emerald-600/20 bg-emerald-50 p-4 dark:border-emerald-500/20 dark:bg-emerald-950/40">
+                    <p className="text-xs font-bold text-emerald-900 dark:text-emerald-200">
+                      {selectedQuizOption === currentLesson.quiz.correct ? '🎉 Correct!' : '💡 Good Try!'}
+                    </p>
+                    <p className="mt-1 text-xs text-gray-600 dark:text-gray-300">
+                      {currentLesson.quiz.explanation}
+                    </p>
+                  </div>
+                )}
               </div>
             )}
           </div>
         </div>
 
-        {/* Right Side: Course Curriculum Sidebar */}
-        <aside className="card p-5">
-          <div className="mb-4 flex items-center justify-between border-b border-black/[0.06] pb-3 dark:border-white/[0.08]">
-            <h3 className="text-sm font-bold">Course Lessons</h3>
-            <span className="text-xs font-bold text-gray-400">
-              {completedLessons.length} of {course.lessons.length} complete
-            </span>
-          </div>
+        {/* Right Sidebar: Curriculum (hidden in Focus Mode) */}
+        {!focusMode && (
+          <aside className="card p-5">
+            <div className="mb-4 flex items-center justify-between border-b border-black/[0.06] pb-3 dark:border-white/[0.08]">
+              <h3 className="text-sm font-bold">Course Lessons</h3>
+              <span className="text-xs font-bold text-gray-400">
+                {completedLessons.length} of {course.lessons.length} complete
+              </span>
+            </div>
 
-          <div className="space-y-1.5">
-            {course.lessons.map((lesson, idx) => {
-              const isSelected = activeLessonIndex === idx
-              const isDone = completedLessons.includes(idx)
+            <div className="space-y-1.5">
+              {course.lessons.map((lesson, idx) => {
+                const isSelected = activeLessonIndex === idx
+                const isDone = completedLessons.includes(idx)
 
-              return (
-                <button
-                  key={lesson.id}
-                  onClick={() => setActiveLessonIndex(idx)}
-                  className={`flex w-full items-center gap-3 rounded-xl p-3 text-left transition ${
-                    isSelected
-                      ? 'bg-[#e4ede6] font-semibold text-[#1e3c2c] dark:bg-[#1b2d22] dark:text-[#9fe0bb]'
-                      : 'hover:bg-black/[0.03] dark:hover:bg-white/[0.04]'
-                  }`}
-                >
-                  <span
-                    className={`grid h-6 w-6 shrink-0 place-items-center rounded-full text-[10px] font-bold ${
-                      isDone
-                        ? 'bg-emerald-600 text-white dark:bg-emerald-500'
-                        : isSelected
-                        ? 'bg-[#29563d] text-white dark:bg-[#7ec29a] dark:text-black'
-                        : 'bg-black/[0.06] text-gray-600 dark:bg-white/10 dark:text-gray-400'
+                return (
+                  <button
+                    key={lesson.id}
+                    onClick={() => setActiveLessonIndex(idx)}
+                    className={`flex w-full items-center gap-3 rounded-xl p-3 text-left transition ${
+                      isSelected
+                        ? 'bg-[#e4ede6] font-semibold text-[#1e3c2c] dark:bg-[#1b2d22] dark:text-[#9fe0bb]'
+                        : 'hover:bg-black/[0.03] dark:hover:bg-white/[0.04]'
                     }`}
                   >
-                    {isDone ? <Check size={13} /> : idx + 1}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-xs">{lesson.title}</p>
-                    <p className="text-[10px] text-gray-400">{lesson.duration}</p>
-                  </div>
-                </button>
-              )
-            })}
-          </div>
-        </aside>
+                    <span
+                      className={`grid h-6 w-6 shrink-0 place-items-center rounded-full text-[10px] font-bold ${
+                        isDone
+                          ? 'bg-emerald-600 text-white dark:bg-emerald-500'
+                          : isSelected
+                          ? 'bg-[#29563d] text-white dark:bg-[#7ec29a] dark:text-black'
+                          : 'bg-black/[0.06] text-gray-600 dark:bg-white/10 dark:text-gray-400'
+                      }`}
+                    >
+                      {isDone ? <Check size={13} /> : idx + 1}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-xs">{lesson.title}</p>
+                      <p className="text-[10px] text-gray-400">{lesson.duration}</p>
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
+          </aside>
+        )}
       </div>
     </section>
   )
 }
 
 /**
- * 7.4 My Learning View: Enrolled, Completed, & Bookmarked Courses.
+ * 8.4 My Learning & Progress Tracking View.
  */
 function MyLearningView({
   navigate,
@@ -1803,10 +2262,10 @@ function MyLearningView({
   bookmarkedCourses,
   getCourseProgress,
   onToggleBookmark,
+  onViewCertificate,
 }) {
-  const [filterTab, setFilterTab] = useState('in-progress') // 'in-progress' | 'completed' | 'saved'
+  const [filterTab, setFilterTab] = useState('in-progress')
 
-  // Filter courses by selected tab
   const displayedCourses = useMemo(() => {
     if (filterTab === 'saved') {
       return COURSES_DATA.filter((c) => bookmarkedCourses.includes(c.id))
@@ -1814,7 +2273,6 @@ function MyLearningView({
     if (filterTab === 'completed') {
       return COURSES_DATA.filter((c) => enrolledCourses.includes(c.id) && getCourseProgress(c.id) === 100)
     }
-    // Default in-progress (enrolled and not 100%)
     return COURSES_DATA.filter((c) => enrolledCourses.includes(c.id) && getCourseProgress(c.id) < 100)
   }, [filterTab, enrolledCourses, bookmarkedCourses, getCourseProgress])
 
@@ -1848,10 +2306,10 @@ function MyLearningView({
           icon={BookOpen}
         />
         <MetricCard
-          label="Completed"
+          label="Completed Certifications"
           value={COURSES_DATA.filter((c) => getCourseProgress(c.id) === 100).length}
-          change="+1 this month"
-          icon={CheckCircle2}
+          change="Lifetime verified"
+          icon={Award}
         />
         <MetricCard
           label="Saved for Later"
@@ -1881,7 +2339,7 @@ function MyLearningView({
               : 'text-gray-500 hover:text-black dark:hover:text-white'
           }`}
         >
-          Completed
+          Completed & Certificates ({COURSES_DATA.filter((c) => enrolledCourses.includes(c.id) && getCourseProgress(c.id) === 100).length})
         </button>
         <button
           onClick={() => setFilterTab('saved')}
@@ -1899,16 +2357,64 @@ function MyLearningView({
       <div className="mt-6">
         {displayedCourses.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {displayedCourses.map((course) => (
-              <CourseCard
-                key={course.id}
-                course={course}
-                navigate={navigate}
-                isBookmarked={bookmarkedCourses.includes(course.id)}
-                onToggleBookmark={onToggleBookmark}
-                progress={getCourseProgress(course.id)}
-              />
-            ))}
+            {displayedCourses.map((course) => {
+              const progress = getCourseProgress(course.id)
+              return (
+                <div key={course.id} className="card p-5 flex flex-col justify-between">
+                  <div>
+                    <div className={`relative mb-4 aspect-[16/10] overflow-hidden rounded-xl ${course.color}`}>
+                      <img src={course.image} alt="" className="h-full w-full object-cover mix-blend-multiply opacity-80" />
+                      <span className="glass-pill absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold text-gray-800 dark:text-gray-200">
+                        {course.category}
+                      </span>
+                    </div>
+
+                    <h3 className="text-base font-bold">{course.title}</h3>
+                    <p className="mt-1 text-xs text-gray-500">{course.author} • {course.duration}</p>
+
+                    <div className="mt-4">
+                      <div className="flex justify-between text-xs font-semibold">
+                        <span>Progress</span>
+                        <span>{progress}%</span>
+                      </div>
+                      <div className="mt-1 h-2 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+                        <div className="h-full rounded-full bg-[#3b6d52]" style={{ width: `${progress}%` }} />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 pt-4 border-t border-black/5 dark:border-white/5 flex items-center justify-between">
+                    {progress === 100 ? (
+                      <button
+                        onClick={() => onViewCertificate(course)}
+                        className="flex items-center gap-1.5 text-xs font-bold text-amber-700 dark:text-amber-400 hover:underline"
+                      >
+                        <Award size={15} /> View Certificate
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => navigate(`/learn/${course.id}`)}
+                        className="flex items-center gap-1.5 text-xs font-bold text-[#3b6d52] dark:text-[#88cb9f] hover:underline"
+                      >
+                        <span>Resume Lesson</span>
+                        <ArrowRight size={13} />
+                      </button>
+                    )}
+
+                    <button
+                      onClick={(e) => onToggleBookmark(course.id, e)}
+                      className="text-gray-400 hover:text-gray-600"
+                    >
+                      {bookmarkedCourses.includes(course.id) ? (
+                        <BookmarkCheck size={16} className="text-emerald-600" />
+                      ) : (
+                        <Bookmark size={16} />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
           </div>
         ) : (
           <div className="card py-16 text-center">
@@ -1931,7 +2437,7 @@ function MyLearningView({
 }
 
 /**
- * 7.5 Dashboard Overview View.
+ * 8.5 Dashboard Overview View.
  */
 function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
   const activeCourse = COURSES_DATA[0]
@@ -1939,7 +2445,6 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
 
   return (
     <>
-      {/* Dashboard Greeting Header */}
       <div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
         <div>
           <p className="eyebrow">Overview</p>
@@ -1959,7 +2464,6 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
         </button>
       </div>
 
-      {/* KPI Stats Grid */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard label="Courses Enrolled" value={enrolledCourses.length} change="2 active" icon={BookOpen} />
         <MetricCard label="Study Hours" value="28.4h" change="+18% vs last month" icon={Clock3} />
@@ -1967,9 +2471,7 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
         <MetricCard label="Average Score" value="94%" change="Top 5% percentile" icon={Award} />
       </div>
 
-      {/* Activity Chart & Resume Card Grid */}
       <div className="mt-8 grid gap-6 lg:grid-cols-[1.4fr_0.8fr]">
-        {/* Weekly Activity Bar Chart */}
         <div className="card p-6">
           <div className="mb-6 flex items-center justify-between">
             <div>
@@ -1992,7 +2494,6 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
               { day: 'Sun', h: 45, hrs: '1.4h' },
             ].map((item, idx) => (
               <div key={idx} className="group relative flex flex-1 flex-col items-center gap-2">
-                {/* Tooltip on hover */}
                 <div className="absolute -top-7 hidden rounded bg-black px-2 py-0.5 text-[10px] text-white group-hover:block dark:bg-white dark:text-black">
                   {item.hrs}
                 </div>
@@ -2010,7 +2511,6 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
           </div>
         </div>
 
-        {/* Continue Learning Spotlight Card */}
         <div className="card p-6">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-bold">Continue Learning</h2>
@@ -2063,7 +2563,7 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
 }
 
 /**
- * 7.6 Analytics View: Focus Metrics, Area Chart, & Achievements.
+ * 8.6 Analytics View: Focus Metrics, Area Chart, & Achievements.
  */
 function AnalyticsView() {
   return (
@@ -2078,14 +2578,12 @@ function AnalyticsView() {
         </p>
       </div>
 
-      {/* Key Metric Highlights */}
       <div className="grid gap-4 sm:grid-cols-3">
         <MetricCard label="Focus Score" value="88 / 100" change="+12% from last week" icon={Headphones} />
         <MetricCard label="Course Completion" value="75%" change="Above 65% target" icon={CheckCircle2} />
         <MetricCard label="Peak Day" value="Saturday" change="4.2 hours average" icon={Calendar} />
       </div>
 
-      {/* Smooth SVG Focus Hours Area Chart */}
       <div className="card mt-6 p-6">
         <div className="mb-6 flex items-center justify-between">
           <div>
@@ -2106,13 +2604,11 @@ function AnalyticsView() {
               </linearGradient>
             </defs>
 
-            {/* Smooth SVG Area Fill */}
             <path
               d="M0 160 C80 140, 120 70, 200 90 S320 180, 400 60 S520 80, 600 40 L700 50 L700 220 L0 220 Z"
               fill="url(#chartGradient)"
             />
 
-            {/* Stroke Line */}
             <path
               d="M0 160 C80 140, 120 70, 200 90 S320 180, 400 60 S520 80, 600 40 L700 50"
               fill="none"
@@ -2122,7 +2618,6 @@ function AnalyticsView() {
             />
           </svg>
 
-          {/* X Axis Labels */}
           <div className="mt-3 flex justify-between text-[11px] font-semibold text-gray-400">
             <span>Mon</span>
             <span>Tue</span>
@@ -2135,7 +2630,6 @@ function AnalyticsView() {
         </div>
       </div>
 
-      {/* Unlocked Badges & Milestones Section */}
       <div className="mt-8">
         <h3 className="text-sm font-bold">Milestones & Badges</h3>
         <p className="text-xs text-gray-400">Badges earned through consistent practice</p>
@@ -2164,7 +2658,7 @@ function AnalyticsView() {
 }
 
 /**
- * 7.7 Transition Splash Screen for Analytics loading state.
+ * 8.7 Transition Splash Screen for Analytics loading state.
  */
 function AnalyticsSplash() {
   return (
@@ -2189,7 +2683,7 @@ function AnalyticsSplash() {
 }
 
 /* ============================================================================
-   8. APPLICATION MOUNT
+   9. APPLICATION MOUNT
    ============================================================================ */
 const rootElement = document.getElementById('root')
 if (rootElement) {
