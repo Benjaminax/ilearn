@@ -1,28 +1,9 @@
 /**
  * ============================================================================
- * ILEARN — Fully Responsive Modern Intentional E-Learning Platform
+ * ILEARN — Modern Intentional E-Learning Platform
  * ============================================================================
  * Designed for education startups & curious lifelong learners.
  * Fully optimized for mobile (iPhone SE 375px+), tablet, and desktop viewports.
- *
- * Core Capabilities & User Journeys:
- * 1. Discover Available Courses:
- *    - Search, responsive category filter tabs, sorting, level badges, and ratings.
- * 2. Explore Course Details:
- *    - In-depth syllabus breakdown, learning outcomes, instructor credentials,
- *      reviews, and lesson preview estimates.
- * 3. Frictionless Enrollment Flow:
- *    - Responsive enrollment confirmation modal with value props and instant access.
- * 4. Rich Learning & Lesson Experience (/learn/:id):
- *    - Distraction-free player, playback speeds (1x, 1.25x, 1.5x, 2x), focus mode,
- *      interactive knowledge check quiz, personal notes editor with auto-save,
- *      lesson key takeaways, discussion, and downloadable resources.
- * 5. Comprehensive Learning Progress Tracking:
- *    - Lesson checkmarks, course progress bars, certificate generation on 100%,
- *      weekly activity charts, and milestone badges.
- * 6. Intuitive Navigation:
- *    - Seamless routing across Discover, My Learning, Course Details, Lesson Player,
- *      and Analytics Dashboard with persistent light/dark themes and mobile drawer.
  * ============================================================================
  */
 
@@ -42,6 +23,7 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
   Clock3,
   Compass,
   Download,
@@ -88,9 +70,6 @@ import './styles.css'
    1. MOCK DATA & CONSTANTS
    ============================================================================ */
 
-/**
- * Curated courses catalog data with modules, outcomes, resources, and interactive quizzes.
- */
 const COURSES_DATA = [
   {
     id: 1,
@@ -117,7 +96,7 @@ const COURSES_DATA = [
     ],
     resources: [
       { name: 'Calm Design System Checklist.pdf', size: '1.4 MB' },
-      { name: 'Typographic Scale & Whitespace Tokens.fig', size: '3.8 MB' },
+      { name: 'Typographic Scale & Tokens.fig', size: '3.8 MB' },
     ],
     lessons: [
       {
@@ -132,9 +111,9 @@ const COURSES_DATA = [
         quiz: {
           question: 'What is the primary objective of calm technology?',
           options: [
-            'To maximize the time a user spends inside the app',
+            'To maximize time spent in the app',
             'To deliver utility while requiring the smallest possible amount of attention',
-            'To replace all text with icons and illustrations',
+            'To replace all text with icons',
           ],
           correct: 1,
           explanation: 'Calm technology aims to inform and empower without demanding constant, active attention.',
@@ -286,7 +265,7 @@ const COURSES_DATA = [
         takeaways: ['Environment shapes behavior more reliably than sheer willpower.'],
         quiz: {
           question: 'Why is a dedicated creative workspace effective?',
-          options: ['It serves as an environmental cue that primes the brain for focus', 'It looks better on social media', 'It is required by copyright laws'],
+          options: ['It serves as an environmental cue for focus', 'It looks better on social media', 'It is required by law'],
           correct: 0,
           explanation: 'Consistent environments trigger conditioned focus states automatically.',
         },
@@ -299,7 +278,7 @@ const COURSES_DATA = [
         takeaways: ['Lower the bar to start: write the worst possible first sentence just to break inertia.'],
         quiz: {
           question: 'What is the fastest way to overcome creative inertia?',
-          options: ['Lower the stakes and produce a deliberately imperfect draft', 'Wait another week', 'Delete your idea'],
+          options: ['Lower stakes and produce an imperfect draft', 'Wait another week', 'Delete your idea'],
           correct: 0,
           explanation: 'Lowering stakes eliminates perfection paralysis.',
         },
@@ -312,7 +291,7 @@ const COURSES_DATA = [
         takeaways: ['A published good draft teaches you more than an unpublished masterpiece.'],
         quiz: {
           question: 'Why should creators ship iterative drafts?',
-          options: ['To receive early real-world feedback and maintain momentum', 'To rush without care', 'To fill up storage'],
+          options: ['To receive early feedback and momentum', 'To rush without care', 'To fill up storage'],
           correct: 0,
           explanation: 'Real-world feedback clarifies what resonates with your audience.',
         },
@@ -325,7 +304,7 @@ const COURSES_DATA = [
         takeaways: ['Celebrate small finished pieces to build intrinsic motivation.'],
         quiz: {
           question: 'What is the purpose of a weekly creative reflection?',
-          options: ['To evaluate progress, celebrate milestones, and adjust course', 'To punish yourself for missed days', 'To restart from scratch'],
+          options: ['To evaluate progress and adjust course', 'To punish missed days', 'To restart from scratch'],
           correct: 0,
           explanation: 'Reflection fosters continuous improvement and sustainable growth.',
         },
@@ -356,7 +335,7 @@ const COURSES_DATA = [
       'Define clear North Star metrics and leading indicators',
     ],
     resources: [
-      { name: 'Customer Discovery Script Template.docx', size: '850 KB' },
+      { name: 'Customer Discovery Script.docx', size: '850 KB' },
       { name: 'RICE Prioritization Matrix.xlsx', size: '1.2 MB' },
     ],
     lessons: [
@@ -368,7 +347,7 @@ const COURSES_DATA = [
         takeaways: ['Fall in love with the customer problem, not your initial solution idea.'],
         quiz: {
           question: 'What is the primary danger of jumping straight into solution space?',
-          options: ['Building a flawless solution for a problem nobody actually has', 'Using modern frameworks', 'Hiring too many designers'],
+          options: ['Building a flawless solution for a problem nobody has', 'Using modern frameworks', 'Hiring designers'],
           correct: 0,
           explanation: 'Building without validating the root problem leads to low product adoption.',
         },
@@ -381,7 +360,7 @@ const COURSES_DATA = [
         takeaways: ['Users don’t buy a 1/4-inch drill bit; they buy a 1/4-inch hole in the wall.'],
         quiz: {
           question: 'According to JTBD theory, why do customers "hire" products?',
-          options: ['To make progress in a specific life or work situation', 'To collect apps', 'Because of color palettes alone'],
+          options: ['To make progress in a specific life situation', 'To collect apps', 'Because of color palettes alone'],
           correct: 0,
           explanation: 'Products are hired to help users make tangible progress.',
         },
@@ -420,7 +399,7 @@ const COURSES_DATA = [
         takeaways: ['Test demand before investing engineering bandwidth.'],
         quiz: {
           question: 'What is a "Smoke Test" in product validation?',
-          options: ['Testing server firewalls', 'A landing page gauging interest with a CTA before full development', 'Code compilation test'],
+          options: ['Testing server firewalls', 'A landing page gauging interest before development', 'Code compilation test'],
           correct: 1,
           explanation: 'Smoke tests measure actual conversion intent before committing build resources.',
         },
@@ -433,7 +412,7 @@ const COURSES_DATA = [
         takeaways: ['A North Star metric reflects genuine value captured by users.'],
         quiz: {
           question: 'What differentiates a North Star metric from a vanity metric?',
-          options: ['It tracks direct user value rather than surface impressions', 'It always goes up automatically', 'It is measured only once a year'],
+          options: ['It tracks direct user value', 'It always goes up automatically', 'It is measured once a year'],
           correct: 0,
           explanation: 'A great North Star metric aligns customer success with business revenue.',
         },
@@ -769,7 +748,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#fbfaf8] text-[#1a1e1b] transition-colors duration-300 dark:bg-[#0d1210] dark:text-[#f3f5f3]">
-      {/* Toast Feedback Notification (Responsive positioning) */}
+      {/* Toast Feedback Notification */}
       {toastMessage && (
         <div className="fixed bottom-4 left-4 right-4 z-50 flex max-w-sm mx-auto sm:mx-0 sm:left-auto sm:right-6 items-center gap-2.5 rounded-2xl border border-emerald-600/20 bg-[#1e382b] px-4 py-3 text-xs sm:text-sm font-semibold text-white shadow-2xl animate-fade-in">
           <Sparkles size={16} className="text-emerald-400 shrink-0" />
@@ -1253,11 +1232,11 @@ function MarketingShell({
         )}
       </header>
 
-      <main className="mx-auto w-full max-w-[1240px] flex-1 px-4 sm:px-6 pb-20 lg:px-8">
+      <main className="mx-auto w-full max-w-[1240px] flex-1 px-3.5 sm:px-6 pb-16 lg:px-8">
         {children}
       </main>
 
-      <footer className="mt-auto border-t border-black/[0.06] bg-white/40 py-8 dark:border-white/[0.08] dark:bg-[#090d0b]">
+      <footer className="mt-auto border-t border-black/[0.06] bg-white/40 py-6 sm:py-8 dark:border-white/[0.08] dark:bg-[#090d0b]">
         <div className="mx-auto flex max-w-[1240px] flex-col items-center justify-between gap-4 px-4 text-xs text-gray-500 dark:text-gray-400 sm:flex-row lg:px-8">
           <div className="flex items-center gap-2 font-medium text-center sm:text-left">
             <Podcast size={15} className="text-[#3b6d52] shrink-0" />
@@ -1418,7 +1397,7 @@ function DashboardShell({
    ============================================================================ */
 
 /**
- * 8.1 Discover View: Home & Course Discovery.
+ * 8.1 Discover View.
  */
 function DiscoverView({
   searchQuery,
@@ -1436,7 +1415,7 @@ function DiscoverView({
 }) {
   return (
     <>
-      <section className="grid items-center gap-8 pb-8 pt-6 md:grid-cols-[1.2fr_340px] md:pt-14">
+      <section className="grid items-center gap-8 pb-8 pt-4 sm:pt-6 md:grid-cols-[1.2fr_340px] md:pt-14">
         <div>
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-600/20 bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-800 dark:border-emerald-500/20 dark:bg-emerald-950/40 dark:text-emerald-300">
             <Sparkles size={12} />
@@ -1447,25 +1426,25 @@ function DiscoverView({
             Make space to <span className="serif italic font-normal text-[#2b593f] dark:text-[#7ec29a]">grow.</span>
           </h1>
 
-          <p className="mt-4 max-w-[500px] text-sm sm:text-base leading-relaxed text-gray-600 dark:text-gray-300">
+          <p className="mt-3 sm:mt-4 max-w-[500px] text-xs sm:text-base leading-relaxed text-gray-600 dark:text-gray-300">
             Immerse yourself in thoughtfully structured courses designed to respect your attention and spark genuine creative breakthroughs.
           </p>
         </div>
 
-        <div className="card relative overflow-hidden p-5 sm:p-6 shadow-md">
-          <div className="mb-4 flex items-center justify-between">
+        <div className="card relative overflow-hidden p-4 sm:p-6 shadow-md">
+          <div className="mb-3 sm:mb-4 flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-gray-400">Weekly Rhythm</p>
-              <p className="mt-0.5 flex items-center gap-1.5 text-lg font-bold">
-                3 day streak <Flame size={17} className="text-amber-500" />
+              <p className="text-[11px] sm:text-xs font-semibold text-gray-400">Weekly Rhythm</p>
+              <p className="mt-0.5 flex items-center gap-1.5 text-base sm:text-lg font-bold">
+                3 day streak <Flame size={16} className="text-amber-500" />
               </p>
             </div>
-            <div className="flex gap-1 sm:gap-1.5">
+            <div className="flex gap-1">
               {[1, 1, 1, 0, 0, 0, 0].map((active, idx) => (
                 <span
                   key={idx}
                   title={`Day ${idx + 1}`}
-                  className={`h-6 sm:h-7 w-1.5 sm:w-2 rounded-full transition-all ${
+                  className={`h-5 sm:h-7 w-1.5 sm:w-2 rounded-full transition-all ${
                     active
                       ? 'bg-[#43795b]'
                       : 'bg-gray-200 dark:bg-white/10'
@@ -1475,30 +1454,30 @@ function DiscoverView({
             </div>
           </div>
 
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p className="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400">
             Last active on <span className="font-semibold text-[#254f38] dark:text-[#99d3b0]">Designing for Calm</span>
           </p>
 
           <button
             onClick={() => navigate('/learn/1')}
-            className="mt-4 flex w-full items-center justify-between rounded-xl bg-[#1a2e23] px-4 py-3 text-xs sm:text-sm font-semibold text-white shadow-sm transition hover:bg-[#254233] dark:bg-white dark:text-[#121c16] dark:hover:bg-gray-100"
+            className="mt-3.5 flex w-full items-center justify-between rounded-xl bg-[#1a2e23] px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm transition hover:bg-[#254233] dark:bg-white dark:text-[#121c16]"
           >
             <span>Resume your lesson</span>
-            <ArrowRight size={15} />
+            <ArrowRight size={14} />
           </button>
         </div>
       </section>
 
       {/* Filter & Search Bar Toolbar */}
-      <section className="mb-8 flex flex-col gap-3.5 border-y border-black/[0.07] py-4 dark:border-white/[0.08] sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 sm:pb-0">
+      <section className="mb-6 sm:mb-8 flex flex-col gap-3 border-y border-black/[0.07] py-3.5 dark:border-white/[0.08] sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1 sm:pb-0">
           {CATEGORIES.map((category) => {
             const isSelected = selectedCategory === category
             return (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
+                className={`whitespace-nowrap rounded-full px-3 py-1 sm:px-3.5 sm:py-1.5 text-xs font-semibold transition ${
                   isSelected
                     ? 'bg-[#1e382b] text-white dark:bg-white dark:text-[#132219]'
                     : 'bg-black/[0.03] text-gray-600 hover:bg-black/[0.06] dark:bg-white/[0.04] dark:text-gray-300 dark:hover:bg-white/10'
@@ -1533,7 +1512,7 @@ function DiscoverView({
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="h-9 rounded-full border border-black/10 bg-white/70 px-3 text-xs font-medium text-gray-700 outline-none dark:border-white/10 dark:bg-[#161f1a] dark:text-gray-300"
+            className="h-9 rounded-full border border-black/10 bg-white/70 px-3 text-xs font-medium text-gray-700 outline-none dark:border-white/10 dark:bg-[#161f1a] dark:text-gray-300 shrink-0"
           >
             <option value="popular">Most Popular</option>
             <option value="rating">Highest Rated</option>
@@ -1544,10 +1523,10 @@ function DiscoverView({
 
       {/* Courses Catalog Grid */}
       <section>
-        <div className="mb-5 flex items-end justify-between">
+        <div className="mb-4 sm:mb-5 flex items-end justify-between">
           <div>
             <p className="eyebrow">Hand-Crafted Syllabus</p>
-            <h2 className="mt-1 text-xl sm:text-2xl font-bold tracking-tight">Explore Courses</h2>
+            <h2 className="mt-0.5 text-lg sm:text-2xl font-bold tracking-tight">Explore Courses</h2>
           </div>
           <span className="text-xs font-semibold text-gray-400">
             {courses.length} {courses.length === 1 ? 'course' : 'courses'}
@@ -1564,16 +1543,13 @@ function DiscoverView({
                 isBookmarked={bookmarkedCourses.includes(course.id)}
                 onToggleBookmark={onToggleBookmark}
                 progress={getCourseProgress(course.id)}
-                onInitiateEnroll={() => onInitiateEnroll(course)}
               />
             ))}
           </div>
         ) : (
-          <div className="rounded-3xl border border-dashed border-gray-200 py-12 text-center dark:border-white/10">
-            <BookOpen size={32} className="mx-auto text-gray-400" />
-            <p className="mt-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
-              No matching courses found
-            </p>
+          <div className="rounded-3xl border border-dashed border-gray-200 py-10 text-center dark:border-white/10">
+            <BookOpen size={30} className="mx-auto text-gray-400" />
+            <p className="mt-2.5 text-xs sm:text-sm font-semibold">No matching courses found</p>
             <button
               onClick={() => {
                 setSearchQuery('')
@@ -1587,32 +1563,32 @@ function DiscoverView({
         )}
       </section>
 
-      {/* Editorial Quote & Philosophy Section */}
-      <section className="mt-14 sm:mt-20 grid gap-5 md:grid-cols-[1.2fr_0.8fr]">
-        <div className="rounded-3xl bg-[#1b2b23] p-6 sm:p-10 text-white shadow-xl dark:bg-[#13201a]">
-          <div className="mb-8 sm:mb-12 flex items-start justify-between">
-            <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-200">
+      {/* Editorial Section */}
+      <section className="mt-12 sm:mt-20 grid gap-4 sm:gap-5 md:grid-cols-[1.2fr_0.8fr]">
+        <div className="rounded-3xl bg-[#1b2b23] p-5 sm:p-10 text-white shadow-xl dark:bg-[#13201a]">
+          <div className="mb-6 sm:mb-12 flex items-start justify-between">
+            <span className="rounded-full border border-white/20 bg-white/5 px-2.5 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-emerald-200">
               ILEARN Journal
             </span>
-            <BookOpen size={18} className="text-white/60" />
+            <BookOpen size={16} className="text-white/60" />
           </div>
-          <p className="serif text-xl sm:text-3xl leading-snug">
+          <p className="serif text-lg sm:text-3xl leading-snug">
             "The quality of your life is the quality of your attention."
           </p>
-          <p className="mt-4 sm:mt-6 text-xs font-medium text-emerald-300/80">— James Clear, Author of Atomic Habits</p>
+          <p className="mt-3 sm:mt-6 text-[11px] sm:text-xs font-medium text-emerald-300/80">— James Clear</p>
         </div>
 
-        <div className="rounded-3xl bg-[#ece4db] p-6 sm:p-10 text-[#261f18] dark:bg-[#212a23] dark:text-[#dce8e0]">
-          <TrendingUp size={22} className="mb-8 sm:mb-12 text-[#8b5a3e] dark:text-[#84c39c]" />
-          <p className="text-xs font-bold uppercase tracking-wider text-[#8b5a3e] dark:text-[#84c39c]">
+        <div className="rounded-3xl bg-[#ece4db] p-5 sm:p-10 text-[#261f18] dark:bg-[#212a23] dark:text-[#dce8e0]">
+          <TrendingUp size={20} className="mb-6 sm:mb-12 text-[#8b5a3e] dark:text-[#84c39c]" />
+          <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#8b5a3e] dark:text-[#84c39c]">
             Learn Consistently
           </p>
-          <h3 className="mt-1.5 text-xl sm:text-2xl font-bold leading-tight">
+          <h3 className="mt-1 text-lg sm:text-2xl font-bold leading-tight">
             Small daily steps make a lasting lifelong difference.
           </h3>
           <button
             onClick={() => navigate('/my-learning')}
-            className="mt-6 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#633a21] hover:underline dark:text-[#a1e2ba]"
+            className="mt-4 sm:mt-6 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#633a21] hover:underline dark:text-[#a1e2ba]"
           >
             <span>See your progress</span>
             <ArrowRight size={13} />
@@ -1638,26 +1614,26 @@ function CourseDetailView({
   const [activeTab, setActiveTab] = useState('syllabus')
 
   return (
-    <section className="pt-6 sm:pt-8">
+    <section className="pt-4 sm:pt-8">
       <button
         onClick={() => navigate('/')}
-        className="mb-6 flex items-center gap-1.5 text-xs font-semibold text-gray-500 transition hover:text-[#1a1e1b] dark:text-gray-400 dark:hover:text-white"
+        className="mb-4 sm:mb-6 flex items-center gap-1.5 text-xs font-semibold text-gray-500 transition hover:text-[#1a1e1b] dark:text-gray-400 dark:hover:text-white"
       >
         <ChevronLeft size={15} /> Back to Catalog
       </button>
 
-      <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className={`relative min-h-[240px] sm:min-h-[360px] overflow-hidden rounded-3xl ${course.color} shadow-lg`}>
+      <div className="grid gap-6 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className={`relative min-h-[220px] sm:min-h-[360px] overflow-hidden rounded-2xl sm:rounded-3xl ${course.color} shadow-lg`}>
           <img
             src={course.image}
             alt={course.title}
             className="h-full w-full object-cover mix-blend-multiply opacity-85 dark:opacity-75"
           />
-          <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 flex items-center gap-2">
-            <span className="glass-pill rounded-full px-3 py-1 text-xs font-bold text-gray-900 dark:text-white">
+          <div className="absolute bottom-3.5 left-3.5 sm:bottom-6 sm:left-6 flex items-center gap-2">
+            <span className="glass-pill rounded-full px-3 py-1 text-[11px] sm:text-xs font-bold text-gray-900 dark:text-white">
               {course.category}
             </span>
-            <span className="glass-pill rounded-full px-3 py-1 text-xs font-bold text-gray-900 dark:text-white">
+            <span className="glass-pill rounded-full px-3 py-1 text-[11px] sm:text-xs font-bold text-gray-900 dark:text-white">
               {course.level}
             </span>
           </div>
@@ -1671,57 +1647,57 @@ function CourseDetailView({
             </span>
           </div>
 
-          <h1 className="mt-2 text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight break-words">
+          <h1 className="mt-1.5 text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight break-words">
             {course.title}
           </h1>
 
-          <p className="mt-3 text-sm sm:text-base leading-relaxed text-gray-600 dark:text-gray-300">
+          <p className="mt-2.5 text-xs sm:text-base leading-relaxed text-gray-600 dark:text-gray-300">
             {course.description}
           </p>
 
-          <div className="my-5 flex flex-wrap gap-4 border-y border-black/[0.08] py-3.5 text-xs font-medium text-gray-600 dark:border-white/[0.08] dark:text-gray-300">
+          <div className="my-4 sm:my-5 flex flex-wrap gap-3 sm:gap-4 border-y border-black/[0.08] py-3 text-xs font-medium text-gray-600 dark:border-white/[0.08] dark:text-gray-300">
             <span className="flex items-center gap-1.5">
-              <UserRound size={14} className="text-[#39694e]" /> {course.author}
+              <UserRound size={13} className="text-[#39694e]" /> {course.author}
             </span>
             <span className="flex items-center gap-1.5">
-              <Clock3 size={14} className="text-[#39694e]" /> {course.duration}
+              <Clock3 size={13} className="text-[#39694e]" /> {course.duration}
             </span>
             <span className="flex items-center gap-1.5">
-              <BookOpen size={14} className="text-[#39694e]" /> {course.lessons.length} lessons
+              <BookOpen size={13} className="text-[#39694e]" /> {course.lessons.length} lessons
             </span>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
             {isEnrolled ? (
               <button
                 onClick={() => navigate(`/learn/${course.id}`)}
-                className="flex items-center justify-center gap-2 rounded-full bg-[#1b3426] py-3.5 px-7 text-xs sm:text-sm font-semibold text-white shadow-md transition hover:bg-[#254935] dark:bg-white dark:text-[#121c16]"
+                className="flex items-center justify-center gap-2 rounded-full bg-[#1b3426] py-3 sm:py-3.5 px-6 text-xs sm:text-sm font-semibold text-white shadow-md transition hover:bg-[#254935] dark:bg-white dark:text-[#121c16]"
               >
                 <span>Continue Learning ({progress}%)</span>
-                <ArrowRight size={15} />
+                <ArrowRight size={14} />
               </button>
             ) : (
               <button
                 onClick={onInitiateEnroll}
-                className="flex items-center justify-center gap-2 rounded-full bg-[#1b3426] py-3.5 px-7 text-xs sm:text-sm font-semibold text-white shadow-md transition hover:bg-[#254935] dark:bg-white dark:text-[#121c16]"
+                className="flex items-center justify-center gap-2 rounded-full bg-[#1b3426] py-3 sm:py-3.5 px-6 text-xs sm:text-sm font-semibold text-white shadow-md transition hover:bg-[#254935] dark:bg-white dark:text-[#121c16]"
               >
                 <span>Enroll in Course</span>
-                <ArrowRight size={15} />
+                <ArrowRight size={14} />
               </button>
             )}
 
             <button
               onClick={(e) => onToggleBookmark(course.id, e)}
-              className="flex items-center justify-center gap-2 rounded-full border border-black/10 bg-white/60 py-3.5 px-5 text-xs sm:text-sm font-semibold transition hover:bg-white dark:border-white/10 dark:bg-white/5"
+              className="flex items-center justify-center gap-2 rounded-full border border-black/10 bg-white/60 py-2.5 sm:py-3.5 px-4 text-xs sm:text-sm font-semibold transition hover:bg-white dark:border-white/10 dark:bg-white/5"
             >
               {isBookmarked ? (
                 <>
-                  <BookmarkCheck size={15} className="text-emerald-600 dark:text-emerald-400" />
+                  <BookmarkCheck size={14} className="text-emerald-600 dark:text-emerald-400" />
                   <span>Bookmarked</span>
                 </>
               ) : (
                 <>
-                  <Bookmark size={15} />
+                  <Bookmark size={14} />
                   <span>Save for later</span>
                 </>
               )}
@@ -1731,8 +1707,8 @@ function CourseDetailView({
       </div>
 
       {/* Tabs */}
-      <div className="mt-10 sm:mt-14">
-        <div className="flex gap-4 border-b border-black/[0.08] pb-2 overflow-x-auto no-scrollbar whitespace-nowrap dark:border-white/[0.08]">
+      <div className="mt-8 sm:mt-12">
+        <div className="flex gap-3 border-b border-black/[0.08] pb-2 overflow-x-auto no-scrollbar whitespace-nowrap dark:border-white/[0.08]">
           <button
             onClick={() => setActiveTab('syllabus')}
             className={`pb-2 text-xs sm:text-sm font-bold transition ${
@@ -1776,24 +1752,24 @@ function CourseDetailView({
         </div>
 
         {activeTab === 'syllabus' && (
-          <div className="mt-6 space-y-2.5">
+          <div className="mt-5 space-y-2">
             {course.lessons.map((lesson, idx) => (
               <div
                 key={lesson.id}
-                className="card flex items-start sm:items-center justify-between p-4 sm:p-5"
+                className="card flex items-start sm:items-center justify-between p-3.5 sm:p-5"
               >
-                <div className="flex items-start gap-3">
-                  <span className="grid h-6 w-6 sm:h-7 sm:w-7 shrink-0 place-items-center rounded-full bg-[#dbe7de] text-xs font-bold text-[#204430] dark:bg-[#1a3124] dark:text-[#9fd5b6]">
+                <div className="flex items-start gap-2.5 sm:gap-3">
+                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#dbe7de] text-[11px] font-bold text-[#204430] dark:bg-[#1a3124] dark:text-[#9fd5b6]">
                     {idx + 1}
                   </span>
                   <div>
                     <h4 className="text-xs sm:text-sm font-bold">{lesson.title}</h4>
-                    <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                    <p className="mt-0.5 text-[11px] text-gray-500 dark:text-gray-400">
                       {lesson.preview}
                     </p>
                   </div>
                 </div>
-                <span className="ml-3 shrink-0 text-xs font-semibold text-gray-400">
+                <span className="ml-2.5 shrink-0 text-[11px] font-semibold text-gray-400">
                   {lesson.duration}
                 </span>
               </div>
@@ -1802,10 +1778,10 @@ function CourseDetailView({
         )}
 
         {activeTab === 'outcomes' && (
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <div className="mt-5 grid gap-2.5 sm:grid-cols-2">
             {course.outcomes.map((outcome, idx) => (
-              <div key={idx} className="card flex items-start gap-3 p-4">
-                <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+              <div key={idx} className="card flex items-start gap-2.5 p-3.5 sm:p-4">
+                <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
                 <span className="text-xs sm:text-sm font-medium leading-relaxed">{outcome}</span>
               </div>
             ))}
@@ -1813,16 +1789,16 @@ function CourseDetailView({
         )}
 
         {activeTab === 'instructor' && (
-          <div className="card mt-6 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:p-6">
-            <div className="grid h-16 w-16 sm:h-20 sm:w-20 shrink-0 place-items-center rounded-2xl bg-[#dbe7de] text-xl sm:text-2xl font-bold text-[#234232] dark:bg-[#1e3427] dark:text-[#a0dbb9]">
+          <div className="card mt-5 flex flex-col gap-3.5 p-4 sm:flex-row sm:items-center sm:p-6">
+            <div className="grid h-14 w-14 sm:h-18 sm:w-18 shrink-0 place-items-center rounded-2xl bg-[#dbe7de] text-lg sm:text-xl font-bold text-[#234232] dark:bg-[#1e3427] dark:text-[#a0dbb9]">
               {course.author.split(' ').map((n) => n[0]).join('')}
             </div>
             <div>
-              <h3 className="text-base sm:text-lg font-bold">{course.author}</h3>
+              <h3 className="text-sm sm:text-base font-bold">{course.author}</h3>
               <p className="text-xs font-semibold text-[#3b6d52] dark:text-[#88cb9f]">
                 {course.authorRole}
               </p>
-              <p className="mt-1.5 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+              <p className="mt-1 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
                 {course.authorBio}
               </p>
             </div>
@@ -1830,11 +1806,11 @@ function CourseDetailView({
         )}
 
         {activeTab === 'resources' && (
-          <div className="mt-6 space-y-2.5">
+          <div className="mt-5 space-y-2">
             {course.resources?.map((res, idx) => (
-              <div key={idx} className="card flex items-center justify-between p-3.5 sm:p-4">
-                <div className="flex items-center gap-2.5 min-w-0 pr-3">
-                  <FileText size={16} className="text-[#3b6d52] shrink-0" />
+              <div key={idx} className="card flex items-center justify-between p-3 sm:p-4">
+                <div className="flex items-center gap-2 min-w-0 pr-2">
+                  <FileText size={15} className="text-[#3b6d52] shrink-0" />
                   <div className="min-w-0">
                     <p className="truncate text-xs font-bold">{res.name}</p>
                     <p className="text-[10px] text-gray-400">{res.size}</p>
@@ -1842,9 +1818,9 @@ function CourseDetailView({
                 </div>
                 <button
                   onClick={() => alert(`Downloading ${res.name}...`)}
-                  className="flex items-center gap-1 rounded-full border border-black/10 px-3 py-1 text-xs font-semibold hover:bg-black/5 dark:border-white/10 shrink-0"
+                  className="flex items-center gap-1 rounded-full border border-black/10 px-2.5 py-1 text-xs font-semibold hover:bg-black/5 dark:border-white/10 shrink-0"
                 >
-                  <Download size={12} /> Download
+                  <Download size={11} /> Download
                 </button>
               </div>
             ))}
@@ -1856,8 +1832,7 @@ function CourseDetailView({
 }
 
 /**
- * 8.3 Comprehensive Interactive Learning Player Experience (/learn/:id).
- * Handles focus mode, interactive notes, quizzes, Q&A, and responsive curriculum navigation.
+ * 8.3 Mobile-Optimized Learning Player Experience (/learn/:id).
  */
 function LearningPlayerView({
   course,
@@ -1874,13 +1849,13 @@ function LearningPlayerView({
   const [playbackSpeed, setPlaybackSpeed] = useState('1x')
   const [isMuted, setIsMuted] = useState(false)
   const [focusMode, setFocusMode] = useState(false)
-  const [activeTab, setActiveTab] = useState('notes') // 'notes' | 'takeaways' | 'quiz' | 'qa' | 'resources'
+  const [activeTab, setActiveTab] = useState('notes')
   const [noteDraft, setNoteDraft] = useState(userNotes)
+  const [showOutlineMobile, setShowOutlineMobile] = useState(false)
 
   const [selectedQuizOption, setSelectedQuizOption] = useState(null)
   const [quizSubmitted, setQuizSubmitted] = useState(false)
 
-  // Community discussion state simulation
   const [discussions, setDiscussions] = useState([
     {
       id: 1,
@@ -1894,7 +1869,7 @@ function LearningPlayerView({
       author: 'Marcus Vance',
       initials: 'MV',
       time: 'Yesterday',
-      text: 'The concept of treating user attention like battery power completely transformed how I think about onboarding.',
+      text: 'Treating user attention like battery power completely transformed our team workflow.',
     },
   ])
   const [newQuestionText, setNewQuestionText] = useState('')
@@ -1939,65 +1914,98 @@ function LearningPlayerView({
   }
 
   return (
-    <section className={`pt-6 sm:pt-8 ${focusMode ? 'max-w-4xl mx-auto' : ''}`}>
-      {/* Top Controls Bar: Back to Course & Focus Mode Switch */}
-      <div className="mb-5 flex items-center justify-between">
+    <section className={`pt-3 sm:pt-6 ${focusMode ? 'max-w-3xl mx-auto' : ''}`}>
+      {/* Sleek Mobile Action Bar */}
+      <div className="mb-3.5 flex items-center justify-between">
         <button
           onClick={() => navigate(`/course/${course.id}`)}
-          className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 transition hover:text-[#1a1e1b] dark:text-gray-400 dark:hover:text-white"
+          className="flex items-center gap-1 rounded-full border border-black/10 bg-white/70 px-3 py-1 text-xs font-semibold text-gray-600 transition hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-gray-300"
         >
-          <ChevronLeft size={15} /> Back to Course Overview
+          <ChevronLeft size={14} /> Back
         </button>
 
-        <button
-          onClick={() => setFocusMode(!focusMode)}
-          className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition ${
-            focusMode
-              ? 'border-emerald-600 bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
-              : 'border-black/10 text-gray-600 hover:bg-black/5 dark:border-white/10 dark:text-gray-300'
-          }`}
-          title="Distraction-Free Focus Mode"
-        >
-          {focusMode ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
-          <span>{focusMode ? 'Exit Focus' : 'Focus Mode'}</span>
-        </button>
-      </div>
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => setShowOutlineMobile(!showOutlineMobile)}
+            className="flex sm:hidden items-center gap-1 rounded-full border border-black/10 bg-white/70 px-2.5 py-1 text-xs font-semibold dark:border-white/10 dark:bg-white/5"
+          >
+            <BookOpen size={13} /> {safeLessonIndex + 1}/{course.lessons.length}
+          </button>
 
-      {/* Lesson Heading Banner */}
-      <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-        <div>
-          <div className="flex items-center gap-2">
-            <p className="eyebrow">{course.title}</p>
-            <span className="text-[11px] text-gray-400">• {course.level}</span>
-          </div>
-          <h1 className="mt-1 text-xl sm:text-3xl font-extrabold tracking-tight break-words">
-            {currentLesson.title}
-          </h1>
-          <p className="mt-0.5 text-xs text-gray-500">
-            Lesson {safeLessonIndex + 1} of {course.lessons.length} • {currentLesson.duration}
-          </p>
-        </div>
-
-        {/* Progress bar in header */}
-        <div className="w-full sm:w-56">
-          <div className="mb-1.5 flex justify-between text-xs font-semibold">
-            <span>Course Progress</span>
-            <span className="text-[#2b593f] dark:text-[#88cb9f]">{progress}%</span>
-          </div>
-          <div className="h-2 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
-            <div
-              className="h-full rounded-full bg-[#3b6d52] transition-all duration-500"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
+          <button
+            onClick={() => setFocusMode(!focusMode)}
+            className={`flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold transition ${
+              focusMode
+                ? 'border-emerald-600 bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
+                : 'border-black/10 text-gray-600 hover:bg-black/5 dark:border-white/10 dark:text-gray-300'
+            }`}
+          >
+            {focusMode ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+            <span>{focusMode ? 'Exit Focus' : 'Focus'}</span>
+          </button>
         </div>
       </div>
 
-      {/* Main Player & Workspace Grid */}
-      <div className={`grid gap-6 ${focusMode ? 'grid-cols-1' : 'lg:grid-cols-[1fr_340px]'}`}>
+      {/* Lesson Header Card */}
+      <div className="mb-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#3b6d52] dark:text-[#88cb9f]">
+            <span>{course.title}</span>
+            <span>•</span>
+            <span className="text-gray-400">Lesson {safeLessonIndex + 1} of {course.lessons.length}</span>
+          </div>
+          <span className="text-[11px] font-bold text-[#3b6d52] dark:text-[#88cb9f]">{progress}%</span>
+        </div>
+
+        <h1 className="mt-1 text-lg sm:text-2xl font-bold tracking-tight break-words">
+          {currentLesson.title}
+        </h1>
+
+        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+          <div
+            className="h-full rounded-full bg-[#3b6d52] transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Mobile Collapsible Outline Drawer (When clicked on mobile header) */}
+      {showOutlineMobile && (
+        <div className="mb-4 card p-3 sm:hidden animate-fade-in border-[#3b6d52]/30">
+          <div className="mb-2 flex items-center justify-between border-b border-black/5 pb-2">
+            <span className="text-xs font-bold">Course Lessons</span>
+            <button onClick={() => setShowOutlineMobile(false)} className="text-gray-400">
+              <X size={15} />
+            </button>
+          </div>
+          <div className="space-y-1 max-h-48 overflow-y-auto">
+            {course.lessons.map((lesson, idx) => (
+              <button
+                key={lesson.id}
+                onClick={() => {
+                  setActiveLessonIndex(idx)
+                  setShowOutlineMobile(false)
+                }}
+                className={`flex w-full items-center gap-2 rounded-lg p-2 text-left text-xs ${
+                  safeLessonIndex === idx ? 'bg-[#e4ede6] font-bold text-[#1e3c2c] dark:bg-[#1b2d22] dark:text-[#9fe0bb]' : ''
+                }`}
+              >
+                <span className="grid h-5 w-5 place-items-center rounded-full bg-black/5 text-[10px]">
+                  {completedLessons.includes(idx) ? <Check size={11} className="text-emerald-600" /> : idx + 1}
+                </span>
+                <span className="truncate flex-1">{lesson.title}</span>
+                <span className="text-[10px] text-gray-400 shrink-0">{lesson.duration}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Grid: Player & Workspace */}
+      <div className={`grid gap-5 ${focusMode ? 'grid-cols-1' : 'lg:grid-cols-[1fr_340px]'}`}>
         <div>
-          {/* Video Player Mock */}
-          <div className={`relative aspect-video overflow-hidden rounded-2xl sm:rounded-3xl ${course.color} shadow-lg`}>
+          {/* Responsive Video Player */}
+          <div className={`relative aspect-video overflow-hidden rounded-2xl ${course.color} shadow-md`}>
             <img
               src={course.image}
               alt=""
@@ -2008,63 +2016,60 @@ function LearningPlayerView({
               onClick={() => setIsPlaying(!isPlaying)}
               className="absolute left-1/2 top-1/2 grid h-12 w-12 sm:h-16 sm:w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-ink shadow-2xl transition hover:scale-110 dark:bg-[#121c16] dark:text-white"
             >
-              {isPlaying ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" className="ml-0.5" />}
+              {isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" className="ml-0.5" />}
             </button>
 
-            {/* Bottom Player Overlay Bar */}
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 sm:p-4 text-white">
-              <div className="mb-2 sm:mb-3 h-1.5 w-full overflow-hidden rounded-full bg-white/30 cursor-pointer">
+            {/* Overlay Bar */}
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-2.5 sm:p-4 text-white">
+              <div className="mb-2 h-1 w-full overflow-hidden rounded-full bg-white/30 cursor-pointer">
                 <div className={`h-full rounded-full bg-emerald-400 ${isPlaying ? 'w-[45%]' : 'w-[20%]'}`} />
               </div>
 
-              <div className="flex items-center justify-between text-[11px] sm:text-xs">
-                <div className="flex items-center gap-3">
+              <div className="flex items-center justify-between text-[11px]">
+                <div className="flex items-center gap-2.5">
                   <button onClick={() => setIsPlaying(!isPlaying)} aria-label="Toggle Play">
-                    {isPlaying ? <Pause size={14} /> : <Play size={14} />}
+                    {isPlaying ? <Pause size={13} /> : <Play size={13} />}
                   </button>
                   <button onClick={() => setIsMuted(!isMuted)} aria-label="Toggle Mute">
-                    {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                    {isMuted ? <VolumeX size={13} /> : <Volume2 size={13} />}
                   </button>
                   <span>04:12 / {currentLesson.duration}</span>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() =>
-                      setPlaybackSpeed((prev) => (prev === '1x' ? '1.25x' : prev === '1.25x' ? '1.5x' : '1x'))
-                    }
-                    className="rounded-md bg-white/20 px-2 py-0.5 font-bold hover:bg-white/30"
-                    title="Playback speed"
-                  >
-                    {playbackSpeed}
-                  </button>
-                </div>
+                <button
+                  onClick={() =>
+                    setPlaybackSpeed((prev) => (prev === '1x' ? '1.25x' : prev === '1.25x' ? '1.5x' : '1x'))
+                  }
+                  className="rounded bg-white/20 px-1.5 py-0.5 font-bold hover:bg-white/30 text-[10px]"
+                >
+                  {playbackSpeed}
+                </button>
               </div>
             </div>
           </div>
 
-          {/* Navigation and Completion Trigger Bar */}
-          <div className="mt-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-b border-black/[0.08] pb-5 dark:border-white/[0.08]">
-            <div className="flex items-center justify-between sm:justify-start gap-2">
+          {/* Action Row: Prev, Next & Complete (Single Sleek Mobile Row) */}
+          <div className="mt-3.5 flex items-center justify-between gap-2 border-b border-black/[0.08] pb-4 dark:border-white/[0.08]">
+            <div className="flex items-center gap-1.5">
               <button
                 disabled={safeLessonIndex === 0}
                 onClick={handlePrev}
-                className="flex items-center gap-1 rounded-full border border-black/10 px-3.5 py-2 text-xs font-semibold disabled:opacity-40 dark:border-white/10"
+                className="flex items-center gap-1 rounded-full border border-black/10 px-3 py-1.5 text-xs font-semibold disabled:opacity-30 dark:border-white/10"
               >
-                <ChevronLeft size={14} /> Prev
+                <ChevronLeft size={13} /> Prev
               </button>
               <button
                 disabled={safeLessonIndex === course.lessons.length - 1}
                 onClick={handleNext}
-                className="flex items-center gap-1 rounded-full border border-black/10 px-3.5 py-2 text-xs font-semibold disabled:opacity-40 dark:border-white/10"
+                className="flex items-center gap-1 rounded-full border border-black/10 px-3 py-1.5 text-xs font-semibold disabled:opacity-30 dark:border-white/10"
               >
-                Next <ChevronRight size={14} />
+                Next <ChevronRight size={13} />
               </button>
             </div>
 
             <button
               onClick={() => onToggleComplete(safeLessonIndex)}
-              className={`flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold transition ${
+              className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-bold transition ${
                 isLessonComplete
                   ? 'border border-emerald-600 bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300'
                   : 'bg-[#1e382b] text-white hover:bg-[#2c4e3e] dark:bg-white dark:text-[#121c16]'
@@ -2072,21 +2077,21 @@ function LearningPlayerView({
             >
               {isLessonComplete ? (
                 <>
-                  <Check size={14} className="text-emerald-600 dark:text-emerald-300" />
-                  <span>Lesson Completed</span>
+                  <Check size={13} className="text-emerald-600 dark:text-emerald-300" />
+                  <span>Done</span>
                 </>
               ) : (
-                <span>Mark Lesson Complete</span>
+                <span>Mark Complete</span>
               )}
             </button>
           </div>
 
-          {/* Tabbed Interactive Lesson Content */}
-          <div className="mt-6">
-            <div className="flex gap-4 border-b border-black/[0.08] pb-2 overflow-x-auto no-scrollbar whitespace-nowrap dark:border-white/[0.08]">
+          {/* Interactive Workspace Tab Pills */}
+          <div className="mt-4">
+            <div className="flex gap-2 border-b border-black/[0.08] pb-2 overflow-x-auto no-scrollbar whitespace-nowrap dark:border-white/[0.08]">
               <button
                 onClick={() => setActiveTab('notes')}
-                className={`flex items-center gap-1.5 pb-2 text-xs font-bold transition ${
+                className={`flex items-center gap-1 pb-1.5 text-xs font-bold transition ${
                   activeTab === 'notes'
                     ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
                     : 'text-gray-500 hover:text-black dark:hover:text-white'
@@ -2096,76 +2101,76 @@ function LearningPlayerView({
               </button>
               <button
                 onClick={() => setActiveTab('takeaways')}
-                className={`flex items-center gap-1.5 pb-2 text-xs font-bold transition ${
+                className={`flex items-center gap-1 pb-1.5 text-xs font-bold transition ${
                   activeTab === 'takeaways'
                     ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
                     : 'text-gray-500 hover:text-black dark:hover:text-white'
                 }`}
               >
-                <Sparkles size={13} /> Key Takeaways
+                <Sparkles size={13} /> Takeaways
               </button>
               {currentLesson.quiz && (
                 <button
                   onClick={() => setActiveTab('quiz')}
-                  className={`flex items-center gap-1.5 pb-2 text-xs font-bold transition ${
+                  className={`flex items-center gap-1 pb-1.5 text-xs font-bold transition ${
                     activeTab === 'quiz'
                       ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
                       : 'text-gray-500 hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <HelpCircle size={13} /> Practice Check
+                  <HelpCircle size={13} /> Quiz
                 </button>
               )}
               <button
                 onClick={() => setActiveTab('qa')}
-                className={`flex items-center gap-1.5 pb-2 text-xs font-bold transition ${
+                className={`flex items-center gap-1 pb-1.5 text-xs font-bold transition ${
                   activeTab === 'qa'
                     ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
                     : 'text-gray-500 hover:text-black dark:hover:text-white'
                 }`}
               >
-                <MessageSquare size={13} /> Discussion ({discussions.length})
+                <MessageSquare size={13} /> Q&A ({discussions.length})
               </button>
               {course.resources && course.resources.length > 0 && (
                 <button
                   onClick={() => setActiveTab('resources')}
-                  className={`flex items-center gap-1.5 pb-2 text-xs font-bold transition ${
+                  className={`flex items-center gap-1 pb-1.5 text-xs font-bold transition ${
                     activeTab === 'resources'
                       ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
                       : 'text-gray-500 hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <Download size={13} /> Resources ({course.resources.length})
+                  <Download size={13} /> Files ({course.resources.length})
                 </button>
               )}
             </div>
 
-            {/* Tab: Notes Editor */}
+            {/* Notes Tab */}
             {activeTab === 'notes' && (
-              <div className="mt-4">
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Write reflections and thoughts for this lesson. Notes are saved automatically to your device.
+              <div className="mt-3 card p-3.5">
+                <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                  Notes are automatically saved locally on your device.
                 </p>
                 <textarea
                   value={noteDraft}
                   onChange={(e) => setNoteDraft(e.target.value)}
-                  placeholder="Type your notes, ideas, or action items here..."
-                  className="mt-2.5 h-32 w-full rounded-2xl border border-black/10 bg-white/70 p-3.5 text-xs font-medium leading-relaxed outline-none transition focus:border-[#43795b] dark:border-white/10 dark:bg-white/5"
+                  placeholder="Record your reflections or key ideas..."
+                  className="mt-2 h-28 w-full rounded-xl border border-black/10 bg-white/70 p-3 text-xs font-medium leading-relaxed outline-none transition focus:border-[#43795b] dark:border-white/10 dark:bg-white/5"
                 />
                 <button
                   onClick={() => onSaveNote(noteDraft)}
-                  className="mt-2 rounded-xl bg-[#1e382b] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#284c3b] dark:bg-white dark:text-[#121c16]"
+                  className="mt-2 rounded-lg bg-[#1e382b] px-4 py-1.5 text-xs font-bold text-white transition hover:bg-[#284c3b] dark:bg-white dark:text-[#121c16]"
                 >
                   Save Note
                 </button>
               </div>
             )}
 
-            {/* Tab: Key Takeaways */}
+            {/* Takeaways Tab */}
             {activeTab === 'takeaways' && (
-              <div className="mt-4 space-y-2.5">
+              <div className="mt-3 space-y-2">
                 {currentLesson.takeaways?.map((takeaway, idx) => (
-                  <div key={idx} className="card p-3.5">
+                  <div key={idx} className="card p-3">
                     <p className="text-xs leading-relaxed text-gray-700 dark:text-gray-200">
                       • {takeaway}
                     </p>
@@ -2174,22 +2179,22 @@ function LearningPlayerView({
               </div>
             )}
 
-            {/* Tab: Practice Check Quiz */}
+            {/* Quiz Tab */}
             {activeTab === 'quiz' && currentLesson.quiz && (
-              <div className="card mt-4 p-4 sm:p-5">
+              <div className="card mt-3 p-4">
                 <h4 className="text-xs sm:text-sm font-bold">{currentLesson.quiz.question}</h4>
-                <div className="mt-3.5 space-y-2">
+                <div className="mt-3 space-y-1.5">
                   {currentLesson.quiz.options.map((option, idx) => (
                     <button
                       key={idx}
                       onClick={() => !quizSubmitted && setSelectedQuizOption(idx)}
-                      className={`flex w-full items-center gap-2.5 rounded-xl border p-2.5 text-left text-xs font-semibold transition ${
+                      className={`flex w-full items-center gap-2 rounded-xl border p-2.5 text-left text-xs font-medium transition ${
                         selectedQuizOption === idx
-                          ? 'border-[#3b6d52] bg-emerald-50 text-[#1e382b] dark:bg-emerald-950/40 dark:text-emerald-200'
+                          ? 'border-[#3b6d52] bg-emerald-50 text-[#1e382b] dark:bg-emerald-950/40 dark:text-emerald-200 font-semibold'
                           : 'border-black/10 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5'
                       }`}
                     >
-                      <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full border text-[10px]">
+                      <span className="grid h-4 w-4 shrink-0 place-items-center rounded-full border text-[9px] font-bold">
                         {String.fromCharCode(65 + idx)}
                       </span>
                       <span>{option}</span>
@@ -2201,16 +2206,16 @@ function LearningPlayerView({
                   <button
                     disabled={selectedQuizOption === null}
                     onClick={() => setQuizSubmitted(true)}
-                    className="mt-3.5 rounded-xl bg-[#1e382b] px-4 py-2 text-xs font-bold text-white disabled:opacity-40 dark:bg-white dark:text-[#121c16]"
+                    className="mt-3 rounded-lg bg-[#1e382b] px-4 py-1.5 text-xs font-bold text-white disabled:opacity-40 dark:bg-white dark:text-[#121c16]"
                   >
                     Submit Answer
                   </button>
                 ) : (
-                  <div className="mt-3.5 rounded-xl border border-emerald-600/20 bg-emerald-50 p-3.5 dark:border-emerald-500/20 dark:bg-emerald-950/40">
+                  <div className="mt-3 rounded-xl border border-emerald-600/20 bg-emerald-50 p-3 dark:border-emerald-500/20 dark:bg-emerald-950/40">
                     <p className="text-xs font-bold text-emerald-900 dark:text-emerald-200">
                       {selectedQuizOption === currentLesson.quiz.correct ? '🎉 Correct!' : '💡 Good Try!'}
                     </p>
-                    <p className="mt-1 text-xs text-gray-600 dark:text-gray-300">
+                    <p className="mt-0.5 text-xs text-gray-600 dark:text-gray-300">
                       {currentLesson.quiz.explanation}
                     </p>
                   </div>
@@ -2218,38 +2223,38 @@ function LearningPlayerView({
               </div>
             )}
 
-            {/* Tab: Discussion & Community Q&A */}
+            {/* Q&A Tab */}
             {activeTab === 'qa' && (
-              <div className="mt-4 space-y-4">
-                <form onSubmit={handlePostQuestion} className="flex gap-2">
+              <div className="mt-3 space-y-3">
+                <form onSubmit={handlePostQuestion} className="flex gap-1.5">
                   <input
                     type="text"
                     value={newQuestionText}
                     onChange={(e) => setNewQuestionText(e.target.value)}
-                    placeholder="Ask a question about this lesson..."
-                    className="h-10 flex-1 rounded-xl border border-black/10 bg-white/70 px-3.5 text-xs font-medium outline-none transition focus:border-[#43795b] dark:border-white/10 dark:bg-white/5"
+                    placeholder="Ask a question..."
+                    className="h-9 flex-1 rounded-lg border border-black/10 bg-white/70 px-3 text-xs font-medium outline-none transition focus:border-[#43795b] dark:border-white/10 dark:bg-white/5"
                   />
                   <button
                     type="submit"
-                    className="flex items-center gap-1.5 rounded-xl bg-[#1e382b] px-4 py-2 text-xs font-bold text-white dark:bg-white dark:text-[#121c16]"
+                    className="flex items-center gap-1 rounded-lg bg-[#1e382b] px-3.5 py-1.5 text-xs font-bold text-white dark:bg-white dark:text-[#121c16]"
                   >
-                    <Send size={13} /> Post
+                    <Send size={12} /> Post
                   </button>
                 </form>
 
-                <div className="space-y-2.5">
+                <div className="space-y-2">
                   {discussions.map((item) => (
-                    <div key={item.id} className="card p-3.5">
+                    <div key={item.id} className="card p-3">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="grid h-6 w-6 place-items-center rounded-full bg-[#dbe7de] text-[10px] font-bold text-[#204430] dark:bg-[#1a3124] dark:text-[#9fd5b6]">
+                        <div className="flex items-center gap-1.5">
+                          <span className="grid h-5 w-5 place-items-center rounded-full bg-[#dbe7de] text-[9px] font-bold text-[#204430] dark:bg-[#1a3124] dark:text-[#9fd5b6]">
                             {item.initials}
                           </span>
                           <span className="text-xs font-bold">{item.author}</span>
                         </div>
                         <span className="text-[10px] text-gray-400">{item.time}</span>
                       </div>
-                      <p className="mt-2 text-xs leading-relaxed text-gray-600 dark:text-gray-300">
+                      <p className="mt-1.5 text-xs leading-relaxed text-gray-600 dark:text-gray-300">
                         {item.text}
                       </p>
                     </div>
@@ -2258,13 +2263,13 @@ function LearningPlayerView({
               </div>
             )}
 
-            {/* Tab: Downloadable Resources */}
+            {/* Resources Tab */}
             {activeTab === 'resources' && course.resources && (
-              <div className="mt-4 space-y-2.5">
+              <div className="mt-3 space-y-2">
                 {course.resources.map((res, idx) => (
-                  <div key={idx} className="card flex items-center justify-between p-3.5">
-                    <div className="flex items-center gap-2.5 min-w-0 pr-3">
-                      <FileText size={16} className="text-[#3b6d52] shrink-0" />
+                  <div key={idx} className="card flex items-center justify-between p-3">
+                    <div className="flex items-center gap-2 min-w-0 pr-2">
+                      <FileText size={15} className="text-[#3b6d52] shrink-0" />
                       <div className="min-w-0">
                         <p className="truncate text-xs font-bold">{res.name}</p>
                         <p className="text-[10px] text-gray-400">{res.size}</p>
@@ -2272,9 +2277,9 @@ function LearningPlayerView({
                     </div>
                     <button
                       onClick={() => alert(`Downloading ${res.name}...`)}
-                      className="flex items-center gap-1 rounded-full border border-black/10 px-3 py-1 text-xs font-semibold hover:bg-black/5 dark:border-white/10 shrink-0"
+                      className="flex items-center gap-1 rounded-full border border-black/10 px-2.5 py-1 text-xs font-semibold hover:bg-black/5 dark:border-white/10 shrink-0"
                     >
-                      <Download size={12} /> Download
+                      <Download size={11} /> Download
                     </button>
                   </div>
                 ))}
@@ -2283,13 +2288,13 @@ function LearningPlayerView({
           </div>
         </div>
 
-        {/* Right Curriculum Outline */}
+        {/* Right Desktop Curriculum Outline (Clean Card on Mobile) */}
         {!focusMode && (
-          <aside className="card p-4 sm:p-5">
-            <div className="mb-3.5 flex items-center justify-between border-b border-black/[0.06] pb-2.5 dark:border-white/[0.08]">
+          <aside className="card p-3.5 sm:p-5 mt-2 lg:mt-0">
+            <div className="mb-2.5 flex items-center justify-between border-b border-black/[0.06] pb-2 dark:border-white/[0.08]">
               <h3 className="text-xs sm:text-sm font-bold">Course Lessons</h3>
               <span className="text-[11px] font-bold text-gray-400">
-                {completedLessons.length}/{course.lessons.length}
+                {completedLessons.length} of {course.lessons.length} complete
               </span>
             </div>
 
@@ -2302,7 +2307,7 @@ function LearningPlayerView({
                   <button
                     key={lesson.id}
                     onClick={() => setActiveLessonIndex(idx)}
-                    className={`flex w-full items-center gap-2.5 rounded-xl p-2.5 text-left transition ${
+                    className={`flex w-full items-center gap-2 rounded-xl p-2.5 text-left transition ${
                       isSelected
                         ? 'bg-[#e4ede6] font-semibold text-[#1e3c2c] dark:bg-[#1b2d22] dark:text-[#9fe0bb]'
                         : 'hover:bg-black/[0.03] dark:hover:bg-white/[0.04]'
@@ -2359,7 +2364,7 @@ function MyLearningView({
 
   return (
     <>
-      <div className="mb-6 flex flex-col justify-between gap-4 pt-6 sm:flex-row sm:items-end">
+      <div className="mb-5 flex flex-col justify-between gap-3 pt-4 sm:pt-6 sm:flex-row sm:items-end">
         <div>
           <p className="eyebrow">Personal Hub</p>
           <h1 className="mt-1 text-2xl sm:text-4xl font-extrabold tracking-tight">
@@ -2372,13 +2377,13 @@ function MyLearningView({
 
         <button
           onClick={() => navigate('/')}
-          className="w-full sm:w-auto flex items-center justify-center gap-1.5 rounded-full bg-[#1e382b] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#2c4e3e] dark:bg-white dark:text-[#121c16]"
+          className="w-full sm:w-auto flex items-center justify-center gap-1.5 rounded-full bg-[#1e382b] px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#2c4e3e] dark:bg-white dark:text-[#121c16]"
         >
           <Compass size={14} /> Explore Courses
         </button>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-2.5 sm:grid-cols-3">
         <MetricCard
           label="Enrolled Courses"
           value={enrolledCourses.length}
@@ -2399,10 +2404,10 @@ function MyLearningView({
         />
       </div>
 
-      <div className="mt-8 flex gap-4 border-b border-black/[0.08] pb-2 overflow-x-auto no-scrollbar whitespace-nowrap dark:border-white/[0.08]">
+      <div className="mt-6 flex gap-3 border-b border-black/[0.08] pb-2 overflow-x-auto no-scrollbar whitespace-nowrap dark:border-white/[0.08]">
         <button
           onClick={() => setFilterTab('in-progress')}
-          className={`pb-2 text-xs font-bold transition ${
+          className={`pb-1.5 text-xs font-bold transition ${
             filterTab === 'in-progress'
               ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
               : 'text-gray-500 hover:text-black dark:hover:text-white'
@@ -2412,17 +2417,17 @@ function MyLearningView({
         </button>
         <button
           onClick={() => setFilterTab('completed')}
-          className={`pb-2 text-xs font-bold transition ${
+          className={`pb-1.5 text-xs font-bold transition ${
             filterTab === 'completed'
               ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
               : 'text-gray-500 hover:text-black dark:hover:text-white'
-            }`}
+          }`}
         >
           Completed ({COURSES_DATA.filter((c) => enrolledCourses.includes(c.id) && getCourseProgress(c.id) === 100).length})
         </button>
         <button
           onClick={() => setFilterTab('saved')}
-          className={`pb-2 text-xs font-bold transition ${
+          className={`pb-1.5 text-xs font-bold transition ${
             filterTab === 'saved'
               ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
               : 'text-gray-500 hover:text-black dark:hover:text-white'
@@ -2432,25 +2437,25 @@ function MyLearningView({
         </button>
       </div>
 
-      <div className="mt-5">
+      <div className="mt-4">
         {displayedCourses.length > 0 ? (
-          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3.5 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {displayedCourses.map((course) => {
               const progress = getCourseProgress(course.id)
               return (
-                <div key={course.id} className="card p-4 sm:p-5 flex flex-col justify-between">
+                <div key={course.id} className="card p-3.5 sm:p-5 flex flex-col justify-between">
                   <div>
-                    <div className={`relative mb-3.5 aspect-[16/10] overflow-hidden rounded-xl ${course.color}`}>
+                    <div className={`relative mb-3 aspect-[16/10] overflow-hidden rounded-xl ${course.color}`}>
                       <img src={course.image} alt="" className="h-full w-full object-cover mix-blend-multiply opacity-80" />
-                      <span className="glass-pill absolute left-2.5 top-2.5 rounded-full px-2.5 py-1 text-[11px] font-semibold text-gray-800 dark:text-gray-200">
+                      <span className="glass-pill absolute left-2.5 top-2.5 rounded-full px-2 py-0.5 text-[10px] font-semibold text-gray-800 dark:text-gray-200">
                         {course.category}
                       </span>
                     </div>
 
                     <h3 className="text-sm sm:text-base font-bold">{course.title}</h3>
-                    <p className="mt-0.5 text-xs text-gray-500">{course.author} • {course.duration}</p>
+                    <p className="mt-0.5 text-[11px] text-gray-500">{course.author} • {course.duration}</p>
 
-                    <div className="mt-3.5">
+                    <div className="mt-3">
                       <div className="flex justify-between text-xs font-semibold">
                         <span>Progress</span>
                         <span>{progress}%</span>
@@ -2461,7 +2466,7 @@ function MyLearningView({
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-3.5 border-t border-black/5 dark:border-white/5 flex items-center justify-between">
+                  <div className="mt-3.5 pt-3 border-t border-black/5 dark:border-white/5 flex items-center justify-between">
                     {progress === 100 ? (
                       <button
                         onClick={() => onViewCertificate(course)}
@@ -2495,12 +2500,12 @@ function MyLearningView({
             })}
           </div>
         ) : (
-          <div className="card py-12 text-center">
-            <BookOpen size={28} className="mx-auto text-gray-400" />
-            <p className="mt-2.5 text-xs sm:text-sm font-bold">No courses in this section yet</p>
+          <div className="card py-10 text-center">
+            <BookOpen size={26} className="mx-auto text-gray-400" />
+            <p className="mt-2 text-xs sm:text-sm font-bold">No courses in this section yet</p>
             <button
               onClick={() => navigate('/')}
-              className="mt-3.5 rounded-full bg-[#1e382b] px-4 py-1.5 text-xs font-bold text-white dark:bg-white dark:text-[#121c16]"
+              className="mt-3 rounded-full bg-[#1e382b] px-4 py-1.5 text-xs font-bold text-white dark:bg-white dark:text-[#121c16]"
             >
               Browse Catalog
             </button>
@@ -2520,7 +2525,7 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
 
   return (
     <>
-      <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+      <div className="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
         <div>
           <p className="eyebrow">Overview</p>
           <h1 className="mt-1 text-2xl sm:text-4xl font-extrabold tracking-tight">
@@ -2533,32 +2538,32 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
 
         <button
           onClick={() => navigate('/')}
-          className="w-full sm:w-auto flex items-center justify-center gap-1.5 rounded-full bg-[#1e382b] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#2c4e3e] dark:bg-white dark:text-[#121c16]"
+          className="w-full sm:w-auto flex items-center justify-center gap-1.5 rounded-full bg-[#1e382b] px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#2c4e3e] dark:bg-white dark:text-[#121c16]"
         >
           <Compass size={14} /> Discover Courses
         </button>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard label="Enrolled" value={enrolledCourses.length} change="2 active" icon={BookOpen} />
         <MetricCard label="Study Hours" value="28.4h" change="+18% vs last month" icon={Clock3} />
         <MetricCard label="Current Streak" value="3 Days" change="Best: 14 days" icon={Flame} />
         <MetricCard label="Average Score" value="94%" change="Top 5% percentile" icon={Award} />
       </div>
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-[1.4fr_0.8fr]">
+      <div className="mt-5 grid gap-4 lg:grid-cols-[1.4fr_0.8fr]">
         <div className="card p-4 sm:p-6">
-          <div className="mb-5 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between">
             <div>
               <h2 className="text-xs sm:text-sm font-bold">Weekly Study Rhythm</h2>
-              <p className="mt-0.5 text-[11px] text-gray-400">Hours spent learning over 7 days</p>
+              <p className="mt-0.5 text-[10px] text-gray-400">Hours spent learning over 7 days</p>
             </div>
-            <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-bold text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+            <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
               Goal Met
             </span>
           </div>
 
-          <div className="flex h-40 sm:h-48 items-end gap-1.5 sm:gap-3 pt-4 sm:pt-6">
+          <div className="flex h-36 sm:h-48 items-end gap-1.5 sm:gap-3 pt-3 sm:pt-6">
             {[
               { day: 'M', h: 40, hrs: '1.2h' },
               { day: 'T', h: 65, hrs: '2.0h' },
@@ -2568,7 +2573,7 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
               { day: 'S', h: 95, hrs: '3.4h', current: true },
               { day: 'S', h: 45, hrs: '1.4h' },
             ].map((item, idx) => (
-              <div key={idx} className="group relative flex flex-1 flex-col items-center gap-1.5">
+              <div key={idx} className="group relative flex flex-1 flex-col items-center gap-1">
                 <div className="absolute -top-6 hidden rounded bg-black px-1.5 py-0.5 text-[9px] text-white group-hover:block dark:bg-white dark:text-black">
                   {item.hrs}
                 </div>
@@ -2597,7 +2602,7 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
             </button>
           </div>
 
-          <div className={`mt-3.5 overflow-hidden rounded-2xl ${activeCourse.color}`}>
+          <div className={`mt-3 overflow-hidden rounded-2xl ${activeCourse.color}`}>
             <img
               src={activeCourse.image}
               alt=""
@@ -2605,13 +2610,13 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
             />
           </div>
 
-          <p className="mt-2.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-gray-400">
+          <p className="mt-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-gray-400">
             {activeCourse.category} • Lesson 2 of {activeCourse.lessons.length}
           </p>
 
           <h3 className="mt-0.5 text-sm sm:text-base font-bold">{activeCourse.title}</h3>
 
-          <div className="mt-2.5">
+          <div className="mt-2">
             <div className="flex justify-between text-[11px] font-medium text-gray-500">
               <span>Progress</span>
               <span>{progress}%</span>
@@ -2626,7 +2631,7 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
 
           <button
             onClick={() => navigate('/learn/1')}
-            className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#1e382b] py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#2a4e3c] dark:bg-white dark:text-[#121c16]"
+            className="mt-3.5 flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#1e382b] py-2 text-xs font-bold text-white shadow-sm transition hover:bg-[#2a4e3c] dark:bg-white dark:text-[#121c16]"
           >
             <span>Resume Lesson</span>
             <ArrowRight size={13} />
@@ -2643,7 +2648,7 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
 function AnalyticsView() {
   return (
     <>
-      <div className="mb-6">
+      <div className="mb-5">
         <p className="eyebrow">Insights & Telemetry</p>
         <h1 className="mt-1 text-2xl sm:text-4xl font-extrabold tracking-tight">
           Learning Analytics
@@ -2653,24 +2658,24 @@ function AnalyticsView() {
         </p>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-2.5 sm:grid-cols-3">
         <MetricCard label="Focus Score" value="88 / 100" change="+12% from last week" icon={Headphones} />
         <MetricCard label="Completion" value="75%" change="Above 65% target" icon={CheckCircle2} />
         <MetricCard label="Peak Day" value="Saturday" change="4.2h average" icon={Calendar} />
       </div>
 
-      <div className="card mt-5 p-4 sm:p-6">
-        <div className="mb-4 flex items-center justify-between">
+      <div className="card mt-4 p-4 sm:p-6">
+        <div className="mb-3 flex items-center justify-between">
           <div>
             <h2 className="text-xs sm:text-sm font-bold">Focus Hours Trend</h2>
             <p className="mt-0.5 text-[10px] text-gray-400">Daily focused study volume</p>
           </div>
-          <span className="rounded-full bg-[#e3ede5] px-2.5 py-0.5 text-[10px] sm:text-xs font-bold text-[#2a543b] dark:bg-[#1a2d22] dark:text-[#9cd1b3]">
+          <span className="rounded-full bg-[#e3ede5] px-2 py-0.5 text-[10px] sm:text-xs font-bold text-[#2a543b] dark:bg-[#1a2d22] dark:text-[#9cd1b3]">
             +22% Growth
           </span>
         </div>
 
-        <div className="relative h-48 sm:h-60 w-full pt-2">
+        <div className="relative h-44 sm:h-60 w-full pt-1">
           <svg viewBox="0 0 700 220" className="h-full w-full overflow-visible">
             <defs>
               <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
@@ -2693,7 +2698,7 @@ function AnalyticsView() {
             />
           </svg>
 
-          <div className="mt-2 flex justify-between text-[10px] font-semibold text-gray-400">
+          <div className="mt-1 flex justify-between text-[10px] font-semibold text-gray-400">
             <span>M</span>
             <span>T</span>
             <span>W</span>
@@ -2705,17 +2710,17 @@ function AnalyticsView() {
         </div>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-5">
         <h3 className="text-xs sm:text-sm font-bold">Milestones & Badges</h3>
-        <p className="text-[11px] text-gray-400">Badges earned through consistent practice</p>
+        <p className="text-[10px] text-gray-400">Badges earned through consistent practice</p>
 
-        <div className="mt-3 grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-2.5 grid gap-2.5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {ACHIEVEMENTS.map((badge) => {
             const Icon = badge.icon
             return (
-              <div key={badge.id} className="card flex items-start gap-3 p-3.5">
-                <span className={`grid h-8 w-8 sm:h-9 sm:w-9 shrink-0 place-items-center rounded-xl ${badge.color}`}>
-                  <Icon size={16} />
+              <div key={badge.id} className="card flex items-start gap-2.5 p-3">
+                <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-xl ${badge.color}`}>
+                  <Icon size={15} />
                 </span>
                 <div>
                   <h4 className="text-xs font-bold">{badge.title}</h4>
@@ -2734,20 +2739,20 @@ function AnalyticsView() {
 
 function AnalyticsSplash() {
   return (
-    <section className="flex min-h-[420px] flex-col items-center justify-center text-center px-4">
+    <section className="flex min-h-[400px] flex-col items-center justify-center text-center px-4">
       <div className="splash-orbit">
-        <span className="grid h-14 w-14 place-items-center rounded-2xl bg-[#1e382b] text-white shadow-xl dark:bg-white dark:text-[#121c16]">
-          <Podcast size={26} />
+        <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#1e382b] text-white shadow-xl dark:bg-white dark:text-[#121c16]">
+          <Podcast size={24} />
         </span>
       </div>
-      <p className="eyebrow mt-6">ILEARN Telemetry</p>
-      <h1 className="mt-1.5 text-xl sm:text-2xl font-extrabold tracking-tight">
+      <p className="eyebrow mt-5">ILEARN Telemetry</p>
+      <h1 className="mt-1 text-lg sm:text-2xl font-extrabold tracking-tight">
         Preparing your insights
       </h1>
-      <p className="mt-1 text-xs text-gray-500">
+      <p className="mt-0.5 text-xs text-gray-500">
         Aggregating your weekly learning velocity and focus scores...
       </p>
-      <div className="mt-5 h-1.5 w-36 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+      <div className="mt-4 h-1.5 w-32 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
         <div className="splash-progress h-full rounded-full bg-[#3b6d52]" />
       </div>
     </section>
