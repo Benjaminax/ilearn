@@ -19,6 +19,7 @@
 html {
   color-scheme: light;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 html.dark {
@@ -32,6 +33,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #fbfaf8;
   color: #1a1e1b;
+  overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -45,15 +47,28 @@ button {
   cursor: pointer;
 }
 
-input, button {
+input, button, select, textarea {
   -webkit-tap-highlight-color: transparent;
+  font-family: inherit;
 }
 
 button:focus-visible,
 input:focus-visible,
+select:focus-visible,
 textarea:focus-visible {
   outline: 2px solid #5a8a6f;
   outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Scroll Helpers
+   -------------------------------------------------------------------------- */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -198,17 +213,17 @@ textarea:focus-visible {
 }
 
 .glass-pill {
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 .dark .glass-pill {
-  background: rgba(25, 36, 30, 0.75);
+  background: rgba(20, 30, 24, 0.82);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* --------------------------------------------------------------------------

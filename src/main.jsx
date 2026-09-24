@@ -1,17 +1,18 @@
 /**
  * ============================================================================
- * ILEARN — Modern Intentional E-Learning Platform
+ * ILEARN — Fully Responsive Modern Intentional E-Learning Platform
  * ============================================================================
  * Designed for education startups & curious lifelong learners.
+ * Fully optimized for mobile (iPhone SE 375px+, Android), tablet, and desktop.
  *
  * Core Capabilities & User Journeys:
  * 1. Discover Available Courses:
- *    - Search, category filter tabs, sorting, level badges, and ratings.
+ *    - Search, responsive category filter tabs, sorting, level badges, and ratings.
  * 2. Explore Course Details:
  *    - In-depth syllabus breakdown, learning outcomes, instructor credentials,
  *      reviews, and lesson preview estimates.
  * 3. Frictionless Enrollment Flow:
- *    - Interactive enrollment confirmation modal with value props and instant access.
+ *    - Responsive enrollment confirmation modal with value props and instant access.
  * 4. Rich Learning & Lesson Experience:
  *    - Distraction-free player, playback speeds, focus mode toggle, interactive
  *      knowledge check quiz, personal note-taking with local persistence,
@@ -21,7 +22,7 @@
  *      generation upon 100% completion, weekly activity bars, and milestone badges.
  * 6. Intuitive Navigation:
  *    - Seamless routing across Discover, My Learning, Course Details, Lesson Player,
- *      and Analytics Dashboard with persistent light/dark themes.
+ *      and Analytics Dashboard with persistent light/dark themes and mobile drawer.
  * ============================================================================
  */
 
@@ -534,14 +535,8 @@ const COURSES_DATA = [
   },
 ]
 
-/**
- * Filter categories available in the catalog.
- */
 const CATEGORIES = ['All courses', 'Design', 'Creativity', 'Business', 'Communication']
 
-/**
- * Gamification achievements unlocked by user activity.
- */
 const ACHIEVEMENTS = [
   { id: 'streak-3', title: '3-Day Momentum', desc: 'Maintained a 3-day continuous learning streak', icon: Flame, color: 'text-amber-500 bg-amber-500/10' },
   { id: 'first-course', title: 'Pioneer Learner', desc: 'Completed your first interactive course lesson', icon: Sparkles, color: 'text-emerald-500 bg-emerald-500/10' },
@@ -600,19 +595,14 @@ function getRoute() {
    ============================================================================ */
 
 function App() {
-  // Navigation & Route state
   const [route, setRoute] = useState(getRoute)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
-  // Theme state (Persisted in localStorage)
   const [dark, setDark] = useState(() => localStorage.getItem('ilearn-theme') === 'dark')
 
-  // Search, Filter & Sort state
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All courses')
   const [sortBy, setSortBy] = useState('popular')
 
-  // Persistent Learning Progress & Enrolled State
   const [completedMap, setCompletedMap] = useState(() =>
     readStoredObject('ilearn-completed-map', { 1: [0, 1] })
   )
@@ -632,15 +622,9 @@ function App() {
     })
   )
 
-  // Enrollment Modal Trigger State
   const [enrollingCourse, setEnrollingCourse] = useState(null)
-  // Certificate Modal State
   const [certificateCourse, setCertificateCourse] = useState(null)
-
-  // Transition splash screen for Analytics page
   const [analyticsSplash, setAnalyticsSplash] = useState(false)
-
-  // Toast feedback notification
   const [toastMessage, setToastMessage] = useState(null)
 
   const showToast = (message) => {
@@ -648,20 +632,17 @@ function App() {
     window.setTimeout(() => setToastMessage(null), 2800)
   }
 
-  // Popstate history navigation
   useEffect(() => {
     const handlePopState = () => setRoute(getRoute())
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
-  // Sync theme
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
     localStorage.setItem('ilearn-theme', dark ? 'dark' : 'light')
   }, [dark])
 
-  // Sync local storage
   useEffect(() => {
     localStorage.setItem('ilearn-completed-map', JSON.stringify(completedMap))
   }, [completedMap])
@@ -682,14 +663,12 @@ function App() {
     localStorage.setItem('ilearn-user-notes', JSON.stringify(userNotes))
   }, [userNotes])
 
-  // Splash dismissal
   useEffect(() => {
     if (!analyticsSplash) return
     const timeout = window.setTimeout(() => setAnalyticsSplash(false), 1100)
     return () => window.clearTimeout(timeout)
   }, [analyticsSplash])
 
-  // Navigation handler
   const navigate = (path) => {
     window.history.pushState({}, '', path)
     const newRoute = getRoute()
@@ -699,7 +678,6 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // Enrollment flow triggers
   const initiateEnrollment = (course) => {
     setEnrollingCourse(course)
   }
@@ -709,7 +687,7 @@ function App() {
       setEnrolledCourses((prev) => [...prev, courseId])
     }
     setEnrollingCourse(null)
-    showToast('🎉 Enrolled successfully! Redirecting to lesson player...')
+    showToast('🎉 Enrolled successfully! Starting course...')
     navigate(`/learn/${courseId}`)
   }
 
@@ -790,10 +768,10 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#fbfaf8] text-[#1a1e1b] transition-colors duration-300 dark:bg-[#0d1210] dark:text-[#f3f5f3]">
-      {/* Toast Feedback Notification */}
+      {/* Toast Feedback Notification (Responsive positioning) */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-xl border border-emerald-600/20 bg-[#1e382b] px-5 py-3.5 text-sm font-semibold text-white shadow-2xl animate-fade-in">
-          <Sparkles size={17} className="text-emerald-400 shrink-0" />
+        <div className="fixed bottom-4 left-4 right-4 z-50 flex max-w-sm mx-auto sm:mx-0 sm:left-auto sm:right-6 items-center gap-2.5 rounded-2xl border border-emerald-600/20 bg-[#1e382b] px-4 py-3 text-xs sm:text-sm font-semibold text-white shadow-2xl animate-fade-in">
+          <Sparkles size={16} className="text-emerald-400 shrink-0" />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -913,57 +891,53 @@ function App() {
    5. MODALS & POPUPS (Enrollment & Certificate)
    ============================================================================ */
 
-/**
- * 5.1 Enrollment Flow Confirmation Modal.
- */
 function EnrollmentModal({ course, onClose, onConfirm }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-      <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-black/10 bg-[#fbfaf8] p-6 shadow-2xl dark:border-white/10 dark:bg-[#121815] sm:p-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+      <div className="relative w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-3xl border border-black/10 bg-[#fbfaf8] p-5 shadow-2xl dark:border-white/10 dark:bg-[#121815] sm:p-8">
         <button
           onClick={onClose}
-          className="absolute right-5 top-5 grid h-8 w-8 place-items-center rounded-full text-gray-400 hover:bg-black/5 dark:hover:bg-white/10"
+          className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full text-gray-400 hover:bg-black/5 dark:hover:bg-white/10"
         >
           <X size={18} />
         </button>
 
         <div className="flex items-center gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#234432] text-white">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-[#234432] text-white">
             <Sparkles size={20} />
           </span>
-          <div>
+          <div className="min-w-0 pr-6">
             <p className="eyebrow">Confirm Enrollment</p>
-            <h3 className="text-xl font-bold tracking-tight">{course.title}</h3>
+            <h3 className="truncate text-lg sm:text-xl font-bold tracking-tight">{course.title}</h3>
           </div>
         </div>
 
         <p className="mt-4 text-xs leading-relaxed text-gray-600 dark:text-gray-300">
-          You are about to unlock full access to all {course.lessons.length} video lessons, downloadable exercise guides, interactive knowledge checks, and certificate eligibility.
+          You are about to unlock full access to all {course.lessons.length} lessons, downloadable guides, practice checks, and verified completion credentials.
         </p>
 
-        {/* Benefits List */}
-        <div className="my-6 space-y-2.5 rounded-2xl border border-black/5 bg-black/[0.02] p-4 text-xs dark:border-white/5 dark:bg-white/[0.03]">
-          <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-300">
-            <Check size={15} /> <span>Self-paced lifetime access to all course modules</span>
+        <div className="my-5 space-y-2.5 rounded-2xl border border-black/5 bg-black/[0.02] p-3.5 text-xs dark:border-white/5 dark:bg-white/[0.03]">
+          <div className="flex items-start gap-2 text-emerald-800 dark:text-emerald-300">
+            <Check size={14} className="mt-0.5 shrink-0" /> <span>Self-paced lifetime access to all course modules</span>
           </div>
-          <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-300">
-            <Check size={15} /> <span>Personal interactive note-taking and lesson quizzes</span>
+          <div className="flex items-start gap-2 text-emerald-800 dark:text-emerald-300">
+            <Check size={14} className="mt-0.5 shrink-0" /> <span>Personal interactive note-taking and lesson quizzes</span>
           </div>
-          <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-300">
-            <Check size={15} /> <span>Verified Certificate of Completion upon 100% progress</span>
+          <div className="flex items-start gap-2 text-emerald-800 dark:text-emerald-300">
+            <Check size={14} className="mt-0.5 shrink-0" /> <span>Verified Certificate of Completion upon 100% progress</span>
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5">
           <button
             onClick={onClose}
-            className="rounded-full border border-black/10 px-5 py-2.5 text-xs font-semibold text-gray-600 hover:bg-black/5 dark:border-white/10 dark:text-gray-300"
+            className="rounded-full border border-black/10 py-2.5 px-5 text-xs font-semibold text-gray-600 hover:bg-black/5 dark:border-white/10 dark:text-gray-300"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
-            className="flex items-center gap-2 rounded-full bg-[#1b3426] px-6 py-2.5 text-xs font-bold text-white shadow-md transition hover:bg-[#284f3a] dark:bg-white dark:text-[#121c16]"
+            className="flex items-center justify-center gap-2 rounded-full bg-[#1b3426] py-3 sm:py-2.5 px-6 text-xs font-bold text-white shadow-md transition hover:bg-[#284f3a] dark:bg-white dark:text-[#121c16]"
           >
             <span>Confirm & Start Learning</span>
             <ArrowRight size={14} />
@@ -974,49 +948,45 @@ function EnrollmentModal({ course, onClose, onConfirm }) {
   )
 }
 
-/**
- * 5.2 Certificate Showcase & Download Modal.
- */
 function CertificateModal({ course, onClose }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-      <div className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-amber-600/30 bg-[#fefdfb] p-6 shadow-2xl dark:border-amber-500/20 dark:bg-[#151c17] sm:p-10">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+      <div className="relative w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-3xl border border-amber-600/30 bg-[#fefdfb] p-5 shadow-2xl dark:border-amber-500/20 dark:bg-[#151c17] sm:p-10">
         <button
           onClick={onClose}
-          className="absolute right-5 top-5 grid h-8 w-8 place-items-center rounded-full text-gray-400 hover:bg-black/5 dark:hover:bg-white/10"
+          className="absolute right-4 top-4 grid h-8 w-8 place-items-center rounded-full text-gray-400 hover:bg-black/5 dark:hover:bg-white/10"
         >
           <X size={18} />
         </button>
 
-        {/* Certificate Decorative Border Container */}
-        <div className="rounded-2xl border-4 border-double border-amber-800/20 p-8 text-center dark:border-amber-500/30">
-          <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400">
-            <Trophy size={28} />
+        <div className="rounded-2xl border-2 sm:border-4 border-double border-amber-800/20 p-5 sm:p-8 text-center dark:border-amber-500/30">
+          <div className="mx-auto grid h-12 w-12 sm:h-14 sm:w-14 place-items-center rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400">
+            <Trophy size={24} />
           </div>
 
-          <p className="eyebrow mt-4 text-amber-800 dark:text-amber-300">
+          <p className="eyebrow mt-3 text-amber-800 dark:text-amber-300">
             Certificate of Intentional Mastery
           </p>
-          <h2 className="serif mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
+          <h2 className="serif mt-2 text-xl sm:text-3xl font-bold tracking-tight">
             {course.title}
           </h2>
 
-          <p className="mt-4 text-xs text-gray-500">This certificate certifies that</p>
-          <p className="mt-1 text-lg font-bold text-[#1b3426] dark:text-[#90cca7]">
+          <p className="mt-3 text-xs text-gray-500">This certificate certifies that</p>
+          <p className="mt-0.5 text-base sm:text-lg font-bold text-[#1b3426] dark:text-[#90cca7]">
             Jordan Davis
           </p>
           <p className="mt-1 text-xs text-gray-500">
             has successfully completed all coursework, interactive exercises, and curriculum requirements.
           </p>
 
-          <div className="mt-8 flex items-center justify-between border-t border-amber-900/10 pt-4 text-xs font-semibold text-gray-500 dark:border-white/10">
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-amber-900/10 pt-4 text-[11px] sm:text-xs font-semibold text-gray-500 dark:border-white/10">
             <span>Instructor: {course.author}</span>
             <span>Issued: September 2026</span>
-            <span>Credential ID: IL-{course.id}84920</span>
+            <span>ID: IL-{course.id}84920</span>
           </div>
         </div>
 
-        <div className="mt-6 flex items-center justify-between">
+        <div className="mt-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <span className="flex items-center gap-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
             <ShieldCheck size={16} /> Verified Authentic Credential
           </span>
@@ -1025,7 +995,7 @@ function CertificateModal({ course, onClose }) {
               alert('Certificate downloaded to your device as PDF.')
               onClose()
             }}
-            className="flex items-center gap-2 rounded-full bg-[#1b3426] px-5 py-2.5 text-xs font-bold text-white transition hover:bg-[#254935] dark:bg-white dark:text-[#121c16]"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-full bg-[#1b3426] py-3 sm:py-2.5 px-5 text-xs font-bold text-white transition hover:bg-[#254935] dark:bg-white dark:text-[#121c16]"
           >
             <Download size={14} /> Download Certificate (PDF)
           </button>
@@ -1043,10 +1013,10 @@ function Brand({ onClick }) {
   return (
     <button
       onClick={onClick}
-      className="group flex items-center gap-2.5 text-left text-[20px] font-bold tracking-tight transition"
+      className="group flex items-center gap-2 sm:gap-2.5 text-left text-[18px] sm:text-[20px] font-bold tracking-tight transition"
     >
-      <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#223d2f] text-white shadow-sm transition-transform duration-300 group-hover:scale-105 dark:bg-[#34634c] dark:text-[#f3f5f3]">
-        <Podcast size={19} strokeWidth={2.2} />
+      <span className="grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-xl bg-[#223d2f] text-white shadow-sm transition-transform duration-300 group-hover:scale-105 dark:bg-[#34634c] dark:text-[#f3f5f3]">
+        <Podcast size={17} strokeWidth={2.2} />
       </span>
       <span className="font-semibold tracking-tight">ILEARN</span>
     </button>
@@ -1058,10 +1028,10 @@ function ThemeButton({ dark, setDark }) {
     <button
       aria-label="Toggle theme mode"
       onClick={() => setDark(!dark)}
-      className="grid h-10 w-10 place-items-center rounded-full text-gray-500 transition-colors hover:bg-black/5 dark:text-gray-400 dark:hover:bg-white/10"
+      className="grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-full text-gray-500 transition-colors hover:bg-black/5 dark:text-gray-400 dark:hover:bg-white/10"
       title={dark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
     >
-      {dark ? <Sun size={18} className="text-amber-300" /> : <Moon size={18} />}
+      {dark ? <Sun size={17} className="text-amber-300" /> : <Moon size={17} />}
     </button>
   )
 }
@@ -1087,20 +1057,20 @@ function AnimatedHamburger({ checked, onChange, label, className = '' }) {
 
 function MetricCard({ label, value, change, icon: Icon, trend = 'up' }) {
   return (
-    <div className="card p-5 transition hover:-translate-y-0.5">
+    <div className="card p-4 sm:p-5 transition hover:-translate-y-0.5">
       <div className="flex items-start justify-between">
-        <p className="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+        <p className="text-[11px] sm:text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
           {label}
         </p>
-        <span className="grid h-8 w-8 place-items-center rounded-xl bg-[#e5eee7] text-[#2b593f] dark:bg-[#1a2d23] dark:text-[#9bcbb1]">
-          <Icon size={16} />
+        <span className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-xl bg-[#e5eee7] text-[#2b593f] dark:bg-[#1a2d23] dark:text-[#9bcbb1]">
+          <Icon size={15} />
         </span>
       </div>
-      <p className="mt-4 text-3xl font-bold tracking-tight text-[#16291e] dark:text-white">
+      <p className="mt-3 text-2xl sm:text-3xl font-bold tracking-tight text-[#16291e] dark:text-white">
         {value}
       </p>
-      <div className="mt-2 flex items-center gap-1 text-xs font-medium text-[#3b7353] dark:text-[#78c097]">
-        {trend === 'up' && <TrendingUp size={13} />}
+      <div className="mt-1.5 flex items-center gap-1 text-[11px] sm:text-xs font-medium text-[#3b7353] dark:text-[#78c097]">
+        {trend === 'up' && <TrendingUp size={12} />}
         <span>{change}</span>
       </div>
     </div>
@@ -1113,56 +1083,52 @@ function CourseCard({
   isBookmarked,
   onToggleBookmark,
   progress = 0,
-  onInitiateEnroll,
-  isEnrolled,
 }) {
   return (
     <div
       onClick={() => navigate(`/course/${course.id}`)}
-      className="card group cursor-pointer overflow-hidden p-4 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:hover:border-white/20 flex flex-col justify-between"
+      className="card group cursor-pointer overflow-hidden p-3.5 sm:p-4 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:hover:border-white/20 flex flex-col justify-between"
     >
       <div>
-        {/* Course Thumbnail Image */}
-        <div className={`relative mb-4 aspect-[16/10] overflow-hidden rounded-xl ${course.color}`}>
+        <div className={`relative mb-3 aspect-[16/10] overflow-hidden rounded-xl ${course.color}`}>
           <img
             src={course.image}
             alt={course.title}
             className="h-full w-full object-cover mix-blend-multiply opacity-80 transition duration-500 group-hover:scale-105 dark:opacity-70"
             loading="lazy"
           />
-          <span className="glass-pill absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold text-gray-800 dark:text-gray-200">
+          <span className="glass-pill absolute left-2.5 top-2.5 rounded-full px-2.5 py-1 text-[10px] sm:text-[11px] font-semibold text-gray-800 dark:text-gray-200">
             {course.category}
           </span>
 
           <button
             aria-label={isBookmarked ? 'Remove bookmark' : 'Bookmark course'}
             onClick={(e) => onToggleBookmark(course.id, e)}
-            className="glass-pill absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full text-gray-700 transition hover:scale-110 dark:text-gray-200"
+            className="glass-pill absolute right-2.5 top-2.5 grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-full text-gray-700 transition hover:scale-110 dark:text-gray-200"
           >
             {isBookmarked ? (
-              <BookmarkCheck size={16} className="text-emerald-700 dark:text-emerald-400" />
+              <BookmarkCheck size={15} className="text-emerald-700 dark:text-emerald-400" />
             ) : (
-              <Bookmark size={16} />
+              <Bookmark size={15} />
             )}
           </button>
 
           {progress > 0 && (
-            <div className="glass-pill absolute bottom-3 left-3 rounded-full px-3 py-1 text-[11px] font-semibold text-emerald-900 dark:text-emerald-200">
+            <div className="glass-pill absolute bottom-2.5 left-2.5 rounded-full px-2.5 py-0.5 text-[10px] sm:text-[11px] font-semibold text-emerald-900 dark:text-emerald-200">
               {progress}% completed
             </div>
           )}
         </div>
 
-        {/* Content Details */}
         <div className="flex items-center justify-between text-xs text-gray-400">
           <span>{course.level}</span>
           <span className="flex items-center gap-1 font-medium text-amber-600 dark:text-amber-400">
-            <Star size={13} fill="currentColor" /> {course.rating}{' '}
-            <span className="text-gray-400">({course.reviewsCount})</span>
+            <Star size={12} fill="currentColor" /> {course.rating}{' '}
+            <span className="text-gray-400 text-[10px]">({course.reviewsCount})</span>
           </span>
         </div>
 
-        <h3 className="mt-2 text-[17px] font-bold leading-snug tracking-tight group-hover:text-[#2d5740] dark:group-hover:text-[#90cca7]">
+        <h3 className="mt-1.5 text-base sm:text-[17px] font-bold leading-snug tracking-tight group-hover:text-[#2d5740] dark:group-hover:text-[#90cca7]">
           {course.title}
         </h3>
 
@@ -1171,13 +1137,13 @@ function CourseCard({
         </p>
       </div>
 
-      <div className="mt-4 border-t border-gray-100 pt-3 text-xs text-gray-500 dark:border-white/5 dark:text-gray-400">
+      <div className="mt-3.5 border-t border-gray-100 pt-2.5 text-xs text-gray-500 dark:border-white/5 dark:text-gray-400">
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-1.5 truncate">
-            <UserRound size={13} /> {course.author}
+            <UserRound size={12} /> {course.author}
           </span>
           <span className="flex items-center gap-1 shrink-0">
-            <Clock3 size={13} /> {course.duration}
+            <Clock3 size={12} /> {course.duration}
           </span>
         </div>
       </div>
@@ -1201,10 +1167,10 @@ function MarketingShell({
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-30 border-b border-black/[0.06] bg-[#fbfaf8]/90 backdrop-blur-xl transition-colors dark:border-white/[0.08] dark:bg-[#0d1210]/90">
-        <div className="mx-auto flex h-[76px] max-w-[1240px] items-center justify-between px-5 lg:px-8">
+        <div className="mx-auto flex h-[70px] sm:h-[76px] max-w-[1240px] items-center justify-between px-4 sm:px-5 lg:px-8">
           <Brand onClick={() => navigate('/')} />
 
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-7 lg:gap-8 md:flex">
             <button
               onClick={() => navigate('/')}
               className={`nav-link ${route.page === 'discover' || route.page === 'course' ? 'active' : ''}`}
@@ -1231,23 +1197,23 @@ function MarketingShell({
             </button>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <ThemeButton dark={dark} setDark={setDark} />
 
             <button
               onClick={() => navigate('/dashboard')}
-              className="hidden items-center gap-2.5 rounded-full border border-black/10 bg-white/70 py-1.5 pl-1.5 pr-3.5 text-xs font-semibold shadow-sm transition hover:bg-white dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10 sm:flex"
+              className="hidden items-center gap-2 rounded-full border border-black/10 bg-white/70 py-1.5 pl-1.5 pr-3 text-xs font-semibold shadow-sm transition hover:bg-white dark:border-white/10 dark:bg-white/5 sm:flex"
             >
-              <span className="grid h-7 w-7 place-items-center rounded-full bg-[#dbe7de] text-xs font-bold text-[#234232] dark:bg-[#20362b] dark:text-[#aee2c2]">
+              <span className="grid h-6 w-6 place-items-center rounded-full bg-[#dbe7de] text-[11px] font-bold text-[#234232] dark:bg-[#20362b] dark:text-[#aee2c2]">
                 JD
               </span>
-              <span>Jordan Davis</span>
+              <span>Jordan</span>
             </button>
 
             <button
               aria-label="Toggle mobile menu"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="grid h-10 w-10 place-items-center rounded-full text-gray-600 transition hover:bg-black/5 dark:text-gray-300 dark:hover:bg-white/10 md:hidden"
+              className="grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-full text-gray-600 transition hover:bg-black/5 dark:text-gray-300 dark:hover:bg-white/10 md:hidden"
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -1255,48 +1221,48 @@ function MarketingShell({
         </div>
 
         {mobileMenuOpen && (
-          <div className="border-t border-black/5 bg-[#fbfaf8] px-5 py-4 dark:border-white/10 dark:bg-[#0d1210] md:hidden">
+          <div className="border-t border-black/5 bg-[#fbfaf8] px-4 py-3 dark:border-white/10 dark:bg-[#0d1210] md:hidden">
             <nav className="flex flex-col space-y-1">
               <button
                 onClick={() => navigate('/')}
-                className="flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold hover:bg-black/5 dark:hover:bg-white/5"
+                className="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-left text-sm font-semibold hover:bg-black/5 dark:hover:bg-white/5"
               >
-                <Compass size={18} /> Discover Catalog
+                <Compass size={17} /> Discover Catalog
               </button>
               <button
                 onClick={() => navigate('/my-learning')}
-                className="flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold hover:bg-black/5 dark:hover:bg-white/5"
+                className="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-left text-sm font-semibold hover:bg-black/5 dark:hover:bg-white/5"
               >
-                <BookOpen size={18} /> My Learning
+                <BookOpen size={17} /> My Learning
               </button>
               <button
                 onClick={() => navigate('/dashboard')}
-                className="flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold hover:bg-black/5 dark:hover:bg-white/5"
+                className="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-left text-sm font-semibold hover:bg-black/5 dark:hover:bg-white/5"
               >
-                <LayoutDashboard size={18} /> Dashboard
+                <LayoutDashboard size={17} /> Dashboard
               </button>
               <button
                 onClick={() => navigate('/analytics')}
-                className="flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold hover:bg-black/5 dark:hover:bg-white/5"
+                className="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-left text-sm font-semibold hover:bg-black/5 dark:hover:bg-white/5"
               >
-                <BarChart3 size={18} /> Learning Analytics
+                <BarChart3 size={17} /> Learning Analytics
               </button>
             </nav>
           </div>
         )}
       </header>
 
-      <main className="mx-auto w-full max-w-[1240px] flex-1 px-5 pb-24 lg:px-8">
+      <main className="mx-auto w-full max-w-[1240px] flex-1 px-4 sm:px-6 pb-20 lg:px-8">
         {children}
       </main>
 
-      <footer className="mt-auto border-t border-black/[0.06] bg-white/40 py-10 dark:border-white/[0.08] dark:bg-[#090d0b]">
-        <div className="mx-auto flex max-w-[1240px] flex-col items-center justify-between gap-6 px-5 text-xs text-gray-500 dark:text-gray-400 sm:flex-row lg:px-8">
-          <div className="flex items-center gap-2 font-medium">
-            <Podcast size={15} className="text-[#3b6d52]" />
-            <span>ILEARN Intentional Learning Studio © 2026. All rights reserved.</span>
+      <footer className="mt-auto border-t border-black/[0.06] bg-white/40 py-8 dark:border-white/[0.08] dark:bg-[#090d0b]">
+        <div className="mx-auto flex max-w-[1240px] flex-col items-center justify-between gap-4 px-4 text-xs text-gray-500 dark:text-gray-400 sm:flex-row lg:px-8">
+          <div className="flex items-center gap-2 font-medium text-center sm:text-left">
+            <Podcast size={15} className="text-[#3b6d52] shrink-0" />
+            <span>ILEARN Intentional Learning Studio © 2026.</span>
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-5">
             <button onClick={() => navigate('/')} className="hover:text-ink dark:hover:text-white">
               Discover
             </button>
@@ -1366,7 +1332,7 @@ function DashboardShell({
           </button>
         </div>
 
-        <nav className="mt-10 flex-1 space-y-1.5">
+        <nav className="mt-8 flex-1 space-y-1.5">
           {navItems.map(({ path, label, icon: Icon }) => {
             const isSelected =
               route.page ===
@@ -1402,8 +1368,8 @@ function DashboardShell({
             <p className="text-[11px] font-bold uppercase tracking-wider text-[#356149] dark:text-[#9cd1b3]">
               Daily Rhythm
             </p>
-            <p className="mt-1 flex items-center gap-2 text-xl font-extrabold text-[#193325] dark:text-white">
-              3 Day Streak <Flame size={18} className="text-amber-500" />
+            <p className="mt-1 flex items-center gap-2 text-lg font-extrabold text-[#193325] dark:text-white">
+              3 Day Streak <Flame size={17} className="text-amber-500" />
             </p>
             <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">
               Keep it going by learning 15 min today.
@@ -1413,7 +1379,7 @@ function DashboardShell({
       </aside>
 
       <div className="min-w-0 flex-1">
-        <header className="flex h-[76px] items-center justify-between border-b border-black/[0.07] bg-[#fbfaf8]/90 px-5 backdrop-blur-md transition-colors dark:border-white/[0.08] dark:bg-[#0d1210]/90 lg:px-10">
+        <header className="flex h-[70px] sm:h-[76px] items-center justify-between border-b border-black/[0.07] bg-[#fbfaf8]/90 px-4 sm:px-6 backdrop-blur-md transition-colors dark:border-white/[0.08] dark:bg-[#0d1210]/90 lg:px-10">
           <div className="flex items-center gap-3">
             <AnimatedHamburger
               checked={mobileMenuOpen}
@@ -1426,21 +1392,21 @@ function DashboardShell({
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <ThemeButton dark={dark} setDark={setDark} />
             <button
               onClick={() => navigate('/my-learning')}
-              className="flex items-center gap-2.5 rounded-full border border-black/10 bg-white/60 py-1.5 pl-1.5 pr-3.5 text-xs font-semibold shadow-sm transition hover:bg-white dark:border-white/10 dark:bg-white/5"
+              className="flex items-center gap-2 rounded-full border border-black/10 bg-white/60 py-1.5 pl-1.5 pr-3 text-xs font-semibold shadow-sm transition hover:bg-white dark:border-white/10 dark:bg-white/5"
             >
-              <span className="grid h-7 w-7 place-items-center rounded-full bg-[#dbe7de] text-xs font-bold text-[#234232] dark:bg-[#20362b] dark:text-[#aee2c2]">
+              <span className="grid h-6 w-6 place-items-center rounded-full bg-[#dbe7de] text-[11px] font-bold text-[#234232] dark:bg-[#20362b] dark:text-[#aee2c2]">
                 JD
               </span>
-              <span>Jordan Davis</span>
+              <span className="hidden sm:inline">Jordan Davis</span>
             </button>
           </div>
         </header>
 
-        <main className="mx-auto max-w-[1240px] p-5 lg:p-10">{children}</main>
+        <main className="mx-auto max-w-[1240px] p-4 sm:p-6 lg:p-10">{children}</main>
       </div>
     </div>
   )
@@ -1469,38 +1435,36 @@ function DiscoverView({
 }) {
   return (
     <>
-      {/* Hero Presentation Section */}
-      <section className="grid items-center gap-10 pb-12 pt-10 md:grid-cols-[1.2fr_360px] md:pt-16">
+      <section className="grid items-center gap-8 pb-8 pt-6 md:grid-cols-[1.2fr_340px] md:pt-14">
         <div>
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-600/20 bg-emerald-50 px-3.5 py-1 text-xs font-semibold text-emerald-800 dark:border-emerald-500/20 dark:bg-emerald-950/40 dark:text-emerald-300">
-            <Sparkles size={13} />
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-600/20 bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-800 dark:border-emerald-500/20 dark:bg-emerald-950/40 dark:text-emerald-300">
+            <Sparkles size={12} />
             <span>Curated for calm & intentional mastery</span>
           </div>
 
-          <h1 className="max-w-[700px] text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
+          <h1 className="max-w-[700px] text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.08] tracking-tight break-words">
             Make space to <span className="serif italic font-normal text-[#2b593f] dark:text-[#7ec29a]">grow.</span>
           </h1>
 
-          <p className="mt-6 max-w-[520px] text-base leading-relaxed text-gray-600 dark:text-gray-300 sm:text-lg">
+          <p className="mt-4 max-w-[500px] text-sm sm:text-base leading-relaxed text-gray-600 dark:text-gray-300">
             Immerse yourself in thoughtfully structured courses designed to respect your attention and spark genuine creative breakthroughs.
           </p>
         </div>
 
-        {/* Streak & Quick Resume Widget Card */}
-        <div className="card relative overflow-hidden p-6 shadow-md">
+        <div className="card relative overflow-hidden p-5 sm:p-6 shadow-md">
           <div className="mb-4 flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-gray-400">Weekly Rhythm</p>
-              <p className="mt-1 flex items-center gap-2 text-xl font-bold">
-                3 day streak <Flame size={18} className="text-amber-500" />
+              <p className="mt-0.5 flex items-center gap-1.5 text-lg font-bold">
+                3 day streak <Flame size={17} className="text-amber-500" />
               </p>
             </div>
-            <div className="flex gap-1.5">
+            <div className="flex gap-1 sm:gap-1.5">
               {[1, 1, 1, 0, 0, 0, 0].map((active, idx) => (
                 <span
                   key={idx}
                   title={`Day ${idx + 1}`}
-                  className={`h-8 w-2 rounded-full transition-all ${
+                  className={`h-6 sm:h-7 w-1.5 sm:w-2 rounded-full transition-all ${
                     active
                       ? 'bg-[#43795b]'
                       : 'bg-gray-200 dark:bg-white/10'
@@ -1516,24 +1480,24 @@ function DiscoverView({
 
           <button
             onClick={() => navigate('/learn/1')}
-            className="mt-5 flex w-full items-center justify-between rounded-xl bg-[#1a2e23] px-4 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#254233] dark:bg-white dark:text-[#121c16] dark:hover:bg-gray-100"
+            className="mt-4 flex w-full items-center justify-between rounded-xl bg-[#1a2e23] px-4 py-3 text-xs sm:text-sm font-semibold text-white shadow-sm transition hover:bg-[#254233] dark:bg-white dark:text-[#121c16] dark:hover:bg-gray-100"
           >
             <span>Resume your lesson</span>
-            <ArrowRight size={16} />
+            <ArrowRight size={15} />
           </button>
         </div>
       </section>
 
       {/* Filter & Search Bar Toolbar */}
-      <section className="mb-10 flex flex-col gap-4 border-y border-black/[0.07] py-5 dark:border-white/[0.08] sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
+      <section className="mb-8 flex flex-col gap-3.5 border-y border-black/[0.07] py-4 dark:border-white/[0.08] sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 sm:pb-0">
           {CATEGORIES.map((category) => {
             const isSelected = selectedCategory === category
             return (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold transition ${
+                className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
                   isSelected
                     ? 'bg-[#1e382b] text-white dark:bg-white dark:text-[#132219]'
                     : 'bg-black/[0.03] text-gray-600 hover:bg-black/[0.06] dark:bg-white/[0.04] dark:text-gray-300 dark:hover:bg-white/10'
@@ -1545,22 +1509,22 @@ function DiscoverView({
           })}
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="relative flex-1 sm:w-64 sm:flex-initial">
-            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="relative flex-1 sm:w-56 sm:flex-initial">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search courses..."
-              className="h-10 w-full rounded-full border border-black/10 bg-white/70 pl-9 pr-8 text-xs font-medium outline-none transition placeholder:text-gray-400 focus:border-[#43795b] focus:ring-2 focus:ring-[#43795b]/20 dark:border-white/10 dark:bg-white/5 dark:focus:border-[#7ec29a]"
+              className="h-9 w-full rounded-full border border-black/10 bg-white/70 pl-8 pr-7 text-xs font-medium outline-none transition placeholder:text-gray-400 focus:border-[#43795b] dark:border-white/10 dark:bg-white/5"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
-                <X size={14} />
+                <X size={13} />
               </button>
             )}
           </div>
@@ -1568,7 +1532,7 @@ function DiscoverView({
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="h-10 rounded-full border border-black/10 bg-white/70 px-3.5 text-xs font-medium text-gray-700 outline-none dark:border-white/10 dark:bg-[#161f1a] dark:text-gray-300"
+            className="h-9 rounded-full border border-black/10 bg-white/70 px-3 text-xs font-medium text-gray-700 outline-none dark:border-white/10 dark:bg-[#161f1a] dark:text-gray-300"
           >
             <option value="popular">Most Popular</option>
             <option value="rating">Highest Rated</option>
@@ -1579,18 +1543,18 @@ function DiscoverView({
 
       {/* Courses Catalog Grid */}
       <section>
-        <div className="mb-6 flex items-end justify-between">
+        <div className="mb-5 flex items-end justify-between">
           <div>
             <p className="eyebrow">Hand-Crafted Syllabus</p>
-            <h2 className="mt-1 text-2xl font-bold tracking-tight">Explore Courses</h2>
+            <h2 className="mt-1 text-xl sm:text-2xl font-bold tracking-tight">Explore Courses</h2>
           </div>
           <span className="text-xs font-semibold text-gray-400">
-            {courses.length} {courses.length === 1 ? 'course' : 'courses'} available
+            {courses.length} {courses.length === 1 ? 'course' : 'courses'}
           </span>
         </div>
 
         {courses.length > 0 ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {courses.map((course) => (
               <CourseCard
                 key={course.id}
@@ -1604,20 +1568,17 @@ function DiscoverView({
             ))}
           </div>
         ) : (
-          <div className="rounded-3xl border border-dashed border-gray-200 py-16 text-center dark:border-white/10">
-            <BookOpen size={36} className="mx-auto text-gray-400" />
-            <p className="mt-4 text-sm font-semibold text-gray-700 dark:text-gray-300">
+          <div className="rounded-3xl border border-dashed border-gray-200 py-12 text-center dark:border-white/10">
+            <BookOpen size={32} className="mx-auto text-gray-400" />
+            <p className="mt-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
               No matching courses found
-            </p>
-            <p className="mt-1 text-xs text-gray-500">
-              Try adjusting your search keywords or switching category filters.
             </p>
             <button
               onClick={() => {
                 setSearchQuery('')
                 setSelectedCategory('All courses')
               }}
-              className="mt-4 rounded-full bg-[#1e382b] px-4 py-2 text-xs font-semibold text-white dark:bg-white dark:text-[#121c16]"
+              className="mt-3 rounded-full bg-[#1e382b] px-4 py-1.5 text-xs font-semibold text-white dark:bg-white dark:text-[#121c16]"
             >
               Reset Filters
             </button>
@@ -1626,34 +1587,34 @@ function DiscoverView({
       </section>
 
       {/* Editorial Quote & Philosophy Section */}
-      <section className="mt-20 grid gap-6 md:grid-cols-[1.2fr_0.8fr]">
-        <div className="rounded-3xl bg-[#1b2b23] p-8 text-white shadow-xl sm:p-10 dark:bg-[#13201a]">
-          <div className="mb-12 flex items-start justify-between">
+      <section className="mt-14 sm:mt-20 grid gap-5 md:grid-cols-[1.2fr_0.8fr]">
+        <div className="rounded-3xl bg-[#1b2b23] p-6 sm:p-10 text-white shadow-xl dark:bg-[#13201a]">
+          <div className="mb-8 sm:mb-12 flex items-start justify-between">
             <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-200">
               ILEARN Journal
             </span>
-            <BookOpen size={20} className="text-white/60" />
+            <BookOpen size={18} className="text-white/60" />
           </div>
-          <p className="serif text-2xl leading-snug sm:text-3xl">
+          <p className="serif text-xl sm:text-3xl leading-snug">
             "The quality of your life is the quality of your attention."
           </p>
-          <p className="mt-6 text-xs font-medium text-emerald-300/80">— James Clear, Author of Atomic Habits</p>
+          <p className="mt-4 sm:mt-6 text-xs font-medium text-emerald-300/80">— James Clear, Author of Atomic Habits</p>
         </div>
 
-        <div className="rounded-3xl bg-[#ece4db] p-8 text-[#261f18] sm:p-10 dark:bg-[#212a23] dark:text-[#dce8e0]">
-          <TrendingUp size={24} className="mb-12 text-[#8b5a3e] dark:text-[#84c39c]" />
+        <div className="rounded-3xl bg-[#ece4db] p-6 sm:p-10 text-[#261f18] dark:bg-[#212a23] dark:text-[#dce8e0]">
+          <TrendingUp size={22} className="mb-8 sm:mb-12 text-[#8b5a3e] dark:text-[#84c39c]" />
           <p className="text-xs font-bold uppercase tracking-wider text-[#8b5a3e] dark:text-[#84c39c]">
             Learn Consistently
           </p>
-          <h3 className="mt-2 text-2xl font-bold leading-tight sm:text-3xl">
+          <h3 className="mt-1.5 text-xl sm:text-2xl font-bold leading-tight">
             Small daily steps make a lasting lifelong difference.
           </h3>
           <button
             onClick={() => navigate('/my-learning')}
-            className="mt-8 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#633a21] hover:underline dark:text-[#a1e2ba]"
+            className="mt-6 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#633a21] hover:underline dark:text-[#a1e2ba]"
           >
             <span>See your progress</span>
-            <ArrowRight size={14} />
+            <ArrowRight size={13} />
           </button>
         </div>
       </section>
@@ -1676,92 +1637,90 @@ function CourseDetailView({
   const [activeTab, setActiveTab] = useState('syllabus')
 
   return (
-    <section className="pt-8">
+    <section className="pt-6 sm:pt-8">
       <button
         onClick={() => navigate('/')}
-        className="mb-8 flex items-center gap-2 text-xs font-semibold text-gray-500 transition hover:text-[#1a1e1b] dark:text-gray-400 dark:hover:text-white"
+        className="mb-6 flex items-center gap-1.5 text-xs font-semibold text-gray-500 transition hover:text-[#1a1e1b] dark:text-gray-400 dark:hover:text-white"
       >
-        <ChevronLeft size={16} /> Back to Catalog
+        <ChevronLeft size={15} /> Back to Catalog
       </button>
 
-      {/* Main Course Header & Media Showcase */}
-      <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className={`relative min-h-[380px] overflow-hidden rounded-3xl ${course.color} shadow-lg`}>
+      <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className={`relative min-h-[240px] sm:min-h-[360px] overflow-hidden rounded-3xl ${course.color} shadow-lg`}>
           <img
             src={course.image}
             alt={course.title}
             className="h-full w-full object-cover mix-blend-multiply opacity-85 dark:opacity-75"
           />
-          <div className="absolute bottom-6 left-6 flex items-center gap-3">
-            <span className="glass-pill rounded-full px-3.5 py-1.5 text-xs font-bold text-gray-900 dark:text-white">
+          <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 flex items-center gap-2">
+            <span className="glass-pill rounded-full px-3 py-1 text-xs font-bold text-gray-900 dark:text-white">
               {course.category}
             </span>
-            <span className="glass-pill rounded-full px-3.5 py-1.5 text-xs font-bold text-gray-900 dark:text-white">
+            <span className="glass-pill rounded-full px-3 py-1 text-xs font-bold text-gray-900 dark:text-white">
               {course.level}
             </span>
           </div>
         </div>
 
         <div className="flex flex-col justify-center">
-          <div className="flex items-center gap-3">
-            <p className="eyebrow">{course.category} Specialization</p>
+          <div className="flex items-center gap-2.5">
+            <p className="eyebrow">{course.category} Track</p>
             <span className="flex items-center gap-1 text-xs font-bold text-amber-600 dark:text-amber-400">
-              <Star size={13} fill="currentColor" /> {course.rating} ({course.reviewsCount} ratings)
+              <Star size={12} fill="currentColor" /> {course.rating} ({course.reviewsCount})
             </span>
           </div>
 
-          <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-5xl">
+          <h1 className="mt-2 text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight break-words">
             {course.title}
           </h1>
 
-          <p className="mt-4 text-base leading-relaxed text-gray-600 dark:text-gray-300">
+          <p className="mt-3 text-sm sm:text-base leading-relaxed text-gray-600 dark:text-gray-300">
             {course.description}
           </p>
 
-          <div className="my-6 flex flex-wrap gap-5 border-y border-black/[0.08] py-4 text-xs font-medium text-gray-600 dark:border-white/[0.08] dark:text-gray-300">
+          <div className="my-5 flex flex-wrap gap-4 border-y border-black/[0.08] py-3.5 text-xs font-medium text-gray-600 dark:border-white/[0.08] dark:text-gray-300">
             <span className="flex items-center gap-1.5">
-              <UserRound size={15} className="text-[#39694e]" /> {course.author}
+              <UserRound size={14} className="text-[#39694e]" /> {course.author}
             </span>
             <span className="flex items-center gap-1.5">
-              <Clock3 size={15} className="text-[#39694e]" /> {course.duration}
+              <Clock3 size={14} className="text-[#39694e]" /> {course.duration}
             </span>
             <span className="flex items-center gap-1.5">
-              <BookOpen size={15} className="text-[#39694e]" /> {course.lessons.length} lessons
+              <BookOpen size={14} className="text-[#39694e]" /> {course.lessons.length} lessons
             </span>
           </div>
 
-          {/* Enrollment / Learning CTA */}
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             {isEnrolled ? (
               <button
                 onClick={() => navigate(`/learn/${course.id}`)}
-                className="flex items-center gap-2 rounded-full bg-[#1b3426] px-8 py-3.5 text-sm font-semibold text-white shadow-md transition hover:bg-[#254935] dark:bg-white dark:text-[#121c16] dark:hover:bg-gray-100"
+                className="flex items-center justify-center gap-2 rounded-full bg-[#1b3426] py-3.5 px-7 text-xs sm:text-sm font-semibold text-white shadow-md transition hover:bg-[#254935] dark:bg-white dark:text-[#121c16]"
               >
                 <span>Continue Learning ({progress}%)</span>
-                <ArrowRight size={16} />
+                <ArrowRight size={15} />
               </button>
             ) : (
               <button
                 onClick={onInitiateEnroll}
-                className="flex items-center gap-2 rounded-full bg-[#1b3426] px-8 py-3.5 text-sm font-semibold text-white shadow-md transition hover:bg-[#254935] dark:bg-white dark:text-[#121c16] dark:hover:bg-gray-100"
+                className="flex items-center justify-center gap-2 rounded-full bg-[#1b3426] py-3.5 px-7 text-xs sm:text-sm font-semibold text-white shadow-md transition hover:bg-[#254935] dark:bg-white dark:text-[#121c16]"
               >
                 <span>Enroll in Course</span>
-                <ArrowRight size={16} />
+                <ArrowRight size={15} />
               </button>
             )}
 
             <button
               onClick={(e) => onToggleBookmark(course.id, e)}
-              className="flex items-center gap-2 rounded-full border border-black/10 bg-white/60 px-5 py-3.5 text-sm font-semibold transition hover:bg-white dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+              className="flex items-center justify-center gap-2 rounded-full border border-black/10 bg-white/60 py-3.5 px-5 text-xs sm:text-sm font-semibold transition hover:bg-white dark:border-white/10 dark:bg-white/5"
             >
               {isBookmarked ? (
                 <>
-                  <BookmarkCheck size={16} className="text-emerald-600 dark:text-emerald-400" />
+                  <BookmarkCheck size={15} className="text-emerald-600 dark:text-emerald-400" />
                   <span>Bookmarked</span>
                 </>
               ) : (
                 <>
-                  <Bookmark size={16} />
+                  <Bookmark size={15} />
                   <span>Save for later</span>
                 </>
               )}
@@ -1770,22 +1729,22 @@ function CourseDetailView({
         </div>
       </div>
 
-      {/* Course Detail Tabs Section */}
-      <div className="mt-14">
-        <div className="flex gap-4 border-b border-black/[0.08] pb-3 dark:border-white/[0.08]">
+      {/* Tabs */}
+      <div className="mt-10 sm:mt-14">
+        <div className="flex gap-4 border-b border-black/[0.08] pb-2 overflow-x-auto no-scrollbar whitespace-nowrap dark:border-white/[0.08]">
           <button
             onClick={() => setActiveTab('syllabus')}
-            className={`pb-2 text-sm font-bold transition ${
+            className={`pb-2 text-xs sm:text-sm font-bold transition ${
               activeTab === 'syllabus'
                 ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
                 : 'text-gray-500 hover:text-black dark:hover:text-white'
             }`}
           >
-            Curriculum ({course.lessons.length} lessons)
+            Curriculum ({course.lessons.length})
           </button>
           <button
             onClick={() => setActiveTab('outcomes')}
-            className={`pb-2 text-sm font-bold transition ${
+            className={`pb-2 text-xs sm:text-sm font-bold transition ${
               activeTab === 'outcomes'
                 ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
                 : 'text-gray-500 hover:text-black dark:hover:text-white'
@@ -1795,7 +1754,7 @@ function CourseDetailView({
           </button>
           <button
             onClick={() => setActiveTab('instructor')}
-            className={`pb-2 text-sm font-bold transition ${
+            className={`pb-2 text-xs sm:text-sm font-bold transition ${
               activeTab === 'instructor'
                 ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
                 : 'text-gray-500 hover:text-black dark:hover:text-white'
@@ -1805,7 +1764,7 @@ function CourseDetailView({
           </button>
           <button
             onClick={() => setActiveTab('resources')}
-            className={`pb-2 text-sm font-bold transition ${
+            className={`pb-2 text-xs sm:text-sm font-bold transition ${
               activeTab === 'resources'
                 ? 'border-b-2 border-[#2b593f] text-[#2b593f] dark:border-[#7ec29a] dark:text-[#7ec29a]'
                 : 'text-gray-500 hover:text-black dark:hover:text-white'
@@ -1815,26 +1774,25 @@ function CourseDetailView({
           </button>
         </div>
 
-        {/* Tab 1: Syllabus Accordion */}
         {activeTab === 'syllabus' && (
-          <div className="mt-8 space-y-3">
+          <div className="mt-6 space-y-2.5">
             {course.lessons.map((lesson, idx) => (
               <div
                 key={lesson.id}
-                className="card flex items-center justify-between p-5 transition hover:border-[#386b4e]"
+                className="card flex items-start sm:items-center justify-between p-4 sm:p-5"
               >
-                <div className="flex items-start gap-4">
-                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#dbe7de] text-xs font-bold text-[#204430] dark:bg-[#1a3124] dark:text-[#9fd5b6]">
+                <div className="flex items-start gap-3">
+                  <span className="grid h-6 w-6 sm:h-7 sm:w-7 shrink-0 place-items-center rounded-full bg-[#dbe7de] text-xs font-bold text-[#204430] dark:bg-[#1a3124] dark:text-[#9fd5b6]">
                     {idx + 1}
                   </span>
                   <div>
-                    <h4 className="text-sm font-bold">{lesson.title}</h4>
-                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    <h4 className="text-xs sm:text-sm font-bold">{lesson.title}</h4>
+                    <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
                       {lesson.preview}
                     </p>
                   </div>
                 </div>
-                <span className="ml-4 shrink-0 text-xs font-semibold text-gray-400">
+                <span className="ml-3 shrink-0 text-xs font-semibold text-gray-400">
                   {lesson.duration}
                 </span>
               </div>
@@ -1842,53 +1800,50 @@ function CourseDetailView({
           </div>
         )}
 
-        {/* Tab 2: Outcomes */}
         {activeTab === 'outcomes' && (
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
             {course.outcomes.map((outcome, idx) => (
-              <div key={idx} className="card flex items-start gap-3.5 p-5">
-                <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
-                <span className="text-sm font-medium leading-relaxed">{outcome}</span>
+              <div key={idx} className="card flex items-start gap-3 p-4">
+                <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                <span className="text-xs sm:text-sm font-medium leading-relaxed">{outcome}</span>
               </div>
             ))}
           </div>
         )}
 
-        {/* Tab 3: Instructor Profile */}
         {activeTab === 'instructor' && (
-          <div className="card mt-8 flex flex-col gap-6 p-6 sm:flex-row sm:items-center">
-            <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl bg-[#dbe7de] text-2xl font-bold text-[#234232] dark:bg-[#1e3427] dark:text-[#a0dbb9]">
+          <div className="card mt-6 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:p-6">
+            <div className="grid h-16 w-16 sm:h-20 sm:w-20 shrink-0 place-items-center rounded-2xl bg-[#dbe7de] text-xl sm:text-2xl font-bold text-[#234232] dark:bg-[#1e3427] dark:text-[#a0dbb9]">
               {course.author.split(' ').map((n) => n[0]).join('')}
             </div>
             <div>
-              <h3 className="text-lg font-bold">{course.author}</h3>
+              <h3 className="text-base sm:text-lg font-bold">{course.author}</h3>
               <p className="text-xs font-semibold text-[#3b6d52] dark:text-[#88cb9f]">
                 {course.authorRole}
               </p>
-              <p className="mt-2 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+              <p className="mt-1.5 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
                 {course.authorBio}
               </p>
             </div>
           </div>
         )}
 
-        {/* Tab 4: Resources */}
         {activeTab === 'resources' && (
-          <div className="mt-8 space-y-3">
+          <div className="mt-6 space-y-2.5">
             {course.resources?.map((res, idx) => (
-              <div key={idx} className="card flex items-center justify-between p-4">
-                <div className="flex items-center gap-3">
-                  <FileText size={18} className="text-[#3b6d52]" />
-                  <div>
-                    <p className="text-xs font-bold">{res.name}</p>
+              <div key={idx} className="card flex items-center justify-between p-3.5 sm:p-4">
+                <div className="flex items-center gap-2.5 min-w-0 pr-3">
+                  <FileText size={16} className="text-[#3b6d52] shrink-0" />
+                  <div className="min-w-0">
+                    <p className="truncate text-xs font-bold">{res.name}</p>
                     <p className="text-[10px] text-gray-400">{res.size}</p>
                   </div>
                 </div>
                 <button
                   onClick={() => alert(`Downloading ${res.name}...`)}
-                  className="flex items-center gap-1.5 rounded-full border border-black/10 px-3 py-1.5 text-xs font-semibold hover:bg-black/5 dark:border-white/10"
+                  className="flex items-center gap-1 rounded-full border border-black/10 px-3 py-1 text-xs font-semibold hover:bg-black/5 dark:border-white/10 shrink-0"
                 >
-                  <Download size={13} /> Download
+                  <Download size={12} /> Download
                 </button>
               </div>
             ))}
@@ -1900,7 +1855,7 @@ function CourseDetailView({
 }
 
 /**
- * 8.3 Learning / Lesson Experience with Focus Mode, Quiz, Notes, and Curriculum.
+ * 8.3 Learning Player Experience with Focus Mode, Quiz, Notes, and Curriculum.
  */
 function LearningPlayerView({
   course,
@@ -1913,19 +1868,16 @@ function LearningPlayerView({
   progress,
   navigate,
 }) {
-  // Player state simulation
   const [isPlaying, setIsPlaying] = useState(false)
   const [playbackSpeed, setPlaybackSpeed] = useState('1x')
   const [isMuted, setIsMuted] = useState(false)
   const [focusMode, setFocusMode] = useState(false)
-  const [activeTab, setActiveTab] = useState('notes') // 'notes' | 'takeaways' | 'quiz'
+  const [activeTab, setActiveTab] = useState('notes')
   const [noteDraft, setNoteDraft] = useState(userNotes)
 
-  // Quiz state
   const [selectedQuizOption, setSelectedQuizOption] = useState(null)
   const [quizSubmitted, setQuizSubmitted] = useState(false)
 
-  // Reset quiz state when switching lessons
   useEffect(() => {
     setSelectedQuizOption(null)
     setQuizSubmitted(false)
@@ -1948,19 +1900,18 @@ function LearningPlayerView({
   }
 
   return (
-    <section className={`pt-8 ${focusMode ? 'max-w-4xl mx-auto' : ''}`}>
-      {/* Top Controls: Back button & Focus mode toggle */}
-      <div className="mb-6 flex items-center justify-between">
+    <section className={`pt-6 sm:pt-8 ${focusMode ? 'max-w-4xl mx-auto' : ''}`}>
+      <div className="mb-5 flex items-center justify-between">
         <button
           onClick={() => navigate(`/course/${course.id}`)}
-          className="flex items-center gap-2 text-xs font-semibold text-gray-500 transition hover:text-[#1a1e1b] dark:text-gray-400 dark:hover:text-white"
+          className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 transition hover:text-[#1a1e1b] dark:text-gray-400 dark:hover:text-white"
         >
-          <ChevronLeft size={16} /> Back to Course Overview
+          <ChevronLeft size={15} /> Back to Course
         </button>
 
         <button
           onClick={() => setFocusMode(!focusMode)}
-          className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+          className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition ${
             focusMode
               ? 'border-emerald-600 bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
               : 'border-black/10 text-gray-600 hover:bg-black/5 dark:border-white/10 dark:text-gray-300'
@@ -1968,28 +1919,27 @@ function LearningPlayerView({
           title="Distraction-Free Focus Mode"
         >
           {focusMode ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
-          <span>{focusMode ? 'Exit Focus Mode' : 'Focus Mode'}</span>
+          <span>{focusMode ? 'Exit Focus' : 'Focus Mode'}</span>
         </button>
       </div>
 
-      {/* Lesson Header Banner */}
-      <div className="mb-8 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+      <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <p className="eyebrow">{course.title}</p>
-          <h1 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-4xl">
+          <h1 className="mt-1 text-xl sm:text-3xl font-extrabold tracking-tight break-words">
             {currentLesson.title}
           </h1>
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-0.5 text-xs text-gray-500">
             Lesson {activeLessonIndex + 1} of {course.lessons.length} • {currentLesson.duration}
           </p>
         </div>
 
-        <div className="w-full sm:w-60">
-          <div className="mb-2 flex justify-between text-xs font-semibold">
-            <span>Course Progress</span>
+        <div className="w-full sm:w-52">
+          <div className="mb-1.5 flex justify-between text-xs font-semibold">
+            <span>Progress</span>
             <span className="text-[#2b593f] dark:text-[#88cb9f]">{progress}%</span>
           </div>
-          <div className="h-2 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+          <div className="h-1.5 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
             <div
               className="h-full rounded-full bg-[#3b6d52] transition-all duration-500"
               style={{ width: `${progress}%` }}
@@ -1998,11 +1948,9 @@ function LearningPlayerView({
         </div>
       </div>
 
-      {/* Main Player & Workspace Grid */}
-      <div className={`grid gap-8 ${focusMode ? 'grid-cols-1' : 'lg:grid-cols-[1fr_360px]'}`}>
-        {/* Left / Center: Interactive Video Player */}
+      <div className={`grid gap-6 ${focusMode ? 'grid-cols-1' : 'lg:grid-cols-[1fr_340px]'}`}>
         <div>
-          <div className={`relative aspect-video overflow-hidden rounded-3xl ${course.color} shadow-lg`}>
+          <div className={`relative aspect-video overflow-hidden rounded-2xl sm:rounded-3xl ${course.color} shadow-lg`}>
             <img
               src={course.image}
               alt=""
@@ -2011,29 +1959,28 @@ function LearningPlayerView({
 
             <button
               onClick={() => setIsPlaying(!isPlaying)}
-              className="absolute left-1/2 top-1/2 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-ink shadow-2xl transition hover:scale-110 dark:bg-[#121c16] dark:text-white"
+              className="absolute left-1/2 top-1/2 grid h-12 w-12 sm:h-16 sm:w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-ink shadow-2xl transition hover:scale-110 dark:bg-[#121c16] dark:text-white"
             >
-              {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" className="ml-1" />}
+              {isPlaying ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" className="ml-0.5" />}
             </button>
 
-            {/* Bottom Player Controls */}
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white">
-              <div className="mb-3 h-1.5 w-full overflow-hidden rounded-full bg-white/30 cursor-pointer">
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 sm:p-4 text-white">
+              <div className="mb-2 sm:mb-3 h-1.5 w-full overflow-hidden rounded-full bg-white/30 cursor-pointer">
                 <div className={`h-full rounded-full bg-emerald-400 ${isPlaying ? 'w-[45%]' : 'w-[20%]'}`} />
               </div>
 
-              <div className="flex items-center justify-between text-xs">
-                <div className="flex items-center gap-4">
+              <div className="flex items-center justify-between text-[11px] sm:text-xs">
+                <div className="flex items-center gap-3">
                   <button onClick={() => setIsPlaying(!isPlaying)}>
-                    {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+                    {isPlaying ? <Pause size={14} /> : <Play size={14} />}
                   </button>
                   <button onClick={() => setIsMuted(!isMuted)}>
-                    {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+                    {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
                   </button>
                   <span>04:12 / {currentLesson.duration}</span>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                   <button
                     onClick={() =>
                       setPlaybackSpeed((prev) => (prev === '1x' ? '1.25x' : prev === '1.25x' ? '1.5x' : '1x'))
@@ -2047,28 +1994,27 @@ function LearningPlayerView({
             </div>
           </div>
 
-          {/* Action Row: Prev/Next & Mark Completed */}
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-b border-black/[0.08] pb-6 dark:border-white/[0.08]">
-            <div className="flex items-center gap-2">
+          <div className="mt-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-b border-black/[0.08] pb-5 dark:border-white/[0.08]">
+            <div className="flex items-center justify-between sm:justify-start gap-2">
               <button
                 disabled={activeLessonIndex === 0}
                 onClick={handlePrev}
-                className="flex items-center gap-1.5 rounded-full border border-black/10 px-4 py-2 text-xs font-semibold disabled:opacity-40 dark:border-white/10"
+                className="flex items-center gap-1 rounded-full border border-black/10 px-3.5 py-2 text-xs font-semibold disabled:opacity-40 dark:border-white/10"
               >
-                <ChevronLeft size={15} /> Previous Lesson
+                <ChevronLeft size={14} /> Prev
               </button>
               <button
                 disabled={activeLessonIndex === course.lessons.length - 1}
                 onClick={handleNext}
-                className="flex items-center gap-1.5 rounded-full border border-black/10 px-4 py-2 text-xs font-semibold disabled:opacity-40 dark:border-white/10"
+                className="flex items-center gap-1 rounded-full border border-black/10 px-3.5 py-2 text-xs font-semibold disabled:opacity-40 dark:border-white/10"
               >
-                Next Lesson <ChevronRight size={15} />
+                Next <ChevronRight size={14} />
               </button>
             </div>
 
             <button
               onClick={() => onToggleComplete(activeLessonIndex)}
-              className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold transition ${
+              className={`flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-xs font-bold transition ${
                 isLessonComplete
                   ? 'border border-emerald-600 bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300'
                   : 'bg-[#1e382b] text-white hover:bg-[#2c4e3e] dark:bg-white dark:text-[#121c16]'
@@ -2076,7 +2022,7 @@ function LearningPlayerView({
             >
               {isLessonComplete ? (
                 <>
-                  <Check size={15} className="text-emerald-600 dark:text-emerald-300" />
+                  <Check size={14} className="text-emerald-600 dark:text-emerald-300" />
                   <span>Lesson Completed</span>
                 </>
               ) : (
@@ -2085,9 +2031,9 @@ function LearningPlayerView({
             </button>
           </div>
 
-          {/* Tabbed Interactive Lesson Content (Notes, Takeaways, Quiz) */}
-          <div className="mt-8">
-            <div className="flex gap-4 border-b border-black/[0.08] pb-2 dark:border-white/[0.08]">
+          {/* Tabbed Interactive Lesson Content */}
+          <div className="mt-6">
+            <div className="flex gap-4 border-b border-black/[0.08] pb-2 overflow-x-auto no-scrollbar whitespace-nowrap dark:border-white/[0.08]">
               <button
                 onClick={() => setActiveTab('notes')}
                 className={`flex items-center gap-1.5 pb-2 text-xs font-bold transition ${
@@ -2096,7 +2042,7 @@ function LearningPlayerView({
                     : 'text-gray-500 hover:text-black dark:hover:text-white'
                 }`}
               >
-                <FileText size={14} /> My Lesson Notes
+                <FileText size={13} /> Notes
               </button>
               <button
                 onClick={() => setActiveTab('takeaways')}
@@ -2106,7 +2052,7 @@ function LearningPlayerView({
                     : 'text-gray-500 hover:text-black dark:hover:text-white'
                 }`}
               >
-                <Sparkles size={14} /> Key Takeaways
+                <Sparkles size={13} /> Key Takeaways
               </button>
               {currentLesson.quiz && (
                 <button
@@ -2117,22 +2063,21 @@ function LearningPlayerView({
                       : 'text-gray-500 hover:text-black dark:hover:text-white'
                   }`}
                 >
-                  <HelpCircle size={14} /> Practice Check
+                  <HelpCircle size={13} /> Practice Check
                 </button>
               )}
             </div>
 
-            {/* Tab: Notes Editor */}
             {activeTab === 'notes' && (
-              <div className="mt-5">
+              <div className="mt-4">
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Write reflections and thoughts for this lesson. Notes are automatically saved locally.
+                  Write reflections and thoughts for this lesson. Notes are saved automatically to your device.
                 </p>
                 <textarea
                   value={noteDraft}
                   onChange={(e) => setNoteDraft(e.target.value)}
                   placeholder="Type your notes, ideas, or action items here..."
-                  className="mt-3 h-32 w-full rounded-2xl border border-black/10 bg-white/70 p-4 text-xs font-medium leading-relaxed outline-none transition focus:border-[#43795b] focus:ring-2 focus:ring-[#43795b]/20 dark:border-white/10 dark:bg-white/5"
+                  className="mt-2.5 h-32 w-full rounded-2xl border border-black/10 bg-white/70 p-3.5 text-xs font-medium leading-relaxed outline-none transition focus:border-[#43795b] dark:border-white/10 dark:bg-white/5"
                 />
                 <button
                   onClick={() => onSaveNote(noteDraft)}
@@ -2143,11 +2088,10 @@ function LearningPlayerView({
               </div>
             )}
 
-            {/* Tab: Key Takeaways */}
             {activeTab === 'takeaways' && (
-              <div className="mt-5 space-y-3">
+              <div className="mt-4 space-y-2.5">
                 {currentLesson.takeaways?.map((takeaway, idx) => (
-                  <div key={idx} className="card p-4">
+                  <div key={idx} className="card p-3.5">
                     <p className="text-xs leading-relaxed text-gray-700 dark:text-gray-200">
                       • {takeaway}
                     </p>
@@ -2156,22 +2100,21 @@ function LearningPlayerView({
               </div>
             )}
 
-            {/* Tab: Knowledge Check Quiz */}
             {activeTab === 'quiz' && currentLesson.quiz && (
-              <div className="card mt-5 p-6">
-                <h4 className="text-sm font-bold">{currentLesson.quiz.question}</h4>
-                <div className="mt-4 space-y-2.5">
+              <div className="card mt-4 p-4 sm:p-5">
+                <h4 className="text-xs sm:text-sm font-bold">{currentLesson.quiz.question}</h4>
+                <div className="mt-3.5 space-y-2">
                   {currentLesson.quiz.options.map((option, idx) => (
                     <button
                       key={idx}
                       onClick={() => !quizSubmitted && setSelectedQuizOption(idx)}
-                      className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left text-xs font-semibold transition ${
+                      className={`flex w-full items-center gap-2.5 rounded-xl border p-2.5 text-left text-xs font-semibold transition ${
                         selectedQuizOption === idx
                           ? 'border-[#3b6d52] bg-emerald-50 text-[#1e382b] dark:bg-emerald-950/40 dark:text-emerald-200'
                           : 'border-black/10 hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/5'
                       }`}
                     >
-                      <span className="grid h-5 w-5 place-items-center rounded-full border text-[10px]">
+                      <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full border text-[10px]">
                         {String.fromCharCode(65 + idx)}
                       </span>
                       <span>{option}</span>
@@ -2183,12 +2126,12 @@ function LearningPlayerView({
                   <button
                     disabled={selectedQuizOption === null}
                     onClick={() => setQuizSubmitted(true)}
-                    className="mt-4 rounded-xl bg-[#1e382b] px-5 py-2 text-xs font-bold text-white disabled:opacity-40 dark:bg-white dark:text-[#121c16]"
+                    className="mt-3.5 rounded-xl bg-[#1e382b] px-4 py-2 text-xs font-bold text-white disabled:opacity-40 dark:bg-white dark:text-[#121c16]"
                   >
                     Submit Answer
                   </button>
                 ) : (
-                  <div className="mt-4 rounded-xl border border-emerald-600/20 bg-emerald-50 p-4 dark:border-emerald-500/20 dark:bg-emerald-950/40">
+                  <div className="mt-3.5 rounded-xl border border-emerald-600/20 bg-emerald-50 p-3.5 dark:border-emerald-500/20 dark:bg-emerald-950/40">
                     <p className="text-xs font-bold text-emerald-900 dark:text-emerald-200">
                       {selectedQuizOption === currentLesson.quiz.correct ? '🎉 Correct!' : '💡 Good Try!'}
                     </p>
@@ -2202,17 +2145,16 @@ function LearningPlayerView({
           </div>
         </div>
 
-        {/* Right Sidebar: Curriculum (hidden in Focus Mode) */}
         {!focusMode && (
-          <aside className="card p-5">
-            <div className="mb-4 flex items-center justify-between border-b border-black/[0.06] pb-3 dark:border-white/[0.08]">
-              <h3 className="text-sm font-bold">Course Lessons</h3>
-              <span className="text-xs font-bold text-gray-400">
-                {completedLessons.length} of {course.lessons.length} complete
+          <aside className="card p-4 sm:p-5">
+            <div className="mb-3.5 flex items-center justify-between border-b border-black/[0.06] pb-2.5 dark:border-white/[0.08]">
+              <h3 className="text-xs sm:text-sm font-bold">Course Lessons</h3>
+              <span className="text-[11px] font-bold text-gray-400">
+                {completedLessons.length}/{course.lessons.length}
               </span>
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               {course.lessons.map((lesson, idx) => {
                 const isSelected = activeLessonIndex === idx
                 const isDone = completedLessons.includes(idx)
@@ -2221,14 +2163,14 @@ function LearningPlayerView({
                   <button
                     key={lesson.id}
                     onClick={() => setActiveLessonIndex(idx)}
-                    className={`flex w-full items-center gap-3 rounded-xl p-3 text-left transition ${
+                    className={`flex w-full items-center gap-2.5 rounded-xl p-2.5 text-left transition ${
                       isSelected
                         ? 'bg-[#e4ede6] font-semibold text-[#1e3c2c] dark:bg-[#1b2d22] dark:text-[#9fe0bb]'
                         : 'hover:bg-black/[0.03] dark:hover:bg-white/[0.04]'
                     }`}
                   >
                     <span
-                      className={`grid h-6 w-6 shrink-0 place-items-center rounded-full text-[10px] font-bold ${
+                      className={`grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] font-bold ${
                         isDone
                           ? 'bg-emerald-600 text-white dark:bg-emerald-500'
                           : isSelected
@@ -2236,7 +2178,7 @@ function LearningPlayerView({
                           : 'bg-black/[0.06] text-gray-600 dark:bg-white/10 dark:text-gray-400'
                       }`}
                     >
-                      {isDone ? <Check size={13} /> : idx + 1}
+                      {isDone ? <Check size={11} /> : idx + 1}
                     </span>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-xs">{lesson.title}</p>
@@ -2254,7 +2196,7 @@ function LearningPlayerView({
 }
 
 /**
- * 8.4 My Learning & Progress Tracking View.
+ * 8.4 My Learning View.
  */
 function MyLearningView({
   navigate,
@@ -2278,27 +2220,26 @@ function MyLearningView({
 
   return (
     <>
-      <div className="mb-8 flex flex-col justify-between gap-5 pt-8 sm:flex-row sm:items-end">
+      <div className="mb-6 flex flex-col justify-between gap-4 pt-6 sm:flex-row sm:items-end">
         <div>
-          <p className="eyebrow">Personal Dashboard</p>
-          <h1 className="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">
+          <p className="eyebrow">Personal Hub</p>
+          <h1 className="mt-1 text-2xl sm:text-4xl font-extrabold tracking-tight">
             Keep your momentum.
           </h1>
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-0.5 text-xs text-gray-500">
             Track your ongoing courses, completed certifications, and saved reads.
           </p>
         </div>
 
         <button
           onClick={() => navigate('/')}
-          className="flex items-center gap-2 rounded-full bg-[#1e382b] px-5 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#2c4e3e] dark:bg-white dark:text-[#121c16]"
+          className="w-full sm:w-auto flex items-center justify-center gap-1.5 rounded-full bg-[#1e382b] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#2c4e3e] dark:bg-white dark:text-[#121c16]"
         >
-          <Compass size={15} /> Explore New Courses
+          <Compass size={14} /> Explore Courses
         </button>
       </div>
 
-      {/* Summary KPI Cards */}
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-3">
         <MetricCard
           label="Enrolled Courses"
           value={enrolledCourses.length}
@@ -2306,7 +2247,7 @@ function MyLearningView({
           icon={BookOpen}
         />
         <MetricCard
-          label="Completed Certifications"
+          label="Certificates Earned"
           value={COURSES_DATA.filter((c) => getCourseProgress(c.id) === 100).length}
           change="Lifetime verified"
           icon={Award}
@@ -2319,8 +2260,7 @@ function MyLearningView({
         />
       </div>
 
-      {/* Filter Tabs Bar */}
-      <div className="mt-10 flex gap-4 border-b border-black/[0.08] pb-2 dark:border-white/[0.08]">
+      <div className="mt-8 flex gap-4 border-b border-black/[0.08] pb-2 overflow-x-auto no-scrollbar whitespace-nowrap dark:border-white/[0.08]">
         <button
           onClick={() => setFilterTab('in-progress')}
           className={`pb-2 text-xs font-bold transition ${
@@ -2339,7 +2279,7 @@ function MyLearningView({
               : 'text-gray-500 hover:text-black dark:hover:text-white'
           }`}
         >
-          Completed & Certificates ({COURSES_DATA.filter((c) => enrolledCourses.includes(c.id) && getCourseProgress(c.id) === 100).length})
+          Completed ({COURSES_DATA.filter((c) => enrolledCourses.includes(c.id) && getCourseProgress(c.id) === 100).length})
         </button>
         <button
           onClick={() => setFilterTab('saved')}
@@ -2353,51 +2293,50 @@ function MyLearningView({
         </button>
       </div>
 
-      {/* Course List / Grid */}
-      <div className="mt-6">
+      <div className="mt-5">
         {displayedCourses.length > 0 ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {displayedCourses.map((course) => {
               const progress = getCourseProgress(course.id)
               return (
-                <div key={course.id} className="card p-5 flex flex-col justify-between">
+                <div key={course.id} className="card p-4 sm:p-5 flex flex-col justify-between">
                   <div>
-                    <div className={`relative mb-4 aspect-[16/10] overflow-hidden rounded-xl ${course.color}`}>
+                    <div className={`relative mb-3.5 aspect-[16/10] overflow-hidden rounded-xl ${course.color}`}>
                       <img src={course.image} alt="" className="h-full w-full object-cover mix-blend-multiply opacity-80" />
-                      <span className="glass-pill absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold text-gray-800 dark:text-gray-200">
+                      <span className="glass-pill absolute left-2.5 top-2.5 rounded-full px-2.5 py-1 text-[11px] font-semibold text-gray-800 dark:text-gray-200">
                         {course.category}
                       </span>
                     </div>
 
-                    <h3 className="text-base font-bold">{course.title}</h3>
-                    <p className="mt-1 text-xs text-gray-500">{course.author} • {course.duration}</p>
+                    <h3 className="text-sm sm:text-base font-bold">{course.title}</h3>
+                    <p className="mt-0.5 text-xs text-gray-500">{course.author} • {course.duration}</p>
 
-                    <div className="mt-4">
+                    <div className="mt-3.5">
                       <div className="flex justify-between text-xs font-semibold">
                         <span>Progress</span>
                         <span>{progress}%</span>
                       </div>
-                      <div className="mt-1 h-2 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+                      <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
                         <div className="h-full rounded-full bg-[#3b6d52]" style={{ width: `${progress}%` }} />
                       </div>
                     </div>
                   </div>
 
-                  <div className="mt-5 pt-4 border-t border-black/5 dark:border-white/5 flex items-center justify-between">
+                  <div className="mt-4 pt-3.5 border-t border-black/5 dark:border-white/5 flex items-center justify-between">
                     {progress === 100 ? (
                       <button
                         onClick={() => onViewCertificate(course)}
                         className="flex items-center gap-1.5 text-xs font-bold text-amber-700 dark:text-amber-400 hover:underline"
                       >
-                        <Award size={15} /> View Certificate
+                        <Award size={14} /> Certificate
                       </button>
                     ) : (
                       <button
                         onClick={() => navigate(`/learn/${course.id}`)}
-                        className="flex items-center gap-1.5 text-xs font-bold text-[#3b6d52] dark:text-[#88cb9f] hover:underline"
+                        className="flex items-center gap-1 text-xs font-bold text-[#3b6d52] dark:text-[#88cb9f] hover:underline"
                       >
-                        <span>Resume Lesson</span>
-                        <ArrowRight size={13} />
+                        <span>Resume</span>
+                        <ArrowRight size={12} />
                       </button>
                     )}
 
@@ -2406,9 +2345,9 @@ function MyLearningView({
                       className="text-gray-400 hover:text-gray-600"
                     >
                       {bookmarkedCourses.includes(course.id) ? (
-                        <BookmarkCheck size={16} className="text-emerald-600" />
+                        <BookmarkCheck size={15} className="text-emerald-600" />
                       ) : (
-                        <Bookmark size={16} />
+                        <Bookmark size={15} />
                       )}
                     </button>
                   </div>
@@ -2417,15 +2356,12 @@ function MyLearningView({
             })}
           </div>
         ) : (
-          <div className="card py-16 text-center">
-            <BookOpen size={32} className="mx-auto text-gray-400" />
-            <p className="mt-3 text-sm font-bold">No courses in this section yet</p>
-            <p className="mt-1 text-xs text-gray-500">
-              Browse our curated collection to start something new.
-            </p>
+          <div className="card py-12 text-center">
+            <BookOpen size={28} className="mx-auto text-gray-400" />
+            <p className="mt-2.5 text-xs sm:text-sm font-bold">No courses in this section yet</p>
             <button
               onClick={() => navigate('/')}
-              className="mt-4 rounded-full bg-[#1e382b] px-5 py-2 text-xs font-bold text-white dark:bg-white dark:text-[#121c16]"
+              className="mt-3.5 rounded-full bg-[#1e382b] px-4 py-1.5 text-xs font-bold text-white dark:bg-white dark:text-[#121c16]"
             >
               Browse Catalog
             </button>
@@ -2445,56 +2381,56 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
 
   return (
     <>
-      <div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+      <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <p className="eyebrow">Overview</p>
-          <h1 className="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">
+          <h1 className="mt-1 text-2xl sm:text-4xl font-extrabold tracking-tight">
             Welcome back, Jordan.
           </h1>
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-0.5 text-xs text-gray-500">
             Here is your current learning velocity and activity summary.
           </p>
         </div>
 
         <button
           onClick={() => navigate('/')}
-          className="flex items-center gap-2 rounded-full bg-[#1e382b] px-5 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#2c4e3e] dark:bg-white dark:text-[#121c16]"
+          className="w-full sm:w-auto flex items-center justify-center gap-1.5 rounded-full bg-[#1e382b] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#2c4e3e] dark:bg-white dark:text-[#121c16]"
         >
-          <Compass size={15} /> Discover Courses
+          <Compass size={14} /> Discover Courses
         </button>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <MetricCard label="Courses Enrolled" value={enrolledCourses.length} change="2 active" icon={BookOpen} />
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <MetricCard label="Enrolled" value={enrolledCourses.length} change="2 active" icon={BookOpen} />
         <MetricCard label="Study Hours" value="28.4h" change="+18% vs last month" icon={Clock3} />
         <MetricCard label="Current Streak" value="3 Days" change="Best: 14 days" icon={Flame} />
         <MetricCard label="Average Score" value="94%" change="Top 5% percentile" icon={Award} />
       </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[1.4fr_0.8fr]">
-        <div className="card p-6">
-          <div className="mb-6 flex items-center justify-between">
+      <div className="mt-6 grid gap-5 lg:grid-cols-[1.4fr_0.8fr]">
+        <div className="card p-4 sm:p-6">
+          <div className="mb-5 flex items-center justify-between">
             <div>
-              <h2 className="text-sm font-bold">Weekly Study Rhythm</h2>
-              <p className="mt-0.5 text-xs text-gray-400">Hours spent learning over the last 7 days</p>
+              <h2 className="text-xs sm:text-sm font-bold">Weekly Study Rhythm</h2>
+              <p className="mt-0.5 text-[11px] text-gray-400">Hours spent learning over 7 days</p>
             </div>
-            <span className="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-bold text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+            <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-bold text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
               Goal Met
             </span>
           </div>
 
-          <div className="flex h-48 items-end gap-3 pt-6">
+          <div className="flex h-40 sm:h-48 items-end gap-1.5 sm:gap-3 pt-4 sm:pt-6">
             {[
-              { day: 'Mon', h: 40, hrs: '1.2h' },
-              { day: 'Tue', h: 65, hrs: '2.0h' },
-              { day: 'Wed', h: 50, hrs: '1.5h' },
-              { day: 'Thu', h: 85, hrs: '2.8h' },
-              { day: 'Fri', h: 70, hrs: '2.2h' },
-              { day: 'Sat', h: 95, hrs: '3.4h', current: true },
-              { day: 'Sun', h: 45, hrs: '1.4h' },
+              { day: 'M', h: 40, hrs: '1.2h' },
+              { day: 'T', h: 65, hrs: '2.0h' },
+              { day: 'W', h: 50, hrs: '1.5h' },
+              { day: 'T', h: 85, hrs: '2.8h' },
+              { day: 'F', h: 70, hrs: '2.2h' },
+              { day: 'S', h: 95, hrs: '3.4h', current: true },
+              { day: 'S', h: 45, hrs: '1.4h' },
             ].map((item, idx) => (
-              <div key={idx} className="group relative flex flex-1 flex-col items-center gap-2">
-                <div className="absolute -top-7 hidden rounded bg-black px-2 py-0.5 text-[10px] text-white group-hover:block dark:bg-white dark:text-black">
+              <div key={idx} className="group relative flex flex-1 flex-col items-center gap-1.5">
+                <div className="absolute -top-6 hidden rounded bg-black px-1.5 py-0.5 text-[9px] text-white group-hover:block dark:bg-white dark:text-black">
                   {item.hrs}
                 </div>
                 <div
@@ -2511,37 +2447,37 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
           </div>
         </div>
 
-        <div className="card p-6">
+        <div className="card p-4 sm:p-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold">Continue Learning</h2>
+            <h2 className="text-xs sm:text-sm font-bold">Continue Learning</h2>
             <button
               onClick={() => navigate('/learn/1')}
               className="text-xs font-bold text-[#3b6d52] hover:underline dark:text-[#80c89c]"
             >
-              Resume <ArrowRight size={12} className="inline" />
+              Resume <ArrowRight size={11} className="inline" />
             </button>
           </div>
 
-          <div className={`mt-4 overflow-hidden rounded-2xl ${activeCourse.color}`}>
+          <div className={`mt-3.5 overflow-hidden rounded-2xl ${activeCourse.color}`}>
             <img
               src={activeCourse.image}
               alt=""
-              className="h-28 w-full object-cover mix-blend-multiply opacity-80"
+              className="h-24 sm:h-28 w-full object-cover mix-blend-multiply opacity-80"
             />
           </div>
 
-          <p className="mt-3 text-[11px] font-bold uppercase tracking-wider text-gray-400">
+          <p className="mt-2.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-gray-400">
             {activeCourse.category} • Lesson 2 of {activeCourse.lessons.length}
           </p>
 
-          <h3 className="mt-1 text-base font-bold">{activeCourse.title}</h3>
+          <h3 className="mt-0.5 text-sm sm:text-base font-bold">{activeCourse.title}</h3>
 
-          <div className="mt-3">
+          <div className="mt-2.5">
             <div className="flex justify-between text-[11px] font-medium text-gray-500">
               <span>Progress</span>
               <span>{progress}%</span>
             </div>
-            <div className="mt-1 h-2 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+            <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
               <div
                 className="h-full rounded-full bg-[#3b6d52]"
                 style={{ width: `${progress}%` }}
@@ -2551,10 +2487,10 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
 
           <button
             onClick={() => navigate('/learn/1')}
-            className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#1e382b] py-3 text-xs font-bold text-white shadow-sm transition hover:bg-[#2a4e3c] dark:bg-white dark:text-[#121c16]"
+            className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#1e382b] py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#2a4e3c] dark:bg-white dark:text-[#121c16]"
           >
             <span>Resume Lesson</span>
-            <ArrowRight size={14} />
+            <ArrowRight size={13} />
           </button>
         </div>
       </div>
@@ -2563,39 +2499,39 @@ function DashboardView({ navigate, enrolledCourses, getCourseProgress }) {
 }
 
 /**
- * 8.6 Analytics View: Focus Metrics, Area Chart, & Achievements.
+ * 8.6 Analytics View.
  */
 function AnalyticsView() {
   return (
     <>
-      <div className="mb-8">
+      <div className="mb-6">
         <p className="eyebrow">Insights & Telemetry</p>
-        <h1 className="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">
+        <h1 className="mt-1 text-2xl sm:text-4xl font-extrabold tracking-tight">
           Learning Analytics
         </h1>
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-0.5 text-xs text-gray-500">
           Gain clarity into your study routines, peak focus hours, and milestone achievements.
         </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-3">
         <MetricCard label="Focus Score" value="88 / 100" change="+12% from last week" icon={Headphones} />
-        <MetricCard label="Course Completion" value="75%" change="Above 65% target" icon={CheckCircle2} />
-        <MetricCard label="Peak Day" value="Saturday" change="4.2 hours average" icon={Calendar} />
+        <MetricCard label="Completion" value="75%" change="Above 65% target" icon={CheckCircle2} />
+        <MetricCard label="Peak Day" value="Saturday" change="4.2h average" icon={Calendar} />
       </div>
 
-      <div className="card mt-6 p-6">
-        <div className="mb-6 flex items-center justify-between">
+      <div className="card mt-5 p-4 sm:p-6">
+        <div className="mb-4 flex items-center justify-between">
           <div>
-            <h2 className="text-sm font-bold">Focus Hours Trend</h2>
-            <p className="mt-0.5 text-xs text-gray-400">Daily focused study volume across this cycle</p>
+            <h2 className="text-xs sm:text-sm font-bold">Focus Hours Trend</h2>
+            <p className="mt-0.5 text-[10px] text-gray-400">Daily focused study volume</p>
           </div>
-          <span className="rounded-full bg-[#e3ede5] px-3 py-1 text-xs font-bold text-[#2a543b] dark:bg-[#1a2d22] dark:text-[#9cd1b3]">
+          <span className="rounded-full bg-[#e3ede5] px-2.5 py-0.5 text-[10px] sm:text-xs font-bold text-[#2a543b] dark:bg-[#1a2d22] dark:text-[#9cd1b3]">
             +22% Growth
           </span>
         </div>
 
-        <div className="relative h-60 w-full pt-4">
+        <div className="relative h-48 sm:h-60 w-full pt-2">
           <svg viewBox="0 0 700 220" className="h-full w-full overflow-visible">
             <defs>
               <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
@@ -2618,33 +2554,33 @@ function AnalyticsView() {
             />
           </svg>
 
-          <div className="mt-3 flex justify-between text-[11px] font-semibold text-gray-400">
-            <span>Mon</span>
-            <span>Tue</span>
-            <span>Wed</span>
-            <span>Thu</span>
-            <span>Fri</span>
-            <span>Sat</span>
-            <span>Sun</span>
+          <div className="mt-2 flex justify-between text-[10px] font-semibold text-gray-400">
+            <span>M</span>
+            <span>T</span>
+            <span>W</span>
+            <span>T</span>
+            <span>F</span>
+            <span>S</span>
+            <span>S</span>
           </div>
         </div>
       </div>
 
-      <div className="mt-8">
-        <h3 className="text-sm font-bold">Milestones & Badges</h3>
-        <p className="text-xs text-gray-400">Badges earned through consistent practice</p>
+      <div className="mt-6">
+        <h3 className="text-xs sm:text-sm font-bold">Milestones & Badges</h3>
+        <p className="text-[11px] text-gray-400">Badges earned through consistent practice</p>
 
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-3 grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {ACHIEVEMENTS.map((badge) => {
             const Icon = badge.icon
             return (
-              <div key={badge.id} className="card flex items-start gap-3.5 p-4">
-                <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${badge.color}`}>
-                  <Icon size={18} />
+              <div key={badge.id} className="card flex items-start gap-3 p-3.5">
+                <span className={`grid h-8 w-8 sm:h-9 sm:w-9 shrink-0 place-items-center rounded-xl ${badge.color}`}>
+                  <Icon size={16} />
                 </span>
                 <div>
                   <h4 className="text-xs font-bold">{badge.title}</h4>
-                  <p className="mt-1 text-[11px] leading-tight text-gray-500 dark:text-gray-400">
+                  <p className="mt-0.5 text-[10px] leading-tight text-gray-500 dark:text-gray-400">
                     {badge.desc}
                   </p>
                 </div>
@@ -2657,25 +2593,22 @@ function AnalyticsView() {
   )
 }
 
-/**
- * 8.7 Transition Splash Screen for Analytics loading state.
- */
 function AnalyticsSplash() {
   return (
-    <section className="flex min-h-[500px] flex-col items-center justify-center text-center">
+    <section className="flex min-h-[420px] flex-col items-center justify-center text-center px-4">
       <div className="splash-orbit">
-        <span className="grid h-16 w-16 place-items-center rounded-2xl bg-[#1e382b] text-white shadow-xl dark:bg-white dark:text-[#121c16]">
-          <Podcast size={30} />
+        <span className="grid h-14 w-14 place-items-center rounded-2xl bg-[#1e382b] text-white shadow-xl dark:bg-white dark:text-[#121c16]">
+          <Podcast size={26} />
         </span>
       </div>
-      <p className="eyebrow mt-8">ILEARN Telemetry</p>
-      <h1 className="mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl">
+      <p className="eyebrow mt-6">ILEARN Telemetry</p>
+      <h1 className="mt-1.5 text-xl sm:text-2xl font-extrabold tracking-tight">
         Preparing your insights
       </h1>
-      <p className="mt-2 text-xs text-gray-500">
+      <p className="mt-1 text-xs text-gray-500">
         Aggregating your weekly learning velocity and focus scores...
       </p>
-      <div className="mt-6 h-1.5 w-44 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+      <div className="mt-5 h-1.5 w-36 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
         <div className="splash-progress h-full rounded-full bg-[#3b6d52]" />
       </div>
     </section>
